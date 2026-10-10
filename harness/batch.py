@@ -1,6 +1,7 @@
 """Run every task for every provider several times.
 
-    python -m harness.batch --providers openai deepseek --repeats 5
+    python -m harness.batch --providers openai deepseek            # 2 repeats while developing
+    python -m harness.batch --providers openai deepseek --repeats 5   # the full pass, costs more
     python -m harness.batch --providers openai --tasks tier1_park_mount --repeats 2
 
 Runs are sequential, since all of them share one set of simulated equipment. A run that crashes
@@ -19,7 +20,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--providers", nargs="+", choices=PROVIDERS, required=True)
     ap.add_argument("--tasks", nargs="+", choices=TASKS, default=list(TASKS))
-    ap.add_argument("--repeats", type=int, default=5)
+    ap.add_argument("--repeats", type=int, default=2, help="runs per task and provider; use 5 for a publishable pass")
     args = ap.parse_args()
 
     crashed = 0
