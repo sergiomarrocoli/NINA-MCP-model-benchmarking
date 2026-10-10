@@ -11,11 +11,13 @@ load_dotenv()
 class Provider:
     name: str
     base_url: str | None
-    key_env: str
+    key_env: str | None  # None for a local runner that needs no key
     model_env: str
 
     @property
     def api_key(self) -> str:
+        if self.key_env is None:
+            return "not-needed"  # the OpenAI client insists on a value
         key = os.environ.get(self.key_env, "")
         if not key:
             raise SystemExit(f"{self.key_env} is not set (see .env.example)")
@@ -32,4 +34,7 @@ class Provider:
 PROVIDERS = {
     "openai": Provider("openai", None, "OPENAI_API_KEY", "OPENAI_MODEL"),
     "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY", "DEEPSEEK_MODEL"),
+    # Local models through Ollama's OpenAI-compatible endpoint. Needs `ollama serve` running with a
+    # context window big enough for the tool list (OLLAMA_CONTEXT_LENGTH), or long prompts are truncated.
+    "ollama": Provider("ollama", os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"), None, "OLLAMA_MODEL"),
 }

@@ -20,6 +20,8 @@ PRICES = {
     # `deepseek-chat` is not on DeepSeek's current pricing page. Priced as DeepSeek-V4.1-Flash at the
     # peak (higher) rate, https://api-docs.deepseek.com/quick_start/pricing, checked 2026-10-10.
     "deepseek-chat": Price(0.30, 1.20, estimated=True, note="DeepSeek-V4.1-Flash peak rate"),
+    # Local models cost nothing per token (electricity and the machine are not counted).
+    "qwen3:8b": Price(0.0, 0.0, note="runs locally"),
 }
 
 
