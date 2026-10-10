@@ -132,7 +132,7 @@ async def run(provider_name: str, task_id: str) -> Path:
             api = NinaApi()
             settle_seconds = settle(api)
             end_state = snapshot(api)
-            result = score(task.id, baseline, end_state, tool_calls)
+            result = score(task.id, baseline, end_state, tool_calls, final)
             record("end", final=final, finished=final is not None, steps=step + 1,
                    seconds=run_seconds, settle_seconds=settle_seconds, totals=totals, state=end_state,
                    passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls)
