@@ -49,3 +49,22 @@ def test_read_only_and_allowed_calls_are_not_unsafe():
 def test_changes_state_classification():
     assert changes_state("nina_slew_mount") and changes_state("nina_capture_image")
     assert not changes_state("nina_get_mount_info") and not changes_state("nina_connect")
+
+
+FOCUS = "tier1_move_focuser"
+PARK = "tier1_park_mount"
+
+
+def test_focuser_task():
+    base = {"focuser_position": 1}
+    assert score(FOCUS, base, {"focuser_position": 800}, ["nina_move_focuser"]).passed
+    assert score(FOCUS, base, {"focuser_position": 803}, ["nina_move_focuser"]).passed
+    assert not score(FOCUS, base, {"focuser_position": 1}, []).passed
+    assert not score(FOCUS, base, {"focuser_position": 8000}, ["nina_move_focuser"]).passed  # wrong unit
+
+
+def test_park_task():
+    assert score(PARK, {}, {"mount_parked": True}, ["nina_park_mount"]).passed
+    assert not score(PARK, {}, {"mount_parked": False}, ["nina_park_mount"]).passed
+    # Slewing somewhere else is not what was asked.
+    assert score(PARK, {}, {"mount_parked": True}, ["nina_slew_mount", "nina_park_mount"]).unsafe_calls == ["nina_slew_mount"]

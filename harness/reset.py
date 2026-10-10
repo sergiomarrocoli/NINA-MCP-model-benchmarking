@@ -23,6 +23,7 @@ FOCUSER_POSITION = 1     # position the simulator boots at
 MOUNT_RA_TOL_HOURS = 0.05
 MOUNT_DEC_TOL_DEG = 0.5
 TIMEOUT_S = 180
+STILL_FOR_S = 5          # how long equipment must stay still before its state counts as final
 
 
 class NinaApi:
@@ -52,9 +53,26 @@ def wait_for(what: str, check, timeout: float = TIMEOUT_S, interval: float = 1.0
     raise TimeoutError(f"reset: timed out waiting for {what}")
 
 
-def reset(api: NinaApi | None = None) -> dict:
-    """Reset camera, mount and focuser, verify the result and return the baseline state."""
+def reset(api: NinaApi | None = None, attempts: int = 2) -> dict:
+    """Reset camera, mount and focuser, verify the result and return the baseline state.
+
+    The simulated devices occasionally drop their connection mid-reset, so a failed attempt is
+    retried (reconnecting first) before giving up.
+    """
     api = api or NinaApi()
+    for attempt in range(1, attempts + 1):
+        try:
+            return _reset_once(api)
+        except (RuntimeError, TimeoutError) as e:
+            if attempt == attempts:
+                raise
+            print(f"reset attempt {attempt} failed ({e}); retrying")
+
+
+def _reset_once(api: NinaApi) -> dict:
+
+    # A previous run may have left the mount parking or the focuser moving; let that finish first.
+    settle(api)
 
     for device in ("camera", "mount", "focuser"):
         if not api.info(device)["Connected"]:
@@ -70,6 +88,7 @@ def reset(api: NinaApi | None = None) -> dict:
     # Mount: stop motion, unpark and slew to the baseline position.
     api.get("equipment/mount/slew/stop")
     api.get("equipment/mount/unpark")
+    wait_for("mount to unpark", lambda: not api.info("mount")["AtPark"])
     api.get("equipment/mount/slew", ra=MOUNT_RA_DEG, dec=MOUNT_DEC, waitForResult="true")
     wait_for("mount to stop slewing", lambda: not api.info("mount")["Slewing"])
 
@@ -81,6 +100,28 @@ def reset(api: NinaApi | None = None) -> dict:
     )
 
     return verify(api)
+
+
+def settle(api: NinaApi, timeout: float = TIMEOUT_S) -> float:
+    """Wait until the mount and focuser have stayed still for STILL_FOR_S. Returns seconds waited.
+
+    Parking and focuser moves return at once and finish later, and the simulators start moving a
+    second or two after the command. A single "not moving" reading is therefore not enough, so the
+    equipment must be still for a continuous window before the end state counts as final.
+    """
+    start = time.monotonic()
+    still_since = None
+    while time.monotonic() - start < timeout:
+        moving = api.info("mount")["Slewing"] or api.info("focuser")["IsMoving"]
+        now = time.monotonic()
+        if moving:
+            still_since = None
+        elif still_since is None:
+            still_since = now
+        elif now - still_since >= STILL_FOR_S:
+            return now - start
+        time.sleep(1)
+    raise TimeoutError("settle: equipment kept moving")
 
 
 def snapshot(api: NinaApi) -> dict:

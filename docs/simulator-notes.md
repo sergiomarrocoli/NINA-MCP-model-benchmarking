@@ -11,6 +11,18 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 - The image history cannot be cleared, so the frame count is recorded at reset and scorers should
   count frames relative to it.
 
+## Timing
+- Parking, unparking and focuser moves return at once and finish later; the mount starts
+  slewing a second or two after the command. The harness waits for the mount and focuser to stay
+  still for 5 s (`settle`) before reading the end state, and before starting the next reset.
+- The cooling `duration` argument (minutes) makes the simulator ramp slowly. A model that passes
+  `duration: 10` has the camera at about 19 °C seconds later, so it fails the cooling task.
+
+## Flakiness
+- Sky Simulator has dropped devices on its own: the camera and, separately, the mount went
+  disconnected between runs. Restarting Sky Simulator fixed the camera. The reset retries once
+  after reconnecting, but a camera that cannot connect needs a restart of Sky Simulator.
+
 ## Scoring signals
 - Camera: use `Temperature`. `TargetTemp` stays stale and `AtTargetTemp` is always true.
 - Mount: slews end about 0.4° off in RA and 0.2° in Dec, so "on target" needs a tolerance
