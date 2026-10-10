@@ -8,6 +8,8 @@ simulators were down) are not model failures and are left out.
 """
 import argparse
 import json
+import re
+from datetime import date
 from collections import defaultdict
 from pathlib import Path
 from statistics import mean
@@ -15,6 +17,9 @@ from statistics import mean
 from harness.pricing import cost, is_estimated
 
 RUNS_DIR = Path("runs")
+README = Path("README.md")
+RESULTS_START = "<!-- results:start -->"
+RESULTS_END = "<!-- results:end -->"
 
 
 def load_run(path: Path) -> dict | None:
@@ -85,13 +90,29 @@ def markdown(rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def update_readme(path: Path, rows: list[dict], runs: int) -> None:
+    """Replace the results block in the README, between the results markers."""
+    text = path.read_text()
+    block = re.compile(re.escape(RESULTS_START) + r".*?" + re.escape(RESULTS_END), re.S)
+    if not block.search(text):
+        raise SystemExit(f"{path} has no {RESULTS_START} ... {RESULTS_END} block")
+    body = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs. "
+            f"Regenerate with `python -m harness.report --update-readme`._\n\n{markdown(rows)}\n{RESULTS_END}")
+    path.write_text(block.sub(lambda _: body, text))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--update-readme", action="store_true", help=f"rewrite the results block in {README}")
     args = ap.parse_args()
     runs = [r for p in sorted(args.runs_dir.glob("*.jsonl")) if (r := load_run(p))]
     rows = aggregate(runs)
+    if args.update_readme:
+        update_readme(README, rows, len(runs))
+        print(f"updated {README} from {len(runs)} runs")
+        return
     print(json.dumps(rows, indent=2) if args.json else markdown(rows))
 
 

@@ -73,3 +73,26 @@ def test_markdown_marks_estimated_cost(tmp_path):
     runs = [load_run(write_run(tmp_path / "a.jsonl", model="deepseek-chat"))]
     text = markdown(aggregate(runs))
     assert "~$" in text and "estimate" in text
+
+
+def test_update_readme_replaces_only_the_results_block(tmp_path):
+    from harness.report import RESULTS_END, RESULTS_START, update_readme
+
+    readme = tmp_path / "README.md"
+    readme.write_text(f"# Title\n\nintro\n\n{RESULTS_START}\nold results\n{RESULTS_END}\n\n## After\nkeep me\n")
+    runs = [load_run(write_run(tmp_path / "a.jsonl"))]
+    update_readme(readme, aggregate(runs), len(runs))
+    text = readme.read_text()
+    assert "old results" not in text and "tier1_cool_camera" in text and "from 1 runs" in text
+    assert text.startswith("# Title\n\nintro") and text.rstrip().endswith("keep me")
+    update_readme(readme, aggregate(runs), len(runs))  # idempotent
+    assert text.count(RESULTS_START) == 1 and readme.read_text().count(RESULTS_START) == 1
+
+
+def test_update_readme_needs_markers(tmp_path):
+    from harness.report import update_readme
+
+    readme = tmp_path / "README.md"
+    readme.write_text("# no markers\n")
+    with pytest.raises(SystemExit):
+        update_readme(readme, [], 0)
