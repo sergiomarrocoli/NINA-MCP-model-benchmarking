@@ -37,6 +37,20 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 - The simulator slews below the horizon without refusing (Orion at about -42° altitude), so a
   tier 4 refusal has to come from the model, not from NINA.
 
+## Plugin API reference
+The Advanced API plugin publishes an OpenAPI spec:
+https://github.com/christian-photo/ninaAPI/blob/main/ninaAPI/api_spec.yaml (endpoint paths,
+parameters and response shapes). Check it before trusting a path in the MCP package.
+
+## Tools we add (`harness/extra_tools.py`)
+`nina-advanced-mcp` has no autofocus and no centring tool, though the plugin has both. We add:
+- `nina_autofocus`: starts NINA's autofocus (`equipment/focuser/auto-focus`) and, by default,
+  waits for a new result in `last-af`.
+- `nina_center_mount`: slews with `center=true`, so NINA plate-solves and corrects the pointing.
+
+Both use their own long timeouts, since the upstream client gives up after 10 s. The harness now
+serves 105 tools (103 upstream plus these two); runs logged before this change had 103.
+
 ## MCP server (`nina-advanced-mcp`) bugs
 - `nina_stop_slew` calls `equipment/mount/stop-slew`, which does not exist (the plugin uses
   `equipment/mount/slew/stop`). The tool returns `Success: false` with a 404 error, so a model
