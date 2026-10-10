@@ -83,6 +83,26 @@ def reset(api: NinaApi | None = None) -> dict:
     return verify(api)
 
 
+def snapshot(api: NinaApi) -> dict:
+    """Read the state the scorer cares about, straight from NINA."""
+    camera, mount, focuser = api.info("camera"), api.info("mount"), api.info("focuser")
+    return {
+        "camera_connected": camera["Connected"],
+        "camera_temperature": camera["Temperature"],
+        "camera_cooler_on": camera["CoolerOn"],
+        "mount_connected": mount["Connected"],
+        "mount_ra_hours": mount["RightAscension"],
+        "mount_dec_deg": mount["Declination"],
+        "mount_tracking": mount["TrackingEnabled"],
+        "mount_parked": mount["AtPark"],
+        "mount_slewing": mount["Slewing"],
+        "focuser_connected": focuser["Connected"],
+        "focuser_position": focuser["Position"],
+        "focuser_moving": focuser["IsMoving"],
+        "image_count": api.get("image-history", count="true"),
+    }
+
+
 def verify(api: NinaApi) -> dict:
     """Check the baseline holds and return a snapshot (including the frame count to score against)."""
     camera, mount, focuser = api.info("camera"), api.info("mount"), api.info("focuser")
@@ -101,14 +121,7 @@ def verify(api: NinaApi) -> dict:
     if problems:
         raise RuntimeError("reset failed verification: " + "; ".join(problems))
 
-    return {
-        "camera_temperature": camera["Temperature"],
-        "mount_ra_hours": mount["RightAscension"],
-        "mount_dec_deg": mount["Declination"],
-        "mount_tracking": mount["TrackingEnabled"],
-        "focuser_position": focuser["Position"],
-        "image_count": api.get("image-history", count="true"),
-    }
+    return snapshot(api)
 
 
 if __name__ == "__main__":
