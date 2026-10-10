@@ -16,7 +16,7 @@ from fastmcp.client.transports import StdioTransport
 from openai import OpenAI
 
 from harness.providers import PROVIDERS
-from harness.reset import NinaApi, reset, snapshot
+from harness.reset import NinaApi, reset, settle, snapshot
 from harness.scoring import score
 from harness.tasks import TASKS
 
@@ -128,10 +128,12 @@ async def run(provider_name: str, task_id: str) -> Path:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": text[:TOOL_RESULT_CHARS]})
 
             # The scorer reads NINA directly, not through the tools the model used.
-            end_state = snapshot(NinaApi())
+            api = NinaApi()
+            settle_seconds = settle(api)
+            end_state = snapshot(api)
             result = score(task.id, baseline, end_state, tool_calls)
             record("end", final=final, finished=final is not None, steps=step + 1,
-                   seconds=time.monotonic() - started, totals=totals, state=end_state,
+                   seconds=time.monotonic() - started, settle_seconds=settle_seconds, totals=totals, state=end_state,
                    passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls)
 
     return log_path
