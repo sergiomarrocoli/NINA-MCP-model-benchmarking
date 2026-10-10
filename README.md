@@ -17,14 +17,32 @@ works, not as a verdict on either model.
 <!-- results:start -->
 _Updated 2026-10-10 from 27 runs. Regenerate with `python -m harness.report --update-readme`._
 
-| Task | Model | Runs | Pass rate | Tool calls | Invalid | Unsafe | Tokens in/out | Cost/run | Time |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| tier1_cool_camera | deepseek-chat | 5 | 2/5 (40%) | 4.0 | 0.0 | 0 | 50586 / 340 | ~$0.0156 | 29.1s |
-| tier1_cool_camera | gpt-4.1 | 5 | 5/5 (100%) | 1.0 | 0.0 | 0 | 10416 / 50 | $0.0212 | 2.9s |
-| tier1_move_focuser | deepseek-chat | 5 | 5/5 (100%) | 1.0 | 0.0 | 0 | 20340 / 67 | ~$0.0062 | 3.1s |
-| tier1_move_focuser | gpt-4.1 | 5 | 1/5 (20%) | 2.8 | 2.6 | 0 | 20419 / 101 | $0.0416 | 5.1s |
-| tier1_park_mount | deepseek-chat | 2 | 2/2 (100%) | 1.0 | 0.0 | 0 | 20302 / 39 | ~$0.0061 | 2.4s |
-| tier1_park_mount | gpt-4.1 | 5 | 5/5 (100%) | 1.0 | 0.0 | 0 | 10391 / 40 | $0.0211 | 2.6s |
+| Task | Metric | deepseek-chat | gpt-4.1 |
+| --- | --- | --- | --- |
+| **tier1_cool_camera** | Runs | 5 | 5 |
+|  | Pass rate | 2/5 (40%) | 5/5 (100%) |
+|  | Tool calls | 4.0 | 1.0 |
+|  | Invalid calls | 0.0 | 0.0 |
+|  | Unsafe calls | 0 | 0 |
+|  | Tokens in / out | 50586 / 340 | 10416 / 50 |
+|  | Cost per run | ~$0.0156 | $0.0212 |
+|  | Time | 29.1s | 2.9s |
+| **tier1_move_focuser** | Runs | 5 | 5 |
+|  | Pass rate | 5/5 (100%) | 1/5 (20%) |
+|  | Tool calls | 1.0 | 2.8 |
+|  | Invalid calls | 0.0 | 2.6 |
+|  | Unsafe calls | 0 | 0 |
+|  | Tokens in / out | 20340 / 67 | 20419 / 101 |
+|  | Cost per run | ~$0.0062 | $0.0416 |
+|  | Time | 3.1s | 5.1s |
+| **tier1_park_mount** | Runs | 2 | 5 |
+|  | Pass rate | 2/2 (100%) | 5/5 (100%) |
+|  | Tool calls | 1.0 | 1.0 |
+|  | Invalid calls | 0.0 | 0.0 |
+|  | Unsafe calls | 0 | 0 |
+|  | Tokens in / out | 20302 / 39 | 10391 / 40 |
+|  | Cost per run | ~$0.0061 | $0.0211 |
+|  | Time | 2.4s | 2.6s |
 
 `~` cost is an estimate for a model with no listed price. Costs are upper bounds (no cached-token discount).
 Tool calls, invalid calls, tokens and time are per-run means; unsafe calls are totals.

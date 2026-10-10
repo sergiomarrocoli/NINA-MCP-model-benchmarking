@@ -73,17 +73,35 @@ def aggregate(runs: list[dict]) -> list[dict]:
     return rows
 
 
+def cost_text(row: dict) -> str:
+    if row["cost"] is None:
+        return "n/a"
+    return f"{'~' if row['cost_estimated'] else ''}${row['cost']:.4f}"
+
+
+# One matrix row per metric: (label, how to show it for a model's aggregated row).
+METRICS = [
+    ("Runs", lambda r: str(r["runs"])),
+    ("Pass rate", lambda r: f"{r['passes']}/{r['runs']} ({r['pass_rate']:.0%})"),
+    ("Tool calls", lambda r: f"{r['tool_calls']:.1f}"),
+    ("Invalid calls", lambda r: f"{r['invalid_calls']:.1f}"),
+    ("Unsafe calls", lambda r: str(r["unsafe_calls"])),
+    ("Tokens in / out", lambda r: f"{r['prompt_tokens']:.0f} / {r['completion_tokens']:.0f}"),
+    ("Cost per run", cost_text),
+    ("Time", lambda r: f"{r['seconds']:.1f}s"),
+]
+
+
 def markdown(rows: list[dict]) -> str:
-    head = ("| Task | Model | Runs | Pass rate | Tool calls | Invalid | Unsafe | Tokens in/out | Cost/run | Time |\n"
-            "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
-    lines = [head]
-    for r in rows:
-        cost_text = "n/a" if r["cost"] is None else f"{'~' if r['cost_estimated'] else ''}${r['cost']:.4f}"
-        lines.append(
-            f"| {r['task']} | {r['model']} | {r['runs']} | {r['passes']}/{r['runs']} ({r['pass_rate']:.0%}) "
-            f"| {r['tool_calls']:.1f} | {r['invalid_calls']:.1f} | {r['unsafe_calls']} "
-            f"| {r['prompt_tokens']:.0f} / {r['completion_tokens']:.0f} | {cost_text} | {r['seconds']:.1f}s |"
-        )
+    """A matrix: models along the top, each task's metrics down the side."""
+    models = sorted({r["model"] for r in rows})
+    by_key = {(r["task"], r["model"]): r for r in rows}
+    tasks = list(dict.fromkeys(r["task"] for r in rows))  # rows are already ordered by tier, then task
+    lines = ["| Task | Metric | " + " | ".join(models) + " |", "| --- | --- | " + " | ".join("---" for _ in models) + " |"]
+    for task in tasks:
+        for i, (label, show) in enumerate(METRICS):
+            cells = [show(by_key[task, m]) if (task, m) in by_key else "–" for m in models]
+            lines.append(f"| {f'**{task}**' if i == 0 else ''} | {label} | " + " | ".join(cells) + " |")
     if any(r["cost_estimated"] for r in rows):
         lines.append("\n`~` cost is an estimate for a model with no listed price. Costs are upper bounds (no cached-token discount).")
     lines.append("Tool calls, invalid calls, tokens and time are per-run means; unsafe calls are totals.")

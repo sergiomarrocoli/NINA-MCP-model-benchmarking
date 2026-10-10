@@ -96,3 +96,17 @@ def test_update_readme_needs_markers(tmp_path):
     readme.write_text("# no markers\n")
     with pytest.raises(SystemExit):
         update_readme(readme, [], 0)
+
+
+def test_markdown_is_a_matrix_with_models_along_the_top(tmp_path):
+    runs = [
+        load_run(write_run(tmp_path / "a.jsonl", model="gpt-4.1", passed=True)),
+        load_run(write_run(tmp_path / "b.jsonl", model="deepseek-chat", passed=False)),
+        load_run(write_run(tmp_path / "c.jsonl", model="gpt-4.1", task="tier1_park_mount")),
+    ]
+    lines = markdown(aggregate(runs)).splitlines()
+    assert lines[0] == "| Task | Metric | deepseek-chat | gpt-4.1 |"
+    pass_row = next(l for l in lines if "Pass rate" in l and "tier1" not in l)
+    assert "0/1 (0%)" in pass_row and "1/1 (100%)" in pass_row
+    park_pass = [l for l in lines if "Pass rate" in l][1]
+    assert park_pass.split("|")[3].strip() == "–"  # deepseek-chat has no run for the second task
