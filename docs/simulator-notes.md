@@ -25,7 +25,8 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 
 ## MCP server (`nina-advanced-mcp`) bugs
 - `nina_stop_slew` calls `equipment/mount/stop-slew`, which does not exist (the plugin uses
-  `equipment/mount/slew/stop`). It still returns `Success: true`, so a model is told the mount
-  stopped when it did not.
+  `equipment/mount/slew/stop`). The tool returns `Success: false` with a 404 error, so a model
+  cannot stop a slew with it, but it is told so. It would need another route (for example
+  parking) to halt the mount.
 - `nina_get_version` calls a missing endpoint and returns 404.
 - The package imports `requests` without declaring it.
