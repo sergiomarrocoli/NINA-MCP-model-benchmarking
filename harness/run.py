@@ -16,6 +16,7 @@ from fastmcp.client.transports import StdioTransport
 from openai import OpenAI
 
 from harness.providers import PROVIDERS
+from harness.reset import reset
 from harness.tasks import TASKS
 
 SYSTEM_PROMPT = (
@@ -71,6 +72,10 @@ async def run(provider_name: str, task_id: str) -> Path:
             log.flush()
 
         record("start", task=task.id, tier=task.tier, provider=provider.name, model=provider.model, prompt=task.prompt)
+
+        # Known starting state; also the baseline the scorer compares against (e.g. frame count).
+        baseline = reset()
+        record("reset", baseline=baseline)
 
         async with Client(mcp_transport()) as client:
             for name, args in task.setup:

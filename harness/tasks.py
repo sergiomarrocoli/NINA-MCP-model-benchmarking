@@ -1,4 +1,4 @@
-"""Benchmark tasks. `setup` calls run before the model sees the task, to put NINA in a known state."""
+"""Benchmark tasks. The harness resets the equipment first; `setup` calls then prepare the MCP session."""
 from dataclasses import dataclass, field
 
 
@@ -19,7 +19,7 @@ TASKS = {
             id="tier1_cool_camera",
             tier=1,
             prompt="Cool the camera to -10 °C.",
-            setup=CONNECT + [("nina_connect_camera", {"input": {}})],
+            setup=CONNECT,
         ),
     ]
 }
