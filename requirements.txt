@@ -1,5 +1,6 @@
 fastmcp==4.1.0
 nina_advanced_mcp==0.1.0
 openai==3.28.0
+pytest==9.1.1
 python-dotenv==1.2.4
 requests==2.34.2

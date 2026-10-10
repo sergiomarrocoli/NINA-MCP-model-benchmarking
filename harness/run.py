@@ -16,7 +16,8 @@ from fastmcp.client.transports import StdioTransport
 from openai import OpenAI
 
 from harness.providers import PROVIDERS
-from harness.reset import reset
+from harness.reset import NinaApi, reset, snapshot
+from harness.scoring import score
 from harness.tasks import TASKS
 
 SYSTEM_PROMPT = (
@@ -91,6 +92,7 @@ async def run(provider_name: str, task_id: str) -> Path:
             totals = {"prompt_tokens": 0, "completion_tokens": 0, "tool_calls": 0, "invalid_calls": 0}
             started = time.monotonic()
             final = None
+            tool_calls = []
 
             for step in range(MAX_STEPS):
                 t0 = time.monotonic()
@@ -110,6 +112,7 @@ async def run(provider_name: str, task_id: str) -> Path:
 
                 for tc in msg.tool_calls:
                     totals["tool_calls"] += 1
+                    tool_calls.append(tc.function.name)
                     try:
                         args = json.loads(tc.function.arguments or "{}")
                     except json.JSONDecodeError:
@@ -124,12 +127,12 @@ async def run(provider_name: str, task_id: str) -> Path:
                            is_error=is_error, seconds=secs)
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": text[:TOOL_RESULT_CHARS]})
 
-            # End-state snapshot for the scorer (#5).
-            state = {}
-            for name in ("nina_get_camera_info",):
-                state[name], _, _ = await call_tool(client, name, {})
+            # The scorer reads NINA directly, not through the tools the model used.
+            end_state = snapshot(NinaApi())
+            result = score(task.id, baseline, end_state, tool_calls)
             record("end", final=final, finished=final is not None, steps=step + 1,
-                   seconds=time.monotonic() - started, totals=totals, state=state)
+                   seconds=time.monotonic() - started, totals=totals, state=end_state,
+                   passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls)
 
     return log_path
 
@@ -143,6 +146,7 @@ def main():
     end = json.loads(path.read_text().splitlines()[-1])
     print(f"log: {path}")
     print(f"finished={end['finished']} steps={end['steps']} seconds={end['seconds']:.1f} totals={end['totals']}")
+    print(f"passed={end['passed']} failures={end['failures']} unsafe_calls={end['unsafe_calls']}")
     print(f"final: {end['final']}")
 
 
