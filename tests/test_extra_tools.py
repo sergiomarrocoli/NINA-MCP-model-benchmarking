@@ -127,13 +127,51 @@ def test_center_converts_ra_hours_to_degrees_and_asks_for_centring(monkeypatch):
     assert result["Success"] and "Slew finished" in result["Message"]
 
 
-def test_center_failure_is_reported(monkeypatch):
-    async def slew(request):
-        return web.json_response({"Response": "Slew failed", "Error": "", "StatusCode": 200, "Success": False, "Type": "API"})
+FAILED = {"Response": "Slew failed", "Error": "", "StatusCode": 200, "Success": False, "Type": "API"}
 
-    result = run_against({"equipment/mount/slew": slew}, monkeypatch,
-                         lambda c: tool(c, "nina_center_mount", {"ra": 1, "dec": 2}))
+
+def mount_info(ra_hours, dec, slewing=False):
+    async def handler(request):
+        return web.json_response(ok({"RightAscension": ra_hours, "Declination": dec, "Slewing": slewing}))
+
+    return handler
+
+
+def test_center_failure_is_reported_when_the_mount_is_elsewhere(monkeypatch):
+    async def slew(request):
+        return web.json_response(FAILED)
+
+    result = run_against({"equipment/mount/slew": slew, "equipment/mount/info": mount_info(5.0, -5.0)}, monkeypatch,
+                         lambda c: tool(c, "nina_center_mount", {"ra": 0.712, "dec": 41.27}))
     assert not result["Success"] and "Slew failed" in result["Error"]
+
+
+def test_center_that_the_plugin_calls_failed_but_left_the_mount_on_target_is_a_success(monkeypatch):
+    # NINA's own log showed the solve succeeding with zero offset; M31's JNOW position in 2026 is
+    # about RA 0.737 h, Dec +41.42. The plugin still said "Slew failed".
+    async def slew(request):
+        return web.json_response(FAILED)
+
+    from datetime import datetime, timezone
+
+    from harness.coords import j2000_to_jnow
+
+    ra, dec = j2000_to_jnow(0.712 * 15, 41.27)
+    result = run_against({"equipment/mount/slew": slew, "equipment/mount/info": mount_info(ra / 15, dec)}, monkeypatch,
+                         lambda c: tool(c, "nina_center_mount", {"ra": 0.712, "dec": 41.27}))
+    assert result["Success"] and "centred" in result["Message"]
+
+
+def test_center_is_not_reported_as_success_while_the_mount_is_still_slewing(monkeypatch):
+    async def slew(request):
+        return web.json_response(FAILED)
+
+    from harness.coords import j2000_to_jnow
+
+    ra, dec = j2000_to_jnow(0.712 * 15, 41.27)
+    result = run_against({"equipment/mount/slew": slew, "equipment/mount/info": mount_info(ra / 15, dec, slewing=True)},
+                         monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": 0.712, "dec": 41.27}))
+    assert not result["Success"]
 
 
 def test_a_timeout_gets_a_readable_error(monkeypatch):

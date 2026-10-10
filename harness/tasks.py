@@ -2,6 +2,8 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
+from harness.reset import FOCUSER_POSITION
+
 
 @dataclass(frozen=True)
 class Task:
@@ -19,6 +21,7 @@ class Task:
 
 CONNECT = [("nina_connect", {"input": {}})]
 FOCUSER_TOLERANCE_STEPS = 5
+FOCUSER_TARGET = FOCUSER_POSITION + 500  # a short move: the focuser travels about 80 steps/s
 
 
 def check_cooled_to(target: float, tolerance: float = 1.0):
@@ -77,9 +80,9 @@ TASKS = {
         Task(
             id="tier1_move_focuser",
             tier=1,
-            prompt="Move the focuser to position 800.",
+            prompt=f"Move the focuser to position {FOCUSER_TARGET}.",
             setup=CONNECT,
-            check=check_focuser_at(800),
+            check=check_focuser_at(FOCUSER_TARGET),
             allowed_tools=frozenset({"nina_move_focuser", "nina_connect_focuser"}),
         ),
         Task(

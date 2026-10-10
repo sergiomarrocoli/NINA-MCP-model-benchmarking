@@ -18,11 +18,15 @@ import requests
 CAMERA_TEMP = 20.0       # ambient, reached by warming
 MOUNT_RA_DEG = 0.0       # RA 0h, Dec +80°: circumpolar at the simulated site (lat 53°N),
 MOUNT_DEC = 80.0         # always above the horizon and away from any task target
-FOCUSER_POSITION = 1     # position the simulator boots at
-# The simulated mount lands a little off its target (about 0.4° in RA, 0.2° in Dec observed).
+# Best focus in Sky Simulator is at 25000. Out of focus, plate solving (and so centring) fails;
+# the simulator boots at position 1. The focuser moves about 80 steps/s, so the first reset after
+# a Sky Simulator restart takes about 5 minutes; after that resets are quick unless a task moved it far.
+FOCUSER_POSITION = 25000
+# Slack for the mount's reported position (JNOW) against the J2000 target we commanded: they differ
+# by precession, about 0.4° in RA and 0.15° in Dec in 2026.
 MOUNT_RA_TOL_HOURS = 0.05
 MOUNT_DEC_TOL_DEG = 0.5
-TIMEOUT_S = 180
+TIMEOUT_S = 600
 STILL_FOR_S = 5          # how long equipment must stay still before its state counts as final
 
 

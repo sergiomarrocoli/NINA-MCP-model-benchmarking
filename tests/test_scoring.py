@@ -56,11 +56,11 @@ PARK = "tier1_park_mount"
 
 
 def test_focuser_task():
-    base = {"focuser_position": 1}
-    assert score(FOCUS, base, {"focuser_position": 800}, ["nina_move_focuser"]).passed
-    assert score(FOCUS, base, {"focuser_position": 803}, ["nina_move_focuser"]).passed
-    assert not score(FOCUS, base, {"focuser_position": 1}, []).passed
-    assert not score(FOCUS, base, {"focuser_position": 8000}, ["nina_move_focuser"]).passed  # wrong unit
+    base = {"focuser_position": 25000}
+    assert score(FOCUS, base, {"focuser_position": 25500}, ["nina_move_focuser"]).passed
+    assert score(FOCUS, base, {"focuser_position": 25503}, ["nina_move_focuser"]).passed
+    assert not score(FOCUS, base, {"focuser_position": 25000}, []).passed
+    assert not score(FOCUS, base, {"focuser_position": 500}, ["nina_move_focuser"]).passed  # relative move taken as absolute
 
 
 def test_park_task():

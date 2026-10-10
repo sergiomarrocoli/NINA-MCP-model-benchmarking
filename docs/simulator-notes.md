@@ -25,9 +25,21 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 
 ## Scoring signals
 - Camera: use `Temperature`. `TargetTemp` stays stale and `AtTargetTemp` is always true.
-- Mount: slews end about 0.4° off in RA and 0.2° in Dec, so "on target" needs a tolerance
-  (reset uses 0.05 h and 0.5°).
+- Mount: the plugin takes J2000 coordinates but mount info reports JNOW, which differ by
+  precession (about 0.37° in RA and 0.15° in Dec for M31 in 2026). The simulated mount is
+  accurate: M31 ends within 0.01° of the target once converted (`harness/coords.py`). Comparing a
+  catalogue position with a mount reading without converting looks 0.4° off. Comparing two mount
+  readings (baseline vs end) needs no conversion.
 - Focuser: moves about 80 steps/s, so large moves take a minute; check `IsMoving`.
+
+## Focus, plate solving and centring
+- Sky Simulator's best focus is at focuser position 25000 (range ±1000 steps, backlash 100). Out of
+  focus, ASTAP cannot solve, so centring loops on "Plate solve failed". The baseline therefore
+  parks the focuser at 25000; the simulator boots at 1, so the first reset after a restart takes
+  about 5 minutes.
+- The plugin's `slew?center=true&waitForResult=true` reports "Slew failed" even when NINA's log
+  shows a successful solve with zero offset (it checks a status that NINA only sets when it runs the
+  instruction itself). `nina_center_mount` therefore judges success by the mount's position.
 
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the

@@ -17,9 +17,12 @@ import aiohttp
 from nina_advanced_mcp import create_error_response, mcp
 from pydantic import BaseModel, Field
 
+from harness.coords import j2000_to_jnow, separation_deg
+
 AUTOFOCUS_TIMEOUT_S = 300
 CENTER_TIMEOUT_S = 300
 POLL_S = 2
+CENTERED_WITHIN_DEG = 0.05  # 3 arc-minutes
 
 
 def _base() -> str:
@@ -37,6 +40,15 @@ async def _get(path: str, params: dict | None = None, timeout: float = 30) -> di
     async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=timeout)) as session:
         async with session.get(f"{_base()}/{path}", params=params) as response:
             return await response.json()
+
+
+async def _degrees_from_target(ra_deg: float, dec_deg: float) -> float | None:
+    """How far the mount is from a J2000 target, or None if it is moving or cannot be read."""
+    info = (await _get("equipment/mount/info")).get("Response") or {}
+    if info.get("Slewing") or info.get("RightAscension") is None:
+        return None
+    target_ra, target_dec = j2000_to_jnow(ra_deg, dec_deg)  # mount info is in JNOW
+    return separation_deg(info["RightAscension"] * 15, info["Declination"], target_ra, target_dec)
 
 
 class AutofocusInput(BaseModel):
@@ -119,9 +131,17 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
         params = {"ra": input.ra * 15, "dec": input.dec, "center": "true",
                   "waitForResult": str(input.wait_for_completion).lower()}
         result = await _get("equipment/mount/slew", params, timeout=CENTER_TIMEOUT_S)
-        if not result.get("Success"):
-            return create_error_response("NINAMountError", result.get("Error") or str(result.get("Response")), result)
-        return {"Success": True, "Message": f"Mount slew and centre: {result.get('Response')}", "Details": result, "Type": "NINA_API"}
+        if result.get("Success"):
+            return {"Success": True, "Message": f"Mount slew and centre: {result.get('Response')}", "Details": result, "Type": "NINA_API"}
+        if input.wait_for_completion:
+            # The plugin reports "Slew failed" for a centre that worked: it checks a status NINA only
+            # sets when it runs the instruction itself. So judge by where the mount ended up.
+            off = await _degrees_from_target(input.ra * 15, input.dec)
+            if off is not None and off <= CENTERED_WITHIN_DEG:
+                return {"Success": True,
+                        "Message": f"Mount is centred on the target ({off:.3f}° away). The plugin reported '{result.get('Response')}' but the mount position confirms the centre.",
+                        "Details": result, "Type": "NINA_API"}
+        return create_error_response("NINAMountError", result.get("Error") or str(result.get("Response")), result)
     except Exception as e:
         return create_error_response("NINAMountError", _describe(e), {})
 
