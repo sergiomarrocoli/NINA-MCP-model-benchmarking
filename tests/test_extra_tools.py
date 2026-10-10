@@ -134,3 +134,16 @@ def test_center_failure_is_reported(monkeypatch):
     result = run_against({"equipment/mount/slew": slew}, monkeypatch,
                          lambda c: tool(c, "nina_center_mount", {"ra": 1, "dec": 2}))
     assert not result["Success"] and "Slew failed" in result["Error"]
+
+
+def test_a_timeout_gets_a_readable_error(monkeypatch):
+    import asyncio as aio
+
+    async def slew(request):
+        await aio.sleep(5)
+        return web.json_response(ok())
+
+    monkeypatch.setattr(extra_tools, "CENTER_TIMEOUT_S", 0.2)
+    result = run_against({"equipment/mount/slew": slew}, monkeypatch,
+                         lambda c: tool(c, "nina_center_mount", {"ra": 1, "dec": 2}))
+    assert not result["Success"] and "Timed out" in result["Error"]

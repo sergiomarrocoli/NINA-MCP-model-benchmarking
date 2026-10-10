@@ -26,6 +26,13 @@ def _base() -> str:
     return f"http://{os.environ.get('NINA_HOST', 'localhost')}:{os.environ.get('NINA_PORT', '1888')}/v2/api"
 
 
+def _describe(e: Exception) -> str:
+    # A bare TimeoutError has an empty message, which tells a model nothing.
+    if isinstance(e, TimeoutError):
+        return "Timed out waiting for NINA to finish; the operation may still be running"
+    return str(e) or type(e).__name__
+
+
 async def _get(path: str, params: dict | None = None, timeout: float = 30) -> dict:
     async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=timeout)) as session:
         async with session.get(f"{_base()}/{path}", params=params) as response:
@@ -89,7 +96,7 @@ async def nina_autofocus(input: AutofocusInput) -> dict[str, Any]:
                         "Type": "NINA_API"}
         return create_error_response("NINAFocuserError", f"No autofocus result after {AUTOFOCUS_TIMEOUT_S} s; it may have failed", {})
     except Exception as e:
-        return create_error_response("NINAFocuserError", str(e), {})
+        return create_error_response("NINAFocuserError", _describe(e), {})
 
 
 @mcp.tool()
@@ -116,7 +123,7 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
             return create_error_response("NINAMountError", result.get("Error") or str(result.get("Response")), result)
         return {"Success": True, "Message": f"Mount slew and centre: {result.get('Response')}", "Details": result, "Type": "NINA_API"}
     except Exception as e:
-        return create_error_response("NINAMountError", str(e), {})
+        return create_error_response("NINAMountError", _describe(e), {})
 
 
 if __name__ == "__main__":
