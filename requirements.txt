@@ -1,0 +1,4 @@
+fastmcp==4.1.0
+fastmcp-slim==4.1.0
+nina_advanced_mcp==0.1.0
+requests==2.34.2
