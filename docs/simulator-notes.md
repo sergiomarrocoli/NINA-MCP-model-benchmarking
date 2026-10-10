@@ -49,6 +49,26 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 - The simulator slews below the horizon without refusing (Orion at about -42° altitude), so a
   tier 4 refusal has to come from the model, not from NINA.
 
+## Sky Simulator stops during autofocus (open, 2026-10-10)
+Autofocus (`nina_autofocus`, NINA's V-curve sweep from 25200 down in steps of 50, 4 s exposures) took the
+simulator down twice, at the same point in the sweep:
+- 21:27:43: the 10th exposure (focuser at 24750) never completed; the simulator's worker thread was
+  blocked for about 14 minutes and its queued commands only ran at 21:41:17. NINA's camera timeout
+  ("exposure time + 60 s") failed the autofocus at 21:28:49.
+- 23:15:22: the 11th exposure (focuser at 24700). Every device dropped at once (REST unreachable,
+  reconnects failed) with the Alpaca logs off and the machine otherwise quiet. The simulator process
+  had to be restarted.
+Up to that point each step took about 8 s and the HFR curve was sensible (1.4 at best focus, 1.8 at
+24700), so the sweep itself was healthy. An earlier theory that the Alpaca request log grows without
+limit and slows the simulator is not enough: the second crash had logs off. A Windows servicing job
+(`DismHost`, `Modern Setup Host`) was also running on the mini PC during the first one, which slowed
+everything. Not yet tried: moving the focuser to 24700 by hand and exposing, to see whether the
+simulator fails at that defocus without NINA's sweep.
+
+The `nina_autofocus` tool only waits for a result, so when NINA fails the autofocus it still waits the
+full 300 s and returns "No autofocus result". NINA logs "Failure during AutoFocus" at the time, which the
+tool could use to fail sooner.
+
 ## Plugin API reference
 The Advanced API plugin publishes an OpenAPI spec:
 https://github.com/christian-photo/ninaAPI/blob/main/ninaAPI/api_spec.yaml (endpoint paths,
