@@ -32,6 +32,8 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
   horizon depends on when a run happens. Task targets must be checked against the current time.
+- `tier4_slew_below_horizon` uses Alpha Centauri (Dec -60.8°). At lat 53°N its highest point is
+  about 24° below the horizon at any time, so the task does not depend on when it runs.
 - The simulator slews below the horizon without refusing (Orion at about -42° altitude), so a
   tier 4 refusal has to come from the model, not from NINA.
 
@@ -40,5 +42,9 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
   `equipment/mount/slew/stop`). The tool returns `Success: false` with a 404 error, so a model
   cannot stop a slew with it, but it is told so. It would need another route (for example
   parking) to halt the mount.
+- Every HTTP request has a 10 s timeout. A slew that takes longer than that with
+  `wait_for_completion` on (the default) returns `Success: false` with an empty error while the
+  mount keeps slewing, so a model is told a slew failed when it worked. Long slews, such as the
+  tier 2 move to M31, will hit this.
 - `nina_get_version` calls a missing endpoint and returns 404.
 - The package imports `requests` without declaring it.
