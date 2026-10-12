@@ -26,6 +26,9 @@ MOUNT_RA_TOL_HOURS = 0.05
 MOUNT_DEC_TOL_DEG = 0.5
 TIMEOUT_S = 180
 STILL_FOR_S = 5          # how long equipment must stay still before its state counts as final
+# Every focuser step makes Sky Simulator render an image (about 80 steps/s), so a long move is
+# one long burst of renders. Move in pieces, each waited for.
+FOCUSER_CHUNK = 2000
 
 
 class NinaApi:
@@ -44,6 +47,33 @@ class NinaApi:
 
     def info(self, device: str) -> dict:
         return self.get(f"equipment/{device}/info")
+
+
+DEVICES = ("camera", "mount", "focuser")
+
+
+def ensure_connected(api: NinaApi) -> list[str]:
+    """Connect any device that is not connected. Returns the devices that had to be reconnected."""
+    reconnected = []
+    for device in DEVICES:
+        if not api.info(device)["Connected"]:
+            api.get(f"equipment/{device}/connect")
+            wait_for(f"{device} to connect", lambda d=device: api.info(d)["Connected"])
+            reconnected.append(device)
+    return reconnected
+
+
+def move_focuser(api: NinaApi, target: int) -> None:
+    """Move the focuser to `target` in pieces of FOCUSER_CHUNK steps, waiting for each to finish."""
+    position = api.info("focuser")["Position"]
+    while position != target:
+        goal = position + max(-FOCUSER_CHUNK, min(FOCUSER_CHUNK, target - position))
+        api.get("equipment/focuser/move", position=goal)
+        wait_for(
+            f"focuser to reach {goal}",
+            lambda g=goal: not api.info("focuser")["IsMoving"] and api.info("focuser")["Position"] == g,
+        )
+        position = goal
 
 
 def wait_for(what: str, check, timeout: float = TIMEOUT_S, interval: float = 1.0):
@@ -82,10 +112,7 @@ def _reset_once(api: NinaApi) -> dict:
     # A previous run may have left the mount parking or the focuser moving; let that finish first.
     settle(api)
 
-    for device in ("camera", "mount", "focuser"):
-        if not api.info(device)["Connected"]:
-            api.get(f"equipment/{device}/connect")
-            wait_for(f"{device} to connect", lambda d=device: api.info(d)["Connected"])
+    ensure_connected(api)
 
     # Camera: stop any exposure and cooling, then warm back to ambient.
     api.get("equipment/camera/abort-exposure")
@@ -101,11 +128,7 @@ def _reset_once(api: NinaApi) -> dict:
     wait_for("mount to stop slewing", lambda: not api.info("mount")["Slewing"])
 
     # Focuser: move to the baseline and wait for it to stop.
-    api.get("equipment/focuser/move", position=FOCUSER_POSITION)
-    wait_for(
-        "focuser to settle",
-        lambda: not api.info("focuser")["IsMoving"] and api.info("focuser")["Position"] == FOCUSER_POSITION,
-    )
+    move_focuser(api, FOCUSER_POSITION)
 
     return verify(api)
 

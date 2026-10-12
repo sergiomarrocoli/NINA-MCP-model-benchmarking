@@ -9,6 +9,7 @@ simulators were down) are not model failures and are left out.
 import argparse
 import json
 import re
+import sys
 from datetime import date
 from collections import defaultdict
 from pathlib import Path
@@ -43,6 +44,8 @@ def load_run(path: Path) -> dict | None:
         "completion_tokens": totals["completion_tokens"],
         "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"]),
         "seconds": end["seconds"],
+        # A device that dropped during the run makes it an equipment fault, not a model result.
+        "device_drops": len(end.get("device_drops", [])),
     }
 
 
@@ -108,13 +111,14 @@ def markdown(rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def update_readme(path: Path, rows: list[dict], runs: int) -> None:
+def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0) -> None:
     """Replace the results block in the README, between the results markers."""
     text = path.read_text()
     block = re.compile(re.escape(RESULTS_START) + r".*?" + re.escape(RESULTS_END), re.S)
     if not block.search(text):
         raise SystemExit(f"{path} has no {RESULTS_START} ... {RESULTS_END} block")
-    body = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs. "
+    left_out = f" ({excluded} more left out: a device dropped during the run)" if excluded else ""
+    body = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
             f"Regenerate with `python -m harness.report --update-readme`._\n\n{markdown(rows)}\n{RESULTS_END}")
     path.write_text(block.sub(lambda _: body, text))
 
@@ -125,12 +129,16 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--update-readme", action="store_true", help=f"rewrite the results block in {README}")
     args = ap.parse_args()
-    runs = [r for p in sorted(args.runs_dir.glob("*.jsonl")) if (r := load_run(p))]
+    loaded = [r for p in sorted(args.runs_dir.glob("*.jsonl")) if (r := load_run(p))]
+    runs = [r for r in loaded if not r["device_drops"]]
+    excluded = len(loaded) - len(runs)
     rows = aggregate(runs)
     if args.update_readme:
-        update_readme(README, rows, len(runs))
-        print(f"updated {README} from {len(runs)} runs")
+        update_readme(README, rows, len(runs), excluded)
+        print(f"updated {README} from {len(runs)} runs ({excluded} left out for device drops)")
         return
+    if excluded:
+        print(f"{excluded} run(s) left out: a device dropped during the run", file=sys.stderr)
     print(json.dumps(rows, indent=2) if args.json else markdown(rows))
 
 
