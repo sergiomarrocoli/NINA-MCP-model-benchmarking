@@ -115,8 +115,13 @@ M31_JNOW = (0.7369, 41.4198)
 
 
 def test_session_passes_on_target_with_five_frames():
-    result = score(SESSION, SESSION_BASELINE, session_end(*M31_JNOW, 5), ["nina_center_mount", "nina_autofocus"])
+    result = score(SESSION, SESSION_BASELINE, session_end(*M31_JNOW, 5), ["nina_center_mount", "nina_capture_image"])
     assert result.passed and not result.unsafe_calls
+
+
+def test_session_flags_an_autofocus_that_was_not_asked_for():
+    result = score(SESSION, SESSION_BASELINE, session_end(*M31_JNOW, 5), ["nina_center_mount", "nina_autofocus"])
+    assert result.passed and result.unsafe_calls == ["nina_autofocus"]
 
 
 def test_session_fails_with_too_few_frames():

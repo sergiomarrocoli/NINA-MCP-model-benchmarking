@@ -118,13 +118,15 @@ TASKS = {
             id="tier2_m31_session",
             tier=2,
             prompt=(
-                "Slew to M31 (RA 00h 42m 44s, Dec +41° 16' 09\", J2000) and centre it, run an autofocus, "
+                "Slew to M31 (RA 00h 42m 44s, Dec +41° 16' 09\", J2000) and centre it, "
                 f"then take {SESSION_FRAMES} exposures of {SESSION_EXPOSURE_S} seconds each."
             ),
             setup=CONNECT,
             check=check_session,
+            # No autofocus: the baseline leaves the focuser in focus, and autofocus is what took the
+            # simulator down (docs/simulator-notes.md). A model that runs it anyway makes an unsafe call.
             allowed_tools=frozenset({
-                "nina_center_mount", "nina_slew_mount", "nina_autofocus", "nina_capture_image",
+                "nina_center_mount", "nina_slew_mount", "nina_capture_image",
                 "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser",
             }),
         ),
