@@ -83,6 +83,16 @@ parameters and response shapes). Check it before trusting a path in the MCP pack
 Both use their own long timeouts, since the upstream client gives up after 10 s. The harness now
 serves 105 tools (103 upstream plus these two); runs logged before this change had 103.
 
+We also **replace** upstream's `nina_capture_image` (same arguments, so 105 tools, not 106). Upstream, with
+`download=False`, starts the exposure and answers "Image captured successfully" in 0.0 s without checking
+that an image was saved. Calls made while the camera was still busy then failed at random ("Camera
+currently exposing"), and the plugin's own `waitForResult=true` sometimes fails with "Unknown error" and
+saves nothing. On 2026-10-12 this cost a Tier 2 run a frame: gpt-4.1 fired exposures back to back, one
+failed, and it ended with 4 frames while saying it had taken 5. The replacement waits for the capture,
+confirms the frame count in NINA's image history went up (so one successful call is one new frame),
+retries up to 3 times if nothing was saved, and returns an error if it still fails. Runs logged before
+this had the old behaviour.
+
 ## MCP server (`nina-advanced-mcp`) bugs
 - `nina_stop_slew` calls `equipment/mount/stop-slew`, which does not exist (the plugin uses
   `equipment/mount/slew/stop`). The tool returns `Success: false` with a 404 error, so a model

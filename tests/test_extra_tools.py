@@ -185,3 +185,92 @@ def test_a_timeout_gets_a_readable_error(monkeypatch):
     result = run_against({"equipment/mount/slew": slew}, monkeypatch,
                          lambda c: tool(c, "nina_center_mount", {"ra": 1, "dec": 2}))
     assert not result["Success"] and "Timed out" in result["Error"]
+
+
+# --- nina_capture_image: waits, and only reports a frame that was really saved ----------------------
+
+
+@pytest.fixture
+def quick_capture(monkeypatch):
+    monkeypatch.setattr(extra_tools, "POLL_S", 0.04)
+    monkeypatch.setattr(extra_tools, "CAPTURE_RETRY_PAUSE_S", 0)
+    monkeypatch.setattr(extra_tools, "CAPTURE_SAVE_WAIT_S", 0.2)
+
+
+class FakeCamera:
+    """Image history plus a capture endpoint whose behaviour per call is given by `script`."""
+
+    def __init__(self, script=("saved",)):
+        self.frames, self.calls, self.script = 0, 0, list(script)
+
+    async def history(self, request):
+        return web.json_response(ok(self.frames))
+
+    async def capture(self, request):
+        action = self.script[min(self.calls, len(self.script) - 1)]
+        self.calls += 1
+        self.last_query = dict(request.query)
+        if action == "saved":
+            self.frames += 1
+            return web.json_response(ok(""))
+        if action == "unknown":      # the plugin's own wait failing, saving nothing
+            return web.json_response({"Response": "", "Error": "Unknown error", "StatusCode": 500, "Success": False})
+        if action == "claims":       # says success but saves nothing
+            return web.json_response(ok(""))
+
+    def routes(self):
+        return {"image-history": self.history, "equipment/camera/capture": self.capture}
+
+
+def capture(camera, monkeypatch, **args):
+    return run_against(camera.routes(), monkeypatch, lambda c: tool(c, "nina_capture_image", args))
+
+
+def test_capture_waits_for_the_saved_frame(monkeypatch, quick_capture):
+    camera = FakeCamera()
+    result = capture(camera, monkeypatch, duration=5)
+    assert result["Success"] and result["Message"] == "Image captured and saved"
+    assert camera.frames == 1 and camera.calls == 1
+    assert camera.last_query["waitForResult"] == "true" and camera.last_query["duration"] == "5.0"
+
+
+def test_capture_tries_again_when_the_plugin_saves_nothing(monkeypatch, quick_capture):
+    camera = FakeCamera(["unknown", "saved"])
+    result = capture(camera, monkeypatch, duration=5)
+    assert result["Success"] and camera.calls == 2 and camera.frames == 1
+
+
+def test_capture_does_not_trust_a_success_without_a_new_frame(monkeypatch, quick_capture):
+    camera = FakeCamera(["claims"])
+    result = capture(camera, monkeypatch, duration=5)
+    assert not result["Success"] and "No image was saved after 3 attempts" in result["Error"]
+    assert camera.calls == 3 and camera.frames == 0
+
+
+def test_capture_reports_the_failure_when_every_attempt_fails(monkeypatch, quick_capture):
+    camera = FakeCamera(["unknown"])
+    result = capture(camera, monkeypatch, duration=5)
+    assert not result["Success"] and "Unknown error" in result["Error"]
+
+
+def test_five_captures_in_a_row_give_five_frames_even_when_some_fail(monkeypatch, quick_capture):
+    # The 4 frames problem: some captures fail at random; each successful call must still mean one frame.
+    camera = FakeCamera(["saved", "unknown", "saved", "saved", "unknown", "saved", "saved"])
+
+    async def five(client):
+        return [await tool(client, "nina_capture_image", {"duration": 5}) for _ in range(5)]
+
+    results = run_against(camera.routes(), monkeypatch, five)
+    assert all(r["Success"] for r in results) and camera.frames == 5
+
+
+def test_capture_with_download_uses_the_upstream_tool(monkeypatch, quick_capture):
+    seen = []
+
+    async def upstream(input):
+        seen.append(input.download)
+        return {"Success": True, "Message": "downloaded"}
+
+    monkeypatch.setattr(extra_tools, "_upstream_capture_image", upstream)
+    result = run_against({}, monkeypatch, lambda c: tool(c, "nina_capture_image", {"duration": 5, "download": True}))
+    assert result["Message"] == "downloaded" and seen == [True]
