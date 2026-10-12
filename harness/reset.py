@@ -15,6 +15,8 @@ import time
 
 import requests
 
+from harness import minipc
+
 CAMERA_TEMP = 20.0       # ambient, reached by warming
 MOUNT_RA_DEG = 0.0       # RA 0h, Dec +80°: circumpolar at the simulated site (lat 53°N),
 MOUNT_DEC = 80.0         # always above the horizon and away from any task target
@@ -57,16 +59,22 @@ def reset(api: NinaApi | None = None, attempts: int = 2) -> dict:
     """Reset camera, mount and focuser, verify the result and return the baseline state.
 
     The simulated devices occasionally drop their connection mid-reset, so a failed attempt is
-    retried (reconnecting first) before giving up.
+    retried (reconnecting first) before giving up. If the mini PC can be reached over SSH
+    (MINIPC_SSH_USER, see harness/minipc.py), Sky Simulator is restarted and the reset tried once more.
     """
     api = api or NinaApi()
     for attempt in range(1, attempts + 1):
         try:
             return _reset_once(api)
-        except (RuntimeError, TimeoutError) as e:
-            if attempt == attempts:
+        except (RuntimeError, TimeoutError, requests.RequestException) as e:
+            if attempt < attempts:
+                print(f"reset attempt {attempt} failed ({e}); retrying")
+                continue
+            if not minipc.enabled():
                 raise
-            print(f"reset attempt {attempt} failed ({e}); retrying")
+            print(f"reset attempt {attempt} failed ({e})")
+    minipc.restart_simulator()
+    return _reset_once(api)
 
 
 def _reset_once(api: NinaApi) -> dict:
