@@ -23,6 +23,31 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
   disconnected between runs. Restarting Sky Simulator fixed the camera. The reset retries once
   after reconnecting, but a camera that cannot connect needs a restart of Sky Simulator.
 
+## Sky Simulator's Alpaca server stalls (open, 2026-10-12)
+NINA loses all three devices at once and does not get them back: the simulator's own log (its Log tab)
+shows it carrying on normally while NINA's requests time out for about 30 s, after which NINA logs
+`should be connected but reports to be disconnected`, `Reconnection failed` and disconnects the camera,
+mount and focuser. The simulator process is still running and responding; its Alpaca server is not.
+- 21:38:11: during a 1 to 25000 focuser move. The simulator finished the move at 21:38:37, 26 s after
+  NINA gave up.
+- 21:55:16: during a 25000 to 1 move made in 2000-step chunks, about 3½ minutes in.
+- Earlier stalls (10 and 12 October) happened during autofocus. A hang can also be longer: on 10 October
+  commands queued for 14 minutes.
+- Each focuser step makes the simulator render an image (about 80 steps/s, about 100 steps per image), so
+  a long move is a long burst of renders. That burst is the likely load, but a 4 minute move did
+  complete once (21:24:52 to 21:29:05), so it is not a fixed limit.
+
+Tried, and what it showed:
+- **Moving the focuser in 2000-step chunks** (`harness/reset.py`): works (about 25 s per chunk) and avoids
+  the reset's 180 s step timeout, which a single 1 to 25000 move (about 312 s) always hit. It did not stop
+  the stall.
+- **NINA's polling interval 2 s to 5 s** (profile `ApplicationSettings.DevicePollingInterval`, changed
+  through `profile/change-value`, path with dashes): no effect on the stall, so it was put back to 2.
+  NINA's profile has no Alpaca timeout or retry setting; the retries ("Attempt 2 / 3") are fixed in code.
+- **Reconnecting** (`harness/watchdog.py`): the watchdog reconnected nothing in over 2½ minutes. A stalled
+  server needs a restart (`docs/minipc-remote.md`), then someone pressing **Start simulation.** (#31).
+  The watchdog's job is therefore to record the drop so the report can leave that run out.
+
 ## Scoring signals
 - Camera: use `Temperature`. `TargetTemp` stays stale and `AtTargetTemp` is always true.
 - Mount: slews end about 0.4° off in RA and 0.2° in Dec, so "on target" needs a tolerance
