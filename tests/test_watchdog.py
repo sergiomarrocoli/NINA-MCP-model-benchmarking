@@ -19,6 +19,7 @@ class FakeApi:
 
     def get(self, path, **params):
         self.connects.append(path)
+        self.params = params
         if not self.stubborn:
             self.connected.add(path.split("/")[1])
 
@@ -80,3 +81,10 @@ def test_a_second_outage_after_recovery_is_a_second_drop():
     api.connected.discard("focuser")
     wd.check()
     assert [d["device"] for d in wd.drops] == ["focuser", "focuser"]
+
+
+def test_reconnect_uses_the_configured_id(monkeypatch):
+    monkeypatch.setenv("NINA_FOCUSER_ID", "ASCOM.AlpacaDynamic1.Focuser")
+    api = FakeApi(connected=("camera", "mount"))
+    Watchdog(api, interval=0).check()
+    assert api.params == {"to": "ASCOM.AlpacaDynamic1.Focuser"}

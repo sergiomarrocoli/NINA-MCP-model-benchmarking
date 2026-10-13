@@ -23,21 +23,34 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
   disconnected between runs. Restarting Sky Simulator fixed the camera. The reset retries once
   after reconnecting, but a camera that cannot connect needs a restart of Sky Simulator.
 
-## Sky Simulator's Alpaca server stalls (open, 2026-10-12)
-NINA loses all three devices at once and does not get them back: the simulator's own log (its Log tab)
-shows it carrying on normally while NINA's requests time out for about 30 s, after which NINA logs
-`should be connected but reports to be disconnected`, `Reconnection failed` and disconnects the camera,
-mount and focuser. The simulator process is still running and responding; its Alpaca server is not.
-- 21:38:11: during a 1 to 25000 focuser move. The simulator finished the move at 21:38:37, 26 s after
-  NINA gave up.
-- 21:55:16: during a 25000 to 1 move made in 2000-step chunks, about 3½ minutes in.
-- Earlier stalls (10 and 12 October) happened during autofocus. A hang can also be longer: on 10 October
-  commands queued for 14 minutes.
-- Each focuser step makes the simulator render an image (about 80 steps/s, about 100 steps per image), so
-  a long move is a long burst of renders. That burst is the likely load, but a 4 minute move did
-  complete once (21:24:52 to 21:29:05), so it is not a fixed limit.
+## NINA drops the Sky Simulator devices after about 4 minutes (worked around, 2026-10-13)
+NINA loses all three devices at once and does not get them back by itself: its requests to the simulator
+time out for about 30 s, then it logs `should be connected but reports to be disconnected` and
+`Reconnection failed` and disconnects the camera, mount and focuser. The simulator's own log (its Log tab)
+shows it carrying on normally throughout, and its process keeps running and responding.
 
-Tried, and what it showed:
+**Cause: NINA's built-in Alpaca client, not the simulator.** The same camera connected through ASCOM's own
+Alpaca client (`ASCOM.AlpacaDynamic1.Camera`) ran 160 captures over 8 minutes without a drop, where the
+direct Alpaca route dropped at 222 s after 75. With all three devices on the ASCOM route (mount
+`ASCOM.AlpacaDynamic1.Telescope`, focuser `ASCOM.AlpacaDynamic1.Focuser`), 10 minutes of mixed work (26
+slews, 26 focuser moves, 49 captures) also had no drop. **Use the ASCOM entries**: set `NINA_CAMERA_ID`,
+`NINA_MOUNT_ID` and `NINA_FOCUSER_ID` in `.env` (see `.env.example`); the reset connects to those ids and
+switches a device that is connected to another one. The ASCOM dynamic clients had to be created in ASCOM
+on the mini PC first (NINA only lists drivers that already exist); the camera ones already were.
+
+Evidence from the direct route, all about 3½ to 4 minutes after activity began, whatever the device:
+- 21:38:11 on 12 Oct, during a 1 to 25000 focuser move (the simulator finished the move 26 s after NINA gave up).
+- 21:55:16, during a 25000 to 1 move in 2000-step chunks.
+- 13 Oct, camera only, back-to-back captures at a steady 3.0 s each, 222 s in. The stall lasted about a minute
+  before NINA could reconnect, though one on 12 Oct had not cleared after 2½ minutes.
+- Earlier stalls on 10 and 12 Oct during autofocus (one lasted 14 minutes: commands queued).
+Nothing slowed down beforehand, and load made no difference, so it is not the simulator's rendering.
+
+Other differences on the ASCOM route: the camera baseline reads `CoolerOn` True (False on the direct route);
+the tier 1 and tier 2 tasks still pass. About 6% of captures fail with the plugin's `Unknown error` on both
+routes (the replacement `nina_capture_image` retries them).
+
+Tried before finding that, and what it showed:
 - **Moving the focuser in 2000-step chunks** (`harness/reset.py`): works (about 25 s per chunk) and avoids
   the reset's 180 s step timeout, which a single 1 to 25000 move (about 312 s) always hit. It did not stop
   the stall.
