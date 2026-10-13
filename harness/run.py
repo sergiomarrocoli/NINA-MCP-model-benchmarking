@@ -32,8 +32,8 @@ RUNS_DIR = Path("runs")
 def mcp_transport() -> StdioTransport:
     return StdioTransport(
         command=sys.executable,
-        # The package has no __main__.py, so start the server directly.
-        args=["-c", "from nina_advanced_mcp import mcp; mcp.run()"],
+        # nina-advanced-mcp plus our autofocus and centre tools (the package has no __main__.py).
+        args=["-c", "from harness.extra_tools import mcp; mcp.run()"],
         env={
             **os.environ,
             "NINA_HOST": os.environ.get("NINA_HOST", "192.168.1.211"),
