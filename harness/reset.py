@@ -54,16 +54,35 @@ class NinaApi:
 
 
 DEVICES = ("camera", "mount", "focuser")
+# Which NINA device to use for each, as set in .env (NINA_CAMERA_ID, ...). Unset means whichever NINA has
+# selected. Use the ASCOM entries (ASCOM.AlpacaDynamic1.Camera, ...Telescope, ...Focuser): NINA's own
+# Alpaca client drops the devices after about 4 minutes, and the ASCOM route does not.
+DEVICE_ID_ENV = {"camera": "NINA_CAMERA_ID", "mount": "NINA_MOUNT_ID", "focuser": "NINA_FOCUSER_ID"}
+
+
+def wanted_id(device: str) -> str | None:
+    return os.environ.get(DEVICE_ID_ENV[device]) or None
+
+
+def connect_command(api: NinaApi, device: str) -> None:
+    """Ask NINA to connect `device`, to the configured id if there is one (does not wait)."""
+    wanted = wanted_id(device)
+    api.get(f"equipment/{device}/connect", **({"to": wanted} if wanted else {}))
 
 
 def ensure_connected(api: NinaApi) -> list[str]:
-    """Connect any device that is not connected. Returns the devices that had to be reconnected."""
+    """Connect each device to the configured id. Returns the devices that had to be (re)connected."""
     reconnected = []
     for device in DEVICES:
-        if not api.info(device)["Connected"]:
-            api.get(f"equipment/{device}/connect")
-            wait_for(f"{device} to connect", lambda d=device: api.info(d)["Connected"])
-            reconnected.append(device)
+        info, wanted = api.info(device), wanted_id(device)
+        if info["Connected"] and (wanted is None or info.get("DeviceId") == wanted):
+            continue
+        if info["Connected"]:  # connected to a different device than the one wanted
+            api.get(f"equipment/{device}/disconnect")
+            wait_for(f"{device} to disconnect", lambda d=device: not api.info(d)["Connected"])
+        connect_command(api, device)
+        wait_for(f"{device} to connect", lambda d=device: api.info(d)["Connected"])
+        reconnected.append(device)
     return reconnected
 
 

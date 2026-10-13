@@ -7,12 +7,13 @@ class FakeApi:
     def __init__(self, position=1, connected=("camera", "mount", "focuser")):
         self.position = position
         self.connected = set(connected)
+        self.ids = {d: "direct-alpaca" for d in connected}
         self.calls = []
 
     def info(self, device):
         if device == "focuser":
             return {"Connected": "focuser" in self.connected, "Position": self.position, "IsMoving": False}
-        return {"Connected": device in self.connected}
+        return {"Connected": device in self.connected, "DeviceId": self.ids.get(device)}
 
     def get(self, path, **params):
         self.calls.append((path, params))
@@ -20,12 +21,16 @@ class FakeApi:
             self.position = int(params["position"])
         elif path.endswith("/connect"):
             self.connected.add(path.split("/")[1])
+            self.ids[path.split("/")[1]] = params.get("to", "direct-alpaca")
         elif path.endswith("/disconnect"):
             self.connected.discard(path.split("/")[1])
         return {}
 
     def moves(self):
         return [p["position"] for path, p in self.calls if path == "equipment/focuser/move"]
+
+    def connects(self):
+        return [(path.split("/")[1], p.get("to")) for path, p in self.calls if path.endswith("/connect")]
 
 
 def test_long_focuser_move_is_made_in_chunks():
@@ -54,3 +59,31 @@ def test_ensure_connected_connects_only_what_is_down():
     assert reset.ensure_connected(api) == ["mount", "focuser"]
     assert reset.ensure_connected(api) == []
     assert api.connected == {"camera", "mount", "focuser"}
+
+
+def test_ensure_connected_uses_the_configured_ids(monkeypatch):
+    monkeypatch.setenv("NINA_CAMERA_ID", "ASCOM.AlpacaDynamic1.Camera")
+    monkeypatch.setenv("NINA_MOUNT_ID", "ASCOM.AlpacaDynamic1.Telescope")
+    monkeypatch.setenv("NINA_FOCUSER_ID", "ASCOM.AlpacaDynamic1.Focuser")
+    api = FakeApi(connected=())
+    assert reset.ensure_connected(api) == ["camera", "mount", "focuser"]
+    assert api.connects() == [("camera", "ASCOM.AlpacaDynamic1.Camera"), ("mount", "ASCOM.AlpacaDynamic1.Telescope"),
+                              ("focuser", "ASCOM.AlpacaDynamic1.Focuser")]
+
+
+def test_a_device_connected_to_the_wrong_id_is_switched(monkeypatch):
+    monkeypatch.setenv("NINA_CAMERA_ID", "ASCOM.AlpacaDynamic1.Camera")
+    for other in ("NINA_MOUNT_ID", "NINA_FOCUSER_ID"):
+        monkeypatch.delenv(other, raising=False)
+    api = FakeApi()  # everything connected through the direct Alpaca route
+    assert reset.ensure_connected(api) == ["camera"]
+    assert api.ids["camera"] == "ASCOM.AlpacaDynamic1.Camera" and api.ids["mount"] == "direct-alpaca"
+    assert reset.ensure_connected(api) == []  # already right: left alone
+
+
+def test_without_configured_ids_the_selected_device_is_connected_as_before(monkeypatch):
+    for name in reset.DEVICE_ID_ENV.values():
+        monkeypatch.delenv(name, raising=False)
+    api = FakeApi(connected=("camera",))
+    reset.ensure_connected(api)
+    assert api.connects() == [("mount", None), ("focuser", None)]

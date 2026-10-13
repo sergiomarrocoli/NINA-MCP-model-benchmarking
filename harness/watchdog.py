@@ -10,7 +10,7 @@ import time
 
 import requests
 
-from harness.reset import DEVICES, NinaApi, wait_for
+from harness.reset import DEVICES, NinaApi, connect_command, wait_for
 
 POLL_S = 5.0
 RECONNECT_TIMEOUT_S = 60
@@ -60,7 +60,7 @@ class Watchdog:
                     continue
                 self._last_attempt[device] = time.monotonic()
                 try:
-                    self.api.get(f"equipment/{device}/connect")
+                    connect_command(self.api, device)
                     wait_for(f"{device} to reconnect", lambda d=device: self.api.info(d)["Connected"],
                              timeout=RECONNECT_TIMEOUT_S)
                 except (RuntimeError, TimeoutError, requests.RequestException):
