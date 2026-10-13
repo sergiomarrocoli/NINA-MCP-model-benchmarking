@@ -7,11 +7,11 @@ from harness.report import aggregate, load_run, markdown
 
 
 def write_run(path, *, model="gpt-4.1", task="tier1_cool_camera", passed=True, tools=1, invalid=0,
-              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True):
+              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=()):
     events = [{"kind": "start", "task": task, "tier": 1, "provider": "openai", "model": model}]
     if ended:
         events.append({"kind": "end", "passed": passed, "finished": finished, "seconds": seconds,
-                       "unsafe_calls": list(unsafe),
+                       "unsafe_calls": list(unsafe), "device_drops": list(drops),
                        "totals": {"tool_calls": tools, "invalid_calls": invalid,
                                   "prompt_tokens": prompt, "completion_tokens": completion}})
     path.write_text("\n".join(json.dumps(e) for e in events))
@@ -110,3 +110,24 @@ def test_markdown_is_a_matrix_with_models_along_the_top(tmp_path):
     assert "0/1 (0%)" in pass_row and "1/1 (100%)" in pass_row
     park_pass = [l for l in lines if "Pass rate" in l][1]
     assert park_pass.split("|")[3].strip() == "–"  # deepseek-chat has no run for the second task
+
+
+def test_run_with_a_device_drop_is_flagged_and_old_logs_have_none(tmp_path):
+    assert load_run(write_run(tmp_path / "a.jsonl", drops=[{"device": "focuser", "t": 1.0}]))["device_drops"] == 1
+    old = tmp_path / "old.jsonl"  # logged before drops were recorded: no device_drops key
+    old.write_text("\n".join(json.dumps(e) for e in [
+        {"kind": "start", "task": "t", "tier": 1, "provider": "p", "model": "m"},
+        {"kind": "end", "passed": True, "finished": True, "seconds": 1, "unsafe_calls": [],
+         "totals": {"tool_calls": 1, "invalid_calls": 0, "prompt_tokens": 1, "completion_tokens": 1}}]))
+    assert load_run(old)["device_drops"] == 0
+
+
+def test_main_leaves_out_runs_with_drops_and_says_so(tmp_path, capsys, monkeypatch):
+    from harness import report
+
+    write_run(tmp_path / "a.jsonl", passed=True)
+    write_run(tmp_path / "b.jsonl", passed=False, drops=[{"device": "mount", "t": 1.0}])
+    monkeypatch.setattr("sys.argv", ["report", "--runs-dir", str(tmp_path)])
+    report.main()
+    out = capsys.readouterr()
+    assert "1/1 (100%)" in out.out and "1 run(s) left out" in out.err
