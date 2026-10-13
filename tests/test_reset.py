@@ -4,13 +4,17 @@ from harness import reset
 class FakeApi:
     """Just enough of NinaApi: a focuser that reaches any commanded position at once, and devices."""
 
-    def __init__(self, position=1, connected=("camera", "mount", "focuser")):
+    def __init__(self, position=1, connected=("camera", "mount", "focuser", "filterwheel")):
         self.position = position
+        self.filter = 0
         self.connected = set(connected)
         self.ids = {d: "direct-alpaca" for d in connected}
         self.calls = []
 
     def info(self, device):
+        if device == "filterwheel":
+            return {"Connected": "filterwheel" in self.connected, "DeviceId": self.ids.get(device), "IsMoving": False,
+                    "SelectedFilter": {"Id": self.filter, "Name": f"filter {self.filter}"}}
         if device == "focuser":
             return {"Connected": "focuser" in self.connected, "Position": self.position, "IsMoving": False}
         return {"Connected": device in self.connected, "DeviceId": self.ids.get(device)}
@@ -19,6 +23,8 @@ class FakeApi:
         self.calls.append((path, params))
         if path == "equipment/focuser/move":
             self.position = int(params["position"])
+        elif path == "equipment/filterwheel/change-filter":
+            self.filter = int(params["filterId"])
         elif path.endswith("/connect"):
             self.connected.add(path.split("/")[1])
             self.ids[path.split("/")[1]] = params.get("to", "direct-alpaca")
@@ -56,25 +62,25 @@ def test_short_move_is_a_single_command():
 
 def test_ensure_connected_connects_only_what_is_down():
     api = FakeApi(connected=("camera",))
-    assert reset.ensure_connected(api) == ["mount", "focuser"]
+    assert reset.ensure_connected(api) == ["mount", "focuser", "filterwheel"]
     assert reset.ensure_connected(api) == []
-    assert api.connected == {"camera", "mount", "focuser"}
+    assert api.connected == {"camera", "mount", "focuser", "filterwheel"}
 
 
 def test_ensure_connected_uses_the_configured_ids(monkeypatch):
     monkeypatch.setenv("NINA_CAMERA_ID", "ASCOM.AlpacaDynamic1.Camera")
     monkeypatch.setenv("NINA_MOUNT_ID", "ASCOM.AlpacaDynamic1.Telescope")
     monkeypatch.setenv("NINA_FOCUSER_ID", "ASCOM.AlpacaDynamic1.Focuser")
+    monkeypatch.setenv("NINA_FILTERWHEEL_ID", "ASCOM.AlpacaDynamic1.FilterWheel")
     api = FakeApi(connected=())
-    assert reset.ensure_connected(api) == ["camera", "mount", "focuser"]
+    assert reset.ensure_connected(api) == ["camera", "mount", "focuser", "filterwheel"]
     assert api.connects() == [("camera", "ASCOM.AlpacaDynamic1.Camera"), ("mount", "ASCOM.AlpacaDynamic1.Telescope"),
-                              ("focuser", "ASCOM.AlpacaDynamic1.Focuser")]
+                              ("focuser", "ASCOM.AlpacaDynamic1.Focuser"),
+                              ("filterwheel", "ASCOM.AlpacaDynamic1.FilterWheel")]
 
 
 def test_a_device_connected_to_the_wrong_id_is_switched(monkeypatch):
     monkeypatch.setenv("NINA_CAMERA_ID", "ASCOM.AlpacaDynamic1.Camera")
-    for other in ("NINA_MOUNT_ID", "NINA_FOCUSER_ID"):
-        monkeypatch.delenv(other, raising=False)
     api = FakeApi()  # everything connected through the direct Alpaca route
     assert reset.ensure_connected(api) == ["camera"]
     assert api.ids["camera"] == "ASCOM.AlpacaDynamic1.Camera" and api.ids["mount"] == "direct-alpaca"
@@ -86,4 +92,32 @@ def test_without_configured_ids_the_selected_device_is_connected_as_before(monke
         monkeypatch.delenv(name, raising=False)
     api = FakeApi(connected=("camera",))
     reset.ensure_connected(api)
-    assert api.connects() == [("mount", None), ("focuser", None)]
+    assert api.connects() == [("mount", None), ("focuser", None), ("filterwheel", None)]
+
+
+def test_change_filter_waits_for_the_wheel_to_arrive():
+    api = FakeApi()
+    assert reset.filter_at(api, 0) and not reset.filter_at(api, 3)
+    reset.change_filter(api, 3)
+    assert api.filter == 3 and reset.filter_at(api, 3)
+    assert ("equipment/filterwheel/change-filter", {"filterId": 3}) in api.calls
+
+
+def test_snapshot_reads_the_filter():
+    api = FakeApi()
+    api.filter = 1
+
+    def info(device, real=api.info):
+        base = real(device)
+        if device == "camera":
+            base.update({"Temperature": 20, "CoolerOn": False})
+        if device == "mount":
+            base.update({"RightAscension": 0.0, "Declination": 80.0, "TrackingEnabled": True, "AtPark": False, "Slewing": False})
+        return base
+
+    api.info = info
+    original_get = api.get
+    api.get = lambda path, **p: 7 if path == "image-history" else original_get(path, **p)
+    state = reset.snapshot(api)
+    assert state["filter_id"] == 1 and state["filter_name"] == "filter 1" and state["filterwheel_connected"]
+    assert state["filterwheel_moving"] is False

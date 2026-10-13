@@ -66,6 +66,15 @@ def check_session(baseline: dict, end: dict) -> list[str]:
     return failures
 
 
+def check_filter_is(name: str):
+    def check(baseline: dict, end: dict) -> list[str]:
+        if end["filter_name"] != name or end["filterwheel_moving"]:
+            return [f"filter wheel at {end['filter_name']}, wanted {name}"]
+        return []
+
+    return check
+
+
 def check_mount_parked(baseline: dict, end: dict) -> list[str]:
     return [] if end["mount_parked"] else ["mount is not parked"]
 
@@ -105,6 +114,14 @@ TASKS = {
             setup=CONNECT,
             check=check_focuser_at(FOCUSER_TARGET),
             allowed_tools=frozenset({"nina_move_focuser", "nina_connect_focuser"}),
+        ),
+        Task(
+            id="tier1_change_filter",
+            tier=1,
+            prompt="Change the filter to Red.",
+            setup=CONNECT,
+            check=check_filter_is("Red"),
+            allowed_tools=frozenset({"nina_change_filter", "nina_connect_filterwheel"}),
         ),
         Task(
             id="tier1_park_mount",

@@ -24,6 +24,7 @@ MOUNT_DEC = 80.0         # always above the horizon and away from any task targe
 # the simulator boots at position 1. The focuser moves about 80 steps/s, so the first reset after
 # a Sky Simulator restart takes about 5 minutes; after that resets are quick unless a task moved it far.
 FOCUSER_POSITION = 25000
+FILTER_BASELINE = 0       # Luminance; the simulated wheel has 7 filters (Luminance, Red, Green, Blue, H-alpha, SII, O3)
 # Slack for the mount's reported position (JNOW) against the J2000 target we commanded: they differ
 # by precession, about 0.4° in RA and 0.15° in Dec in 2026.
 MOUNT_RA_TOL_HOURS = 0.05
@@ -53,11 +54,12 @@ class NinaApi:
         return self.get(f"equipment/{device}/info")
 
 
-DEVICES = ("camera", "mount", "focuser")
+DEVICES = ("camera", "mount", "focuser", "filterwheel")
 # Which NINA device to use for each, as set in .env (NINA_CAMERA_ID, ...). Unset means whichever NINA has
 # selected. Use the ASCOM entries (ASCOM.AlpacaDynamic1.Camera, ...Telescope, ...Focuser): NINA's own
 # Alpaca client drops the devices after about 4 minutes, and the ASCOM route does not.
-DEVICE_ID_ENV = {"camera": "NINA_CAMERA_ID", "mount": "NINA_MOUNT_ID", "focuser": "NINA_FOCUSER_ID"}
+DEVICE_ID_ENV = {"camera": "NINA_CAMERA_ID", "mount": "NINA_MOUNT_ID", "focuser": "NINA_FOCUSER_ID",
+                 "filterwheel": "NINA_FILTERWHEEL_ID"}
 
 
 def wanted_id(device: str) -> str | None:
@@ -84,6 +86,16 @@ def ensure_connected(api: NinaApi) -> list[str]:
         wait_for(f"{device} to connect", lambda d=device: api.info(d)["Connected"])
         reconnected.append(device)
     return reconnected
+
+
+def filter_at(api: NinaApi, filter_id: int) -> bool:
+    info = api.info("filterwheel")
+    return not info["IsMoving"] and (info.get("SelectedFilter") or {}).get("Id") == filter_id
+
+
+def change_filter(api: NinaApi, filter_id: int) -> None:
+    api.get("equipment/filterwheel/change-filter", filterId=filter_id)
+    wait_for(f"filter wheel to reach filter {filter_id}", lambda: filter_at(api, filter_id))
 
 
 def move_focuser(api: NinaApi, target: int) -> None:
@@ -153,11 +165,15 @@ def _reset_once(api: NinaApi) -> dict:
     # Focuser: move to the baseline and wait for it to stop.
     move_focuser(api, FOCUSER_POSITION)
 
+    # Filter wheel: back to the baseline filter.
+    if not filter_at(api, FILTER_BASELINE):
+        change_filter(api, FILTER_BASELINE)
+
     return verify(api)
 
 
 def settle(api: NinaApi, timeout: float = TIMEOUT_S) -> float:
-    """Wait until the mount and focuser have stayed still for STILL_FOR_S. Returns seconds waited.
+    """Wait until the mount, focuser and filter wheel have stayed still for STILL_FOR_S. Returns seconds waited.
 
     Parking and focuser moves return at once and finish later, and the simulators start moving a
     second or two after the command. A single "not moving" reading is therefore not enough, so the
@@ -166,7 +182,7 @@ def settle(api: NinaApi, timeout: float = TIMEOUT_S) -> float:
     start = time.monotonic()
     still_since = None
     while time.monotonic() - start < timeout:
-        moving = api.info("mount")["Slewing"] or api.info("focuser")["IsMoving"]
+        moving = api.info("mount")["Slewing"] or api.info("focuser")["IsMoving"] or api.info("filterwheel")["IsMoving"]
         now = time.monotonic()
         if moving:
             still_since = None
@@ -181,6 +197,8 @@ def settle(api: NinaApi, timeout: float = TIMEOUT_S) -> float:
 def snapshot(api: NinaApi) -> dict:
     """Read the state the scorer cares about, straight from NINA."""
     camera, mount, focuser = api.info("camera"), api.info("mount"), api.info("focuser")
+    wheel = api.info("filterwheel")
+    filter_now = wheel.get("SelectedFilter") or {}
     return {
         "camera_connected": camera["Connected"],
         "camera_temperature": camera["Temperature"],
@@ -194,6 +212,10 @@ def snapshot(api: NinaApi) -> dict:
         "focuser_connected": focuser["Connected"],
         "focuser_position": focuser["Position"],
         "focuser_moving": focuser["IsMoving"],
+        "filterwheel_connected": wheel["Connected"],
+        "filter_id": filter_now.get("Id"),
+        "filter_name": filter_now.get("Name"),
+        "filterwheel_moving": wheel["IsMoving"],
         "image_count": api.get("image-history", count="true"),
     }
 
@@ -201,8 +223,9 @@ def snapshot(api: NinaApi) -> dict:
 def verify(api: NinaApi) -> dict:
     """Check the baseline holds and return a snapshot (including the frame count to score against)."""
     camera, mount, focuser = api.info("camera"), api.info("mount"), api.info("focuser")
+    wheel = api.info("filterwheel")
     problems = []
-    if not (camera["Connected"] and mount["Connected"] and focuser["Connected"]):
+    if not (camera["Connected"] and mount["Connected"] and focuser["Connected"] and wheel["Connected"]):
         problems.append("a device is not connected")
     if abs(camera["Temperature"] - CAMERA_TEMP) > 1:
         problems.append(f"camera temperature {camera['Temperature']}")
@@ -213,6 +236,8 @@ def verify(api: NinaApi) -> dict:
         problems.append("mount parked or slewing")
     if focuser["Position"] != FOCUSER_POSITION or focuser["IsMoving"]:
         problems.append(f"focuser at {focuser['Position']}")
+    if not filter_at(api, FILTER_BASELINE):
+        problems.append(f"filter wheel at {(wheel.get('SelectedFilter') or {}).get('Name')}")
     if problems:
         raise RuntimeError("reset failed verification: " + "; ".join(problems))
 
