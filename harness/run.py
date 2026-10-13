@@ -19,6 +19,7 @@ from harness.providers import PROVIDERS
 from harness.reset import NinaApi, reset, settle, snapshot
 from harness.scoring import score
 from harness.tasks import TASKS
+from harness.watchdog import Watchdog
 
 SYSTEM_PROMPT = (
     "You operate an astrophotography setup through N.I.N.A. using the tools provided. "
@@ -77,6 +78,8 @@ async def run(provider_name: str, task_id: str) -> Path:
         # Known starting state; also the baseline the scorer compares against (e.g. frame count).
         baseline = reset()
         record("reset", baseline=baseline)
+        api = NinaApi()
+        watchdog = Watchdog(api).start()  # reconnects a device that drops mid-run and records it
 
         async with Client(mcp_transport()) as client:
             for name, args in task.setup:
@@ -129,13 +132,16 @@ async def run(provider_name: str, task_id: str) -> Path:
 
             # The scorer reads NINA directly, not through the tools the model used.
             run_seconds = time.monotonic() - started  # the model's own time, before waiting on equipment
-            api = NinaApi()
+            watchdog.stop()
+            watchdog.check()
             settle_seconds = settle(api)
             end_state = snapshot(api)
+            watchdog.check(reconnect=False)
             result = score(task.id, baseline, end_state, tool_calls, final)
             record("end", final=final, finished=final is not None, steps=step + 1,
                    seconds=run_seconds, settle_seconds=settle_seconds, totals=totals, state=end_state,
-                   passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls)
+                   passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls,
+                   device_drops=watchdog.drops)
 
     return log_path
 
