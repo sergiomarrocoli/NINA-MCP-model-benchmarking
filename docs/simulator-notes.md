@@ -61,6 +61,16 @@ Tried before finding that, and what it showed:
   server needs a restart (`docs/minipc-remote.md`), then someone pressing **Start simulation.** (#31).
   The watchdog's job is therefore to record the drop so the report can leave that run out.
 
+## Filter wheel
+- The simulated wheel has 7 filters: Luminance (id 0), Red (1), Green (2), Blue (3), H-alpha (4), SII (5), O3 (6).
+  The baseline is Luminance. Connect it through the ASCOM entry, `NINA_FILTERWHEEL_ID=ASCOM.AlpacaDynamic1.FilterWheel`
+  (see the stall notes above).
+- `equipment/filterwheel/change-filter?filterId=N` answers "Filter changed" at once; the wheel takes about 1 s.
+  Straight after the command the first reading can still show the old filter with `IsMoving` True, so a reading
+  only counts once `IsMoving` is False. `settle` waits for the wheel too.
+- 10 minutes with all four devices on the ASCOM route (25 slews, 25 focuser moves, 25 filter changes, 48
+  captures) had no drops.
+
 ## Scoring signals
 - Camera: use `Temperature`. `TargetTemp` stays stale and `AtTargetTemp` is always true.
 - Mount: the plugin takes J2000 coordinates but mount info reports JNOW, which differ by
