@@ -7,6 +7,7 @@ from aiohttp import web
 from aiohttp.test_utils import TestServer
 from fastmcp import Client
 
+import nina_advanced_mcp
 from harness import extra_tools
 
 
@@ -14,11 +15,16 @@ def run_against(routes, monkeypatch, call):
     """Start a fake API, point the tools at it, and run `call(client)` against the MCP server."""
     async def go():
         app = web.Application()
+        async def api_root(request):  # the server's own connection check
+            return web.json_response(ok())
+
+        app.router.add_get("/v2/api", api_root)
         for path, handler in routes.items():
             app.router.add_get(f"/v2/api/{path}", handler)
         async with TestServer(app) as server:
             monkeypatch.setenv("NINA_HOST", server.host)
             monkeypatch.setenv("NINA_PORT", str(server.port))
+            monkeypatch.setattr(nina_advanced_mcp, "nina_client", None)  # the server caches its client, host and port included
             async with Client(extra_tools.mcp) as client:
                 return await call(client)
 
@@ -187,14 +193,13 @@ def test_a_timeout_gets_a_readable_error(monkeypatch):
     assert not result["Success"] and "Timed out" in result["Error"]
 
 
-# --- nina_capture_image: waits, and only reports a frame that was really saved ----------------------
+# --- nina_capture_image (the fork's, installed from its benchmark branch): waits, and only reports a frame that was really saved ---
 
 
 @pytest.fixture
 def quick_capture(monkeypatch):
-    monkeypatch.setattr(extra_tools, "POLL_S", 0.04)
-    monkeypatch.setattr(extra_tools, "CAPTURE_RETRY_PAUSE_S", 0)
-    monkeypatch.setattr(extra_tools, "CAPTURE_SAVE_WAIT_S", 0.2)
+    monkeypatch.setattr(nina_advanced_mcp, "CAPTURE_RETRY_PAUSE_S", 0)
+    monkeypatch.setattr(nina_advanced_mcp, "CAPTURE_SAVE_WAIT_S", 0.2)
 
 
 class FakeCamera:
@@ -229,7 +234,7 @@ def capture(camera, monkeypatch, **args):
 def test_capture_waits_for_the_saved_frame(monkeypatch, quick_capture):
     camera = FakeCamera()
     result = capture(camera, monkeypatch, duration=5)
-    assert result["Success"] and result["Message"] == "Image captured and saved"
+    assert result["Success"] and result["Message"] == "Image captured successfully"
     assert camera.frames == 1 and camera.calls == 1
     assert camera.last_query["waitForResult"] == "true" and camera.last_query["duration"] == "5.0"
 
@@ -250,7 +255,7 @@ def test_capture_does_not_trust_a_success_without_a_new_frame(monkeypatch, quick
 def test_capture_reports_the_failure_when_every_attempt_fails(monkeypatch, quick_capture):
     camera = FakeCamera(["unknown"])
     result = capture(camera, monkeypatch, duration=5)
-    assert not result["Success"] and "Unknown error" in result["Error"]
+    assert not result["Success"] and "no response from device" in result["Error"]  # the server's wording for "Unknown error"
 
 
 def test_five_captures_in_a_row_give_five_frames_even_when_some_fail(monkeypatch, quick_capture):
@@ -262,15 +267,3 @@ def test_five_captures_in_a_row_give_five_frames_even_when_some_fail(monkeypatch
 
     results = run_against(camera.routes(), monkeypatch, five)
     assert all(r["Success"] for r in results) and camera.frames == 5
-
-
-def test_capture_with_download_uses_the_upstream_tool(monkeypatch, quick_capture):
-    seen = []
-
-    async def upstream(input):
-        seen.append(input.download)
-        return {"Success": True, "Message": "downloaded"}
-
-    monkeypatch.setattr(extra_tools, "_upstream_capture_image", upstream)
-    result = run_against({}, monkeypatch, lambda c: tool(c, "nina_capture_image", {"duration": 5, "download": True}))
-    assert result["Message"] == "downloaded" and seen == [True]

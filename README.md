@@ -12,8 +12,8 @@ The full plan is in [NINA Agent Benchmark.md](NINA%20Agent%20Benchmark.md). Work
 
 No results yet: the first batch (local against frontier models, #13) will be reported here.
 
-Runs from 10 to 12 October were discarded. They used a different tool list (103 tools; now 105, with a
-replacement capture tool), connected the simulator through a different route (NINA's own Alpaca client,
+Runs from 10 to 12 October were discarded. They used a different tool list (103 tools; now 105, and the MCP server
+is a fork with bug fixes), connected the simulator through a different route (NINA's own Alpaca client,
 which dropped the devices after about 4 minutes), and started from different baselines, so they cannot be
 compared with anything run now.
 

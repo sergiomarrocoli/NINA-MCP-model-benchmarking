@@ -48,7 +48,7 @@ Nothing slowed down beforehand, and load made no difference, so it is not the si
 
 Other differences on the ASCOM route: the camera baseline reads `CoolerOn` True (False on the direct route);
 the tier 1 and tier 2 tasks still pass. About 6% of captures fail with the plugin's `Unknown error` on both
-routes (the replacement `nina_capture_image` retries them).
+routes (the fork's `nina_capture_image` retries them).
 
 Tried before finding that, and what it showed:
 - **Moving the focuser in 2000-step chunks** (`harness/reset.py`): works (about 25 s per chunk) and avoids
@@ -154,24 +154,31 @@ parameters and response shapes). Check it before trusting a path in the MCP pack
 Both use their own long timeouts, since the upstream client gives up after 10 s. The harness now
 serves 105 tools (103 upstream plus these two); runs logged before this change had 103.
 
-We also **replace** upstream's `nina_capture_image` (same arguments, so 105 tools, not 106). Upstream, with
-`download=False`, starts the exposure and answers "Image captured successfully" in 0.0 s without checking
-that an image was saved. Calls made while the camera was still busy then failed at random ("Camera
-currently exposing"), and the plugin's own `waitForResult=true` sometimes fails with "Unknown error" and
-saves nothing. On 2026-10-12 this cost a Tier 2 run a frame: gpt-4.1 fired exposures back to back, one
-failed, and it ended with 4 frames while saying it had taken 5. The replacement waits for the capture,
-confirms the frame count in NINA's image history went up (so one successful call is one new frame),
-retries up to 3 times if nothing was saved, and returns an error if it still fails. Runs logged before
-this had the old behaviour.
+## The server under test: upstream with fixes, from our fork
+`requirements.txt` installs `nina_advanced_mcp` from the `benchmark` branch of
+[sergiomarrocoli/Nina_advanced_api_mcp](https://github.com/sergiomarrocoli/Nina_advanced_api_mcp) (a fork of
+PaDev1/Nina_advanced_api_mcp), pinned to a commit. The PyPI release is the same code, an older snapshot of it. The
+branch is upstream plus fixes for bugs we found, each on its own branch so it can go upstream as its own PR, and
+packaging (a `pyproject.toml` and the `nina_advanced_mcp/` layout, which the fork lacks). These are not model errors, so
+they are fixed rather than scored. It serves the same 105 tools (103 plus our autofocus and centre).
+- **`fix-stop-slew-endpoint`** (upstream PR #7): `nina_stop_slew` called `equipment/mount/stop-slew`, which does not exist
+  (the plugin uses `equipment/mount/slew/stop`), so a model could not stop a slew.
+- **`long-request-timeout`**: every request had a 10 s timeout, so a slew that takes longer with `wait_for_completion`
+  (the default) returned `Success: false` while the mount kept slewing. Waiting slews now get 300 s. Checked live: slews
+  of 20 s and 16 s now return success.
+- **`fix-get-version`**: `nina_get_version` called `application/version`, which 404s; the plugin serves `version`.
+- **`capture-verify-saved`**: with `download=False` the tool answered "Image captured successfully" in 0.0 s without
+  checking an image was saved. Calls made while the camera was busy then failed at random ("Camera currently
+  exposing"), and the plugin's own `waitForResult=true` sometimes fails with "Unknown error" and saves nothing. On
+  2026-10-12 this cost a Tier 2 run a frame: gpt-4.1 fired exposures back to back, one failed, and it ended with 4
+  frames while saying it had taken 5. The tool now waits for the capture, confirms the frame count in NINA's image
+  history went up (so one successful call is one new frame), retries up to 3 times if nothing was saved, and returns
+  an error if it still fails. Runs logged before the fix used our own replacement tool in the harness, with the same
+  behaviour; before that, the old one.
+- **`fix-fastmcp-instructions`**: the fork's main passes `description=` to `FastMCP()`, which current FastMCP (4.1.0)
+  rejects, so the server did not start. The PyPI release uses `instructions=`.
+- The fork's main also differs from the PyPI release in logging to stderr (right for an MCP server) and in the
+  flat-panel endpoint names; neither is used here.
 
-## MCP server (`nina-advanced-mcp`) bugs
-- `nina_stop_slew` calls `equipment/mount/stop-slew`, which does not exist (the plugin uses
-  `equipment/mount/slew/stop`). The tool returns `Success: false` with a 404 error, so a model
-  cannot stop a slew with it, but it is told so. It would need another route (for example
-  parking) to halt the mount.
-- Every HTTP request has a 10 s timeout. A slew that takes longer than that with
-  `wait_for_completion` on (the default) returns `Success: false` with an empty error while the
-  mount keeps slewing, so a model is told a slew failed when it worked. Long slews, such as the
-  tier 2 move to M31, will hit this.
-- `nina_get_version` calls a missing endpoint and returns 404.
+## Other MCP server problems we have not changed
 - The package imports `requests` without declaring it.
