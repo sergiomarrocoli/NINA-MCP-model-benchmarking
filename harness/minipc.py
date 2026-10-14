@@ -58,12 +58,40 @@ def wait_for_api(timeout: float = 240) -> None:
     raise TimeoutError("NINA's API did not come back after the restart")
 
 
+SIM_ONLINE_TIMEOUT_S = 120
+SIM_CAMERA_ID = "camera_sky_simulator_unique-id"  # NINA's own Alpaca entry; "(OFFLINE)" in its name until the simulation runs
+
+
+def sim_online() -> bool:
+    """Does NINA list the Sky Simulator camera as online? False while the simulation has not been started."""
+    base = f"http://{os.environ.get('NINA_HOST', 'localhost')}:{os.environ.get('NINA_PORT', '1888')}/v2/api"
+    try:
+        requests.get(f"{base}/equipment/camera/rescan", timeout=30)
+        devices = requests.get(f"{base}/equipment/camera/list-devices", timeout=30).json()["Response"]
+    except (requests.RequestException, ValueError, KeyError):
+        return False
+    return any(d.get("Id") == SIM_CAMERA_ID and "OFFLINE" not in d.get("DisplayName", "").upper() for d in devices)
+
+
+def wait_for_sim(timeout: float = SIM_ONLINE_TIMEOUT_S) -> None:
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if sim_online():
+            return
+        time.sleep(5)
+    raise TimeoutError(
+        "Sky Simulator is running but NINA still lists its camera as offline, so 'Start simulation.' was not pressed. "
+        "See C:\\nina-control\\log.txt on the mini PC (docs/minipc-remote.md)"
+    )
+
+
 def restart_simulator() -> None:
     """Restart Sky Simulator. NINA keeps running but loses its devices; the reset reconnects them."""
     print("restarting Sky Simulator on the mini PC")
     run("restart-sim")
     time.sleep(SIM_BOOT_S)
     wait_for_api()
+    wait_for_sim()
 
 
 def restart_nina() -> None:
