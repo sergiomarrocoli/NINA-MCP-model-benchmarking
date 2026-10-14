@@ -21,42 +21,47 @@ Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe)
 Log "started $exe"
 
 # Sky Simulator comes up idle: its Alpaca server only starts when "Start simulation." is pressed, and the
-# app has no start-on-launch setting. Press it through Windows UI Automation (docs/minipc-remote.md).
+# app has no start-on-launch setting. UI Automation sees nothing inside its window (0 elements, 14 Oct), so
+# look for the button as a plain Win32 child window and click it with a BM_CLICK message (docs/minipc-remote.md).
 if ($Target -ne "sim") { return }
-Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes
-Add-Type -Namespace Win -Name Mouse -MemberDefinition @"
-[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
-[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern void mouse_event(uint flags, uint dx, uint dy, uint data, UIntPtr extra);
+Add-Type -Namespace Win -Name Native -MemberDefinition @"
+public delegate bool EnumProc(System.IntPtr hwnd, System.IntPtr lParam);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool EnumChildWindows(System.IntPtr parent, EnumProc cb, System.IntPtr lParam);
+[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)] public static extern int GetWindowText(System.IntPtr hwnd, System.Text.StringBuilder text, int max);
+[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)] public static extern int GetClassName(System.IntPtr hwnd, System.Text.StringBuilder text, int max);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern System.IntPtr SendMessage(System.IntPtr hwnd, uint msg, System.IntPtr w, System.IntPtr l);
 "@
-$AE = [System.Windows.Automation.AutomationElement]
 
-function Find-Button($window) {
-    $all = $window.FindAll([System.Windows.Automation.TreeScope]::Descendants, [System.Windows.Automation.Condition]::TrueCondition)
-    foreach ($e in $all) { if ($e.Current.Name -like "Start simulation*") { return $e } }
-    $names = ($all | ForEach-Object { "$($_.Current.ControlType.ProgrammaticName):'$($_.Current.Name)'" } | Select-Object -First 80) -join "; "
-    Log "no 'Start simulation.' control among $($all.Count) elements: $names"
-    return $null
+function Get-Children($parent) {
+    $script:found = New-Object System.Collections.ArrayList
+    $cb = [Win.Native+EnumProc]{ param($h, $l)
+        $t = New-Object System.Text.StringBuilder 256; $c = New-Object System.Text.StringBuilder 256
+        [void][Win.Native]::GetWindowText($h, $t, 256); [void][Win.Native]::GetClassName($h, $c, 256)
+        [void]$script:found.Add([pscustomobject]@{ Handle = $h; Text = $t.ToString(); Class = $c.ToString() })
+        $true }
+    [void][Win.Native]::EnumChildWindows($parent, $cb, [IntPtr]::Zero)
+    return $script:found
 }
 
-$window = $null
-for ($i = 0; $i -lt 60 -and -not $window; $i++) {
+$main = [IntPtr]::Zero
+for ($i = 0; $i -lt 60 -and $main -eq [IntPtr]::Zero; $i++) {
     Start-Sleep -Seconds 1
     $p = Get-Process -Name $name -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
-    if ($p) { $window = $AE::FromHandle($p.MainWindowHandle) }
+    if ($p) { $main = $p.MainWindowHandle }
 }
-if (-not $window) { Log "START FAILED: no Sky Simulator window within 60 s"; return }
+if ($main -eq [IntPtr]::Zero) { Log "START FAILED: no Sky Simulator window within 60 s"; return }
 
-Start-Sleep -Seconds 3  # let the window finish drawing
-$button = Find-Button $window
-if (-not $button) { Log "START FAILED: button not found"; return }
-try {
-    $button.GetCurrentPattern([System.Windows.Automation.InvokePattern]::Pattern).Invoke()
-    Log "pressed 'Start simulation.' (invoke)"
-} catch {
-    # The control is visible but cannot be invoked: click where it is.
-    $r = $button.Current.BoundingRectangle
-    [Win.Mouse]::SetCursorPos([int]($r.X + $r.Width / 2), [int]($r.Y + $r.Height / 2)) | Out-Null
-    [Win.Mouse]::mouse_event(0x2, 0, 0, 0, [UIntPtr]::Zero)
-    [Win.Mouse]::mouse_event(0x4, 0, 0, 0, [UIntPtr]::Zero)
-    Log "pressed 'Start simulation.' (mouse click, invoke failed: $($_.Exception.Message))"
+# The window can exist before its controls do, so look for a few seconds.
+$button = $null
+for ($i = 0; $i -lt 15 -and -not $button; $i++) {
+    Start-Sleep -Seconds 1
+    $children = Get-Children $main
+    $button = $children | Where-Object { $_.Text -like "Start simulation*" } | Select-Object -First 1
 }
+if (-not $button) {
+    $list = ($children | Select-Object -First 80 | ForEach-Object { "$($_.Class):'$($_.Text)'" }) -join "; "
+    Log "START FAILED: no 'Start simulation.' child window among $($children.Count): $list"
+    return
+}
+[void][Win.Native]::SendMessage($button.Handle, 0x00F5, [IntPtr]::Zero, [IntPtr]::Zero)  # BM_CLICK
+Log "pressed '$($button.Text)' ($($button.Class), BM_CLICK)"
