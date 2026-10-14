@@ -18,8 +18,10 @@ RETRY_AFTER_S = 30  # a failed reconnect is not repeated sooner: a stalled simul
 
 
 class Watchdog:
-    def __init__(self, api: NinaApi | None = None, interval: float = POLL_S):
+    def __init__(self, api: NinaApi | None = None, interval: float = POLL_S, expected_down: tuple[str, ...] = ()):
         self.api = api or NinaApi()
+        # Devices a fault injected on purpose: left alone until they are connected (by the model), then watched like the rest.
+        self.expected_down = set(expected_down)
         self.interval = interval
         self.drops: list[dict] = []
         self._last_attempt: dict[str, float] = {}
@@ -47,6 +49,10 @@ class Watchdog:
                 connected = self.api.info(device)["Connected"]
             except (RuntimeError, requests.RequestException):
                 continue  # NINA's API itself is busy or unreachable: not a device drop
+            if device in self.expected_down:
+                if connected:
+                    self.expected_down.discard(device)
+                continue
             if not connected:
                 down.append(device)
                 # Record a drop once per outage, not on every check while the device stays down.

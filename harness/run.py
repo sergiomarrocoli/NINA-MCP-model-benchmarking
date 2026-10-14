@@ -16,6 +16,7 @@ from fastmcp.client.transports import StdioTransport
 from openai import OpenAI
 
 from harness.providers import PROVIDERS
+from harness import faults
 from harness.reset import NinaApi, reset, settle, snapshot
 from harness.scoring import score
 from harness.tasks import TASKS
@@ -79,7 +80,11 @@ async def run(provider_name: str, task_id: str) -> Path:
         baseline = reset()
         record("reset", baseline=baseline)
         api = NinaApi()
-        watchdog = Watchdog(api).start()  # reconnects a device that drops mid-run and records it
+        expected_down = ()
+        if task.fault:
+            expected_down = faults.inject(task.fault, api)  # after the baseline, so frame counts etc. are from the clean state
+            record("fault", fault=task.fault, expected_down=expected_down)
+        watchdog = Watchdog(api, expected_down=expected_down).start()  # reconnects a device that drops mid-run and records it
 
         async with Client(mcp_transport()) as client:
             for name, args in task.setup:

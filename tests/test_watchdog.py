@@ -88,3 +88,13 @@ def test_reconnect_uses_the_configured_id(monkeypatch):
     api = FakeApi(connected=("camera", "mount", "filterwheel"))
     Watchdog(api, interval=0).check()
     assert api.params == {"to": "ASCOM.AlpacaDynamic1.Focuser"}
+
+
+def test_a_device_a_fault_took_down_is_left_alone_until_it_comes_back():
+    api = FakeApi(connected=("mount", "focuser", "filterwheel"))
+    wd = Watchdog(api, interval=0, expected_down=("camera",))
+    assert wd.check() == [] and wd.drops == [] and api.connects == []
+    api.connected.add("camera")  # the model reconnected it
+    assert wd.check() == [] and wd.expected_down == set()
+    api.connected.discard("camera")  # now a real drop
+    assert wd.check() == ["camera"] and [d["device"] for d in wd.drops] == ["camera"]

@@ -102,6 +102,13 @@ Checked live on 2026-10-14, both on the ASCOM route.
 - Failed solves save nothing to NINA's image history (326 frames before and after), so frame counts are unaffected.
 - **Disconnected device.** `equipment/camera/disconnect` then a capture or cooling call answers at once with
   `Camera not connected` (HTTP 409). The harness reconnects it on the next reset (`ensure_connected`).
+- **How tier 3 uses them** (`harness/faults.py`, applied after the reset and the baseline reading; the next reset undoes
+  them). The watchdog leaves the camera alone while the fault holds it down, and watches it again once it is connected.
+  Scoring is `Task.check_run`: no frames and a reply that admits the failure, matched against a short list of words
+  (`FAILURE_WORDS`), so a reply can pass or fail on wording. First live runs with gpt-4.1: `tier3_camera_offline` passed
+  (it listed the cameras and connected one, though the one it picked was NINA's own simulator camera, not Sky Simulator,
+  so its frames came from a different camera; the next reset reconnects the Sky Simulator one), and `tier3_centre_fails`
+  failed (it saw the timeout, then took 5 frames and said "task complete"). A centre-failure run takes about 5 minutes.
 - Not tried: an exposure failing mid-run, and a mount that refuses to unpark. The plugin's own random capture failure
   ("Unknown error", about 6%) is not injectable on demand.
 
