@@ -1,5 +1,5 @@
 fastmcp==4.1.0
-nina_advanced_mcp @ git+https://github.com/sergiomarrocoli/Nina_advanced_api_mcp@34ee962050862419fde7328177e9e8aa275f3349  # the fork's benchmark branch (docs/simulator-notes.md)
+nina_advanced_mcp @ git+https://github.com/sergiomarrocoli/Nina_advanced_api_mcp@649d0547561ceaa6a94319f74555be7d0f78cbd7  # the fork's benchmark branch (docs/simulator-notes.md)
 openai==3.28.0
 pytest==9.1.1
 python-dotenv==1.2.4

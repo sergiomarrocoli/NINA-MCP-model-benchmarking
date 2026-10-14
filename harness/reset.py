@@ -10,23 +10,25 @@ Simulator quirks this works around:
 - The focuser moves about 80 steps/s, so waiting for it is the slow part of a reset.
 - The image history cannot be cleared, so the frame count is recorded as a baseline instead.
 """
+import json
 import os
 import time
 
 import requests
 
 from harness import minipc
+from harness.coords import j2000_to_jnow, separation_deg
 
 CAMERA_TEMP = 20.0       # ambient, reached by warming
-MOUNT_RA_DEG = 0.0       # RA 0h, Dec +80°: circumpolar at the simulated site (lat 53°N),
-MOUNT_DEC = 80.0         # always above the horizon and away from any task target
+MOUNT_RA_DEG = 20.0      # RA 1h20m, Dec +83° (J2000): circumpolar at the simulated site (lat 53°N), so always above the
+MOUNT_DEC = 83.0         # horizon and away from any task target, and a field that plate solves every time (about 130 stars;
+                         # the previous baseline, RA 0 Dec +80°, gave about 60 stars and often failed to solve)
 # Best focus in Sky Simulator is at 25000. Out of focus, plate solving (and so centring) fails;
 # the simulator boots at position 1. The focuser moves about 80 steps/s, so the first reset after
 # a Sky Simulator restart takes about 5 minutes; after that resets are quick unless a task moved it far.
 FOCUSER_POSITION = 25000
 FILTER_BASELINE = 0       # Luminance; the simulated wheel has 7 filters (Luminance, Red, Green, Blue, H-alpha, SII, O3)
-# Slack for the mount's reported position (JNOW) against the J2000 target we commanded: they differ
-# by precession, about 0.4° in RA and 0.15° in Dec in 2026.
+# Slack for the mount's reported position (JNOW), compared with the J2000 target converted to JNOW; the slew itself lands within 0.01°.
 MOUNT_RA_TOL_HOURS = 0.05
 MOUNT_DEC_TOL_DEG = 0.5
 TIMEOUT_S = 600
@@ -34,6 +36,11 @@ STILL_FOR_S = 5          # how long equipment must stay still before its state c
 # Every focuser step makes Sky Simulator render an image (about 80 steps/s), so a long move is
 # one long burst of renders. Move in pieces, each waited for.
 FOCUSER_CHUNK = 2000
+# The mount can report a position it is not at: after a sync with the wrong coordinates the sky stays put and the
+# readout shifts, and every later slew lands off target (docs/simulator-notes.md). Only a plate solve shows it.
+SOLVE_EXPOSURE_S = 3
+SOLVE_TIMEOUT_S = 150
+POINTING_TOLERANCE_DEG = 0.05  # the simulated mount lands within 0.01° of a target
 
 
 class NinaApi:
@@ -159,8 +166,7 @@ def _reset_once(api: NinaApi) -> dict:
     api.get("equipment/mount/slew/stop")
     api.get("equipment/mount/unpark")
     wait_for("mount to unpark", lambda: not api.info("mount")["AtPark"])
-    api.get("equipment/mount/slew", ra=MOUNT_RA_DEG, dec=MOUNT_DEC, waitForResult="true")
-    wait_for("mount to stop slewing", lambda: not api.info("mount")["Slewing"])
+    slew_to_baseline(api)
 
     # Focuser: move to the baseline and wait for it to stop.
     move_focuser(api, FOCUSER_POSITION)
@@ -169,7 +175,61 @@ def _reset_once(api: NinaApi) -> dict:
     if not filter_at(api, FILTER_BASELINE):
         change_filter(api, FILTER_BASELINE)
 
+    # Mount pointing: a plate solve needs the camera and a focused sky, so this comes last.
+    fix_pointing(api)
+
     return verify(api)
+
+
+def slew_to_baseline(api: NinaApi) -> None:
+    api.get("equipment/mount/slew", ra=MOUNT_RA_DEG, dec=MOUNT_DEC, waitForResult="true")
+    wait_for("mount to stop slewing", lambda: not api.info("mount")["Slewing"])
+
+
+def solve_frame(api: NinaApi) -> tuple[tuple[float, float] | None, str]:
+    """Take a short plate-solved frame that is not saved. Returns the J2000 degrees the camera points at, or None and why."""
+    try:
+        r = requests.get(
+            f"{api.base}/equipment/camera/capture", timeout=SOLVE_TIMEOUT_S,
+            params={"duration": SOLVE_EXPOSURE_S, "solve": "true", "save": "false", "omitImage": "true", "waitForResult": "true"},
+        ).json()
+    except (requests.RequestException, ValueError) as e:
+        return None, f"{type(e).__name__}: {e}"
+    solved = (r.get("Response") or {}).get("PlateSolveResult") if isinstance(r.get("Response"), dict) else None
+    coords = (solved or {}).get("Coordinates") or {}
+    if (solved or {}).get("Success") and "RADegrees" in coords and "Dec" in coords:
+        return (coords["RADegrees"], coords["Dec"]), ""
+    return None, str(r.get("Error") or json.dumps(r)[:300])
+
+
+def solve_pointing(api: NinaApi) -> tuple[float, float] | None:
+    """Where the camera really points (J2000 degrees), or None if the frame did not solve."""
+    return solve_frame(api)[0]
+
+
+def pointing_error_deg(api: NinaApi) -> float:
+    """How far the mount's reported position is from where the camera really points. Raises if the frame did not solve."""
+    sky, problem = solve_frame(api)
+    if sky is None:
+        raise RuntimeError(f"could not plate solve to check where the mount is pointing: {problem}")
+    ra, dec = j2000_to_jnow(*sky)  # the mount reports JNOW
+    mount = api.info("mount")
+    return separation_deg(mount["RightAscension"] * 15, mount["Declination"], ra, dec)
+
+
+def fix_pointing(api: NinaApi) -> None:
+    """Make the mount's readout match the sky: a mount synced to the wrong place is synced back by plate solving."""
+    settle(api)  # a frame taken just after a slew has trailed stars and does not solve
+    error = pointing_error_deg(api)
+    if error <= POINTING_TOLERANCE_DEG:
+        return
+    print(f"mount reports a position {error:.2f}° from where it points; syncing it")
+    api.get("equipment/mount/sync")  # no coordinates: NINA plate solves and syncs
+    slew_to_baseline(api)
+    settle(api)
+    error = pointing_error_deg(api)
+    if error > POINTING_TOLERANCE_DEG:
+        raise RuntimeError(f"mount still {error:.2f}° from where it points after a sync")
 
 
 def settle(api: NinaApi, timeout: float = TIMEOUT_S) -> float:
@@ -229,8 +289,9 @@ def verify(api: NinaApi) -> dict:
         problems.append("a device is not connected")
     if abs(camera["Temperature"] - CAMERA_TEMP) > 1:
         problems.append(f"camera temperature {camera['Temperature']}")
-    ra_error = abs(mount["RightAscension"] - MOUNT_RA_DEG / 15)
-    if min(ra_error, 24 - ra_error) > MOUNT_RA_TOL_HOURS or abs(mount["Declination"] - MOUNT_DEC) > MOUNT_DEC_TOL_DEG:
+    ra_jnow, dec_jnow = j2000_to_jnow(MOUNT_RA_DEG, MOUNT_DEC)  # the mount reports JNOW; the baseline is J2000
+    ra_error = abs(mount["RightAscension"] - ra_jnow / 15)
+    if min(ra_error, 24 - ra_error) > MOUNT_RA_TOL_HOURS or abs(mount["Declination"] - dec_jnow) > MOUNT_DEC_TOL_DEG:
         problems.append(f"mount at RA {mount['RightAscension']} Dec {mount['Declination']}")
     if mount["AtPark"] or mount["Slewing"]:
         problems.append("mount parked or slewing")

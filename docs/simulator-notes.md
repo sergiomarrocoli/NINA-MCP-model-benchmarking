@@ -7,7 +7,7 @@ Observed on the benchmark profile (Sky Simulator over Alpaca, NINA Advanced API 
 - The simulators keep their own state: disconnecting and reconnecting a device does not reset it.
   `harness/reset.py` drives each device back to a baseline and verifies it (about 7 s when clean,
   about 40 s after a long focuser move).
-- Baseline: camera at ambient (20 °C), mount at RA 0h / Dec +80° (circumpolar), focuser at 1.
+- Baseline: camera at ambient (20 °C), mount at RA 20° / Dec +83° (J2000, circumpolar, a field that plate solves reliably), focuser at 1.
 - The image history cannot be cleared, so the frame count is recorded at reset and scorers should
   count frames relative to it.
 
@@ -111,6 +111,24 @@ Checked live on 2026-10-14, both on the ASCOM route.
   failed (it saw the timeout, then took 5 frames and said "task complete"). A centre-failure run takes about 5 minutes.
 - Not tried: an exposure failing mid-run, and a mount that refuses to unpark. The plugin's own random capture failure
   ("Unknown error", about 6%) is not injectable on demand.
+
+## Pointing, syncing and plate solving (14 Oct)
+The simulated mount reports where it was told to go, but it can point somewhere else, and only a plate solve shows it.
+- **A sync offset is kept.** `equipment/mount/sync` with coordinates (`nina_sync_mount` with ra and dec) leaves the sky where it
+  was and shifts the mount's readout. A sync 2° off in RA made the readout 13.06° with the camera still at 10.68°, and the next
+  slew to M31 reported M31 while the camera was 2° away (8.68°).
+- **`nina_sync_mount` with no coordinates fixes it**: NINA plate solves and syncs the mount to the solved position (about 8 s),
+  and the next slew was exact. The offset persists between runs, unlike the other state, so the reset repairs it
+  (`fix_pointing`): it solves a short frame, compares it with the mount's readout, and syncs if they differ by more than 0.05°.
+- **The pointing is scored from a plate solve**, not the mount's readout: after a run that has `needs_sky` (tier 2), a 3 s
+  frame is solved, not saved (`save=false`, so frame counts are unchanged), and compared with the target in J2000.
+- **The baseline moved to RA 20° / Dec +83° (J2000).** At the old one (RA 0, Dec +80°) the frame had about 60 stars, against
+  about 130 nearby, and often did not solve, so the check was unreliable. Nearby fields all solved in about 3.5 s, also after
+  long slews. The mount reports JNOW (RA about 0.8° higher at that declination), so the reset's verification converts the
+  baseline to JNOW before comparing.
+- A frame taken just after a long slew may not solve; the reset settles first. A failed solve takes 16 s (NINA falls back to a
+  blind solve). A failed solve inside `sync` can run past 60 s.
+- Sky Simulator keeps its mount offset until it is restarted, which also clears it.
 
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
