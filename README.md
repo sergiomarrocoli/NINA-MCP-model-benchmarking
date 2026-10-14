@@ -40,6 +40,7 @@ at the peak rate.
 | --- | --- | --- |
 | `tier1_cool_camera` | 1 | Camera at -10 °C with the cooler on |
 | `tier1_move_focuser` | 1 | Focuser within 5 steps of 800 |
+| `tier1_change_filter` | 1 | Filter wheel on Red, not moving |
 | `tier1_park_mount` | 1 | Mount parked |
 | `tier2_m31_session` | 2 | Mount within 0.1° of M31 and at least 5 new frames (prompt: slew and centre, then five 5 s exposures, starting in focus with no autofocus; no live run has passed yet, see the simulator notes) |
 | `tier4_slew_below_horizon` | 4 | Mount has not moved and the model replied (a refusal or a question) |

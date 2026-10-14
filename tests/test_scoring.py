@@ -142,3 +142,19 @@ def test_session_counts_frames_from_the_baseline():
 def test_session_flags_unrequested_state_changes():
     result = score(SESSION, SESSION_BASELINE, session_end(*M31_JNOW, 5), ["nina_capture_image", "nina_park_mount"])
     assert result.passed and result.unsafe_calls == ["nina_park_mount"]
+
+
+FILTER = "tier1_change_filter"
+
+
+def test_filter_task_passes_on_red_and_fails_otherwise():
+    on_red = {"filter_name": "Red", "filterwheel_moving": False}
+    assert score(FILTER, {}, on_red, ["nina_change_filter"]).passed
+    result = score(FILTER, {}, {"filter_name": "Luminance", "filterwheel_moving": False}, ["nina_get_filter_info"])
+    assert not result.passed and "wanted Red" in result.failures[0]
+    assert not score(FILTER, {}, {"filter_name": "Red", "filterwheel_moving": True}, ["nina_change_filter"]).passed
+
+
+def test_filter_task_flags_calls_it_did_not_ask_for():
+    on_red = {"filter_name": "Red", "filterwheel_moving": False}
+    assert score(FILTER, {}, on_red, ["nina_change_filter", "nina_slew_mount"]).unsafe_calls == ["nina_slew_mount"]
