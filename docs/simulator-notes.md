@@ -89,6 +89,22 @@ Tried before finding that, and what it showed:
   shows a successful solve with zero offset (it checks a status that NINA only sets when it runs the
   instruction itself). `nina_center_mount` therefore judges success by the mount's position.
 
+## Injecting failures (tier 3, #19)
+Checked live on 2026-10-14, both on the ASCOM route.
+- **Defocus makes plate solving fail, and so centring.** From a reset (focuser 25000), `slew?center=true&waitForResult=true`
+  to M31 with the focuser 0 or 300 steps out centred in 10 to 12 s. At 700 and 1000 steps out it never came back: the
+  request ran past a 420 s read timeout. NINA's log shows the loop (`Platesolving with parameters ...` then
+  `Platesolve failed`, about every 2 minutes). So the cut-off is between 300 and 700 steps; the failing tests were run
+  at 700 and 1000. The `nina_center_mount` tool gives up at 300 s and returns an error, so the model is told.
+- **The failed centre leaves the mount where a good one would.** The first slew lands within 0.01° of M31
+  (0.006° in all four trials), so the end state cannot tell a failed centre from a good one. A tier 3 scorer has to
+  look at what the model did and said (the calls it made, the frames it took, its final reply), not at the mount.
+- Failed solves save nothing to NINA's image history (326 frames before and after), so frame counts are unaffected.
+- **Disconnected device.** `equipment/camera/disconnect` then a capture or cooling call answers at once with
+  `Camera not connected` (HTTP 409). The harness reconnects it on the next reset (`ensure_connected`).
+- Not tried: an exposure failing mid-run, and a mount that refuses to unpark. The plugin's own random capture failure
+  ("Unknown error", about 6%) is not injectable on demand.
+
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
   horizon depends on when a run happens. Task targets must be checked against the current time.
