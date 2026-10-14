@@ -6,12 +6,6 @@ them to the upstream server object, written in the same style as its other tools
 in `input`). Both wait for the operation to finish, with their own long timeout: the upstream
 client gives up after 10 s, which a real autofocus or centre never meets.
 
-It also replaces `nina_capture_image`. Upstream, with `download=False`, starts the exposure, returns
-at once with "Image captured successfully" and does not check that an image was saved; a second call
-made while the camera is still busy fails at random ("Camera currently exposing") and the plugin's
-own wait sometimes fails with "Unknown error" and saves nothing. The replacement takes the same
-arguments, waits, and only reports success once the frame count in NINA's image history has gone up.
-
 Start it with: python -c "from harness.extra_tools import mcp; mcp.run()"
 """
 import asyncio
@@ -20,8 +14,7 @@ import time
 from typing import Any
 
 import aiohttp
-from nina_advanced_mcp import CameraCaptureInput, create_error_response, mcp
-from nina_advanced_mcp import nina_capture_image as _upstream_capture_image
+from nina_advanced_mcp import create_error_response, mcp
 from pydantic import BaseModel, Field
 
 from harness.coords import j2000_to_jnow, separation_deg
@@ -30,9 +23,6 @@ AUTOFOCUS_TIMEOUT_S = 300
 CENTER_TIMEOUT_S = 300
 POLL_S = 2
 CENTERED_WITHIN_DEG = 0.05  # 3 arc-minutes
-CAPTURE_ATTEMPTS = 3        # a capture that saves nothing is tried again this many times in all
-CAPTURE_RETRY_PAUSE_S = 2
-CAPTURE_SAVE_WAIT_S = 6     # after NINA says it is done, how long to wait for the frame to be listed
 
 
 def _base() -> str:
@@ -158,75 +148,3 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
 
 if __name__ == "__main__":
     mcp.run()
-
-
-async def _image_count() -> int | None:
-    try:
-        count = (await _get("image-history", {"count": "true"})).get("Response")
-    except Exception:
-        return None
-    return count if isinstance(count, int) else None
-
-
-async def _wait_for_new_frame(before: int) -> bool:
-    deadline = time.monotonic() + CAPTURE_SAVE_WAIT_S
-    while True:
-        count = await _image_count()
-        if count is not None and count > before:
-            return True
-        if time.monotonic() >= deadline:
-            return False
-        await asyncio.sleep(POLL_S / 4)
-
-
-@mcp.tool()
-async def nina_capture_image(input: CameraCaptureInput) -> dict[str, Any]:
-    """Capture an image with NINA astronomy software and wait until it has been saved.
-
-    With download=False (the default) one image is taken and saved by NINA in full resolution. The call
-    returns once the image is saved, so the next capture can be started straight away; a successful
-    call means one new image. If the camera is busy or the capture saves nothing it is tried again, and
-    an error is returned if it still fails.
-
-    With download=True the image is also downloaded and can be resized and compressed for preview
-    (resize, size, quality).
-
-    Args:
-        input: CameraCaptureInput containing:
-            duration: Optional, exposure time in seconds
-            gain: Optional, camera gain
-            download: Optional, also download the image (default false)
-            resize, size, quality: Optional, preview settings used with download
-            solve: Optional, plate solve the image
-
-    Returns:
-        Dict containing the success status and a message.
-    """
-    if input.download:
-        return await _upstream_capture_image(input)
-    try:
-        params = {"save": "true", "omitImage": "true", "waitForResult": "true"}
-        if input.duration is not None:
-            params["duration"] = str(input.duration)
-        if input.gain is not None:
-            params["gain"] = str(input.gain)
-        if input.solve is not None:
-            params["solve"] = str(input.solve).lower()
-        timeout = (input.duration or 0) + 60 + (120 if input.solve else 0)
-
-        problem = "no new image appeared in NINA's image history"
-        for attempt in range(CAPTURE_ATTEMPTS):
-            if attempt:
-                await asyncio.sleep(CAPTURE_RETRY_PAUSE_S)
-            before = await _image_count()
-            result = await _get("equipment/camera/capture", params, timeout=timeout)
-            if before is None:  # cannot count frames: trust NINA's own answer
-                if result.get("Success"):
-                    return {"Success": True, "Message": "Image captured and saved", "Type": "NINA_API"}
-            elif await _wait_for_new_frame(before):
-                return {"Success": True, "Message": "Image captured and saved", "Type": "NINA_API"}
-            problem = result.get("Error") or problem
-        return create_error_response(
-            "NINACameraError", f"No image was saved after {CAPTURE_ATTEMPTS} attempts: {problem}", {})
-    except Exception as e:
-        return create_error_response("NINACameraError", _describe(e), {})
