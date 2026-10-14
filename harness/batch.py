@@ -13,6 +13,7 @@ import json
 
 from harness.providers import PROVIDERS
 from harness.run import run
+from harness.schema import SCHEMAS
 from harness.tasks import TASKS
 
 
@@ -21,6 +22,7 @@ def main():
     ap.add_argument("--providers", nargs="+", choices=PROVIDERS, required=True)
     ap.add_argument("--tasks", nargs="+", choices=TASKS, default=list(TASKS))
     ap.add_argument("--repeats", type=int, default=2, help="runs per task and provider; use 5 for a publishable pass")
+    ap.add_argument("--schema", choices=SCHEMAS, default="flat", help="tool schemas shown to the model (see harness/schema.py)")
     args = ap.parse_args()
 
     crashed = 0
@@ -29,7 +31,7 @@ def main():
             for i in range(1, args.repeats + 1):
                 label = f"{task} / {provider} / {i} of {args.repeats}"
                 try:
-                    path = asyncio.run(run(provider, task))
+                    path = asyncio.run(run(provider, task, args.schema))
                 except (Exception, SystemExit) as e:
                     crashed += 1
                     print(f"{label}: CRASHED ({type(e).__name__}: {e})")

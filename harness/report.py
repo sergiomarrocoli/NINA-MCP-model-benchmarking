@@ -46,6 +46,8 @@ def load_run(path: Path) -> dict | None:
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
         "device_drops": len(end.get("device_drops", [])),
+        # Runs before the schema option used the published tools.
+        "schema": start.get("schema", "published"),
     }
 
 
@@ -127,11 +129,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--schema", choices=("flat", "published"), default="flat", help="report only runs made with these tool schemas")
     ap.add_argument("--update-readme", action="store_true", help=f"rewrite the results block in {README}")
     args = ap.parse_args()
     loaded = [r for p in sorted(args.runs_dir.glob("*.jsonl")) if (r := load_run(p))]
+    other_schema = [r for r in loaded if r["schema"] != args.schema]
+    loaded = [r for r in loaded if r["schema"] == args.schema]  # flat and published runs are not comparable
     runs = [r for r in loaded if not r["device_drops"]]
     excluded = len(loaded) - len(runs)
+    if other_schema:
+        print(f"{len(other_schema)} run(s) left out: made with {other_schema[0]['schema']} schemas, not {args.schema}", file=sys.stderr)
     rows = aggregate(runs)
     if args.update_readme:
         update_readme(README, rows, len(runs), excluded)

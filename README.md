@@ -63,6 +63,11 @@ cp .env.example .env                 # then fill in the NINA host and API keys
 .venv/bin/python -m pytest tests
 ```
 
+By default the model sees the tools with their `input` wrapper taken off (44 of the 105 tools take one `input`
+object, which small models get wrong); the harness puts it back before calling the server. `--schema published`
+(on `run` and `batch`) gives the tools as the server serves them. The report shows one schema at a time
+(`--schema flat` by default). See `harness/schema.py`.
+
 Every run calls the model's API and costs money (roughly $0.01-0.07 per tier 1 run), so use few
 repeats while developing. Runs share one set of simulated equipment, so they go one at a time. A run that crashes (for
 example because a simulator dropped a device) is left out of the report.
