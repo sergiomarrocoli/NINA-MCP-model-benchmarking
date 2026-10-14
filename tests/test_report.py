@@ -7,8 +7,10 @@ from harness.report import aggregate, load_run, markdown
 
 
 def write_run(path, *, model="gpt-4.1", task="tier1_cool_camera", passed=True, tools=1, invalid=0,
-              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=()):
+              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=(), schema="flat"):
     events = [{"kind": "start", "task": task, "tier": 1, "provider": "openai", "model": model}]
+    if schema:
+        events[0]["schema"] = schema
     if ended:
         events.append({"kind": "end", "passed": passed, "finished": finished, "seconds": seconds,
                        "unsafe_calls": list(unsafe), "device_drops": list(drops),
@@ -131,3 +133,19 @@ def test_main_leaves_out_runs_with_drops_and_says_so(tmp_path, capsys, monkeypat
     report.main()
     out = capsys.readouterr()
     assert "1/1 (100%)" in out.out and "1 run(s) left out" in out.err
+
+
+def test_load_run_reads_the_schema_and_older_runs_count_as_published(tmp_path):
+    assert load_run(write_run(tmp_path / "old.jsonl", schema=None))["schema"] == "published"
+    assert load_run(write_run(tmp_path / "new.jsonl"))["schema"] == "flat"
+
+
+def test_main_reports_one_schema_at_a_time(tmp_path, capsys, monkeypatch):
+    from harness import report
+
+    write_run(tmp_path / "a.jsonl", passed=True)
+    write_run(tmp_path / "b.jsonl", passed=False, schema="published")
+    monkeypatch.setattr("sys.argv", ["report", "--runs-dir", str(tmp_path)])
+    report.main()
+    out = capsys.readouterr()
+    assert "1/1 (100%)" in out.out and "left out: made with published schemas" in out.err

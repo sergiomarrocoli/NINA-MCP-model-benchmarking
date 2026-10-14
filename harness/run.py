@@ -18,6 +18,7 @@ from openai import OpenAI
 from harness.providers import PROVIDERS
 from harness import faults
 from harness.reset import NinaApi, reset, settle, snapshot
+from harness.schema import SCHEMAS, flatten, wrap_arguments
 from harness.scoring import score
 from harness.tasks import TASKS
 from harness.watchdog import Watchdog
@@ -45,14 +46,17 @@ def mcp_transport() -> StdioTransport:
     )
 
 
-def openai_tools(mcp_tools) -> list[dict]:
-    return [
-        {
-            "type": "function",
-            "function": {"name": t.name, "description": t.description or "", "parameters": t.input_schema},
-        }
-        for t in mcp_tools
-    ]
+def openai_tools(mcp_tools, schema: str = "flat") -> tuple[list[dict], set[str]]:
+    """The tool list for the model, and the names of the tools whose `input` wrapper was taken off (harness/schema.py)."""
+    tools, flattened = [], set()
+    for t in mcp_tools:
+        description, parameters, was_flattened = (
+            flatten(t.name, t.description or "", t.input_schema) if schema == "flat" else (t.description or "", t.input_schema, False)
+        )
+        if was_flattened:
+            flattened.add(t.name)
+        tools.append({"type": "function", "function": {"name": t.name, "description": description, "parameters": parameters}})
+    return tools, flattened
 
 
 async def call_tool(client: Client, name: str, args: dict) -> tuple[str, bool, float]:
@@ -62,7 +66,7 @@ async def call_tool(client: Client, name: str, args: dict) -> tuple[str, bool, f
     return text, bool(result.is_error), time.monotonic() - start
 
 
-async def run(provider_name: str, task_id: str) -> Path:
+async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
     provider, task = PROVIDERS[provider_name], TASKS[task_id]
     llm = OpenAI(api_key=provider.api_key, base_url=provider.base_url)
     RUNS_DIR.mkdir(exist_ok=True)
@@ -74,7 +78,7 @@ async def run(provider_name: str, task_id: str) -> Path:
             log.write(json.dumps({"t": time.time(), "kind": kind, **data}, default=str) + "\n")
             log.flush()
 
-        record("start", task=task.id, tier=task.tier, provider=provider.name, model=provider.model, prompt=task.prompt)
+        record("start", task=task.id, tier=task.tier, provider=provider.name, model=provider.model, prompt=task.prompt, schema=schema)
 
         # Known starting state; also the baseline the scorer compares against (e.g. frame count).
         baseline = reset()
@@ -91,7 +95,7 @@ async def run(provider_name: str, task_id: str) -> Path:
                 text, is_error, secs = await call_tool(client, name, args)
                 record("setup", tool=name, args=args, result=text, is_error=is_error, seconds=secs)
 
-            tools = openai_tools(await client.list_tools())
+            tools, flattened = openai_tools(await client.list_tools(), schema)
             record("tools", count=len(tools))
             messages = [
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -127,12 +131,13 @@ async def run(provider_name: str, task_id: str) -> Path:
                         text, is_error, secs = f"Invalid JSON arguments: {tc.function.arguments}", True, 0.0
                         args = {"_raw": tc.function.arguments}
                     else:
-                        text, is_error, secs = await call_tool(client, tc.function.name, args)
+                        sent = wrap_arguments(args, tc.function.name in flattened)
+                        text, is_error, secs = await call_tool(client, tc.function.name, sent)
                     # Validation errors and NINA-side failures both count as a failed call.
                     if is_error or '"Success":false' in text.replace(" ", ""):
                         totals["invalid_calls"] += 1
                     record("tool_call", step=step, tool=tc.function.name, args=args, result=text,
-                           is_error=is_error, seconds=secs)
+                           is_error=is_error, seconds=secs, flattened=tc.function.name in flattened)
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": text[:TOOL_RESULT_CHARS]})
 
             # The scorer reads NINA directly, not through the tools the model used.
@@ -155,8 +160,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--provider", choices=PROVIDERS, required=True)
     ap.add_argument("--task", choices=TASKS, required=True)
+    ap.add_argument("--schema", choices=SCHEMAS, default="flat", help="flat: arguments at the top level; published: as the server serves them")
     args = ap.parse_args()
-    path = asyncio.run(run(args.provider, args.task))
+    path = asyncio.run(run(args.provider, args.task, args.schema))
     end = json.loads(path.read_text().splitlines()[-1])
     print(f"log: {path}")
     print(f"finished={end['finished']} steps={end['steps']} seconds={end['seconds']:.1f} totals={end['totals']}")
