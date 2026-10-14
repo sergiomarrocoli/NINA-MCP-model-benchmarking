@@ -41,12 +41,12 @@ then tries once more. Unset it to turn that off.
   with nobody logged in it will not work. For an unattended rig, set Windows to log in automatically.
 - **A restart during a run ruins that run.** The hook only fires in the reset, between runs.
 - **Sky Simulator is started for you.** It comes up idle (its Alpaca server only starts when **Start simulation.**
-  is pressed, and v3.0.8 has no start-on-launch setting), so `restart-app.ps1` finds its window and presses the
-  button through Windows UI Automation, falling back to a mouse click on the button if it cannot be invoked.
-  The outcome, or the list of controls it could see if it found no button, goes to `C:\nina-control\log.txt`
-  (`START FAILED` lines). The Mac side then waits up to 2 minutes for NINA to list the Sky Simulator camera
-  as online and raises an error pointing at that log if it does not. The window must be on the logged-in desktop
-  (not minimised to nothing, no lock screen).
+  is pressed, and v3.0.8 has no start-on-launch setting), so `restart-app.ps1` finds the button and clicks it. UI Automation
+  sees no controls inside the window, so it looks through every top-level window the app owns (and their child windows) for
+  one titled "Start simulation." and sends it a click message. The outcome goes to `C:\\nina-control\\log.txt`, with a
+  `START FAILED` line listing the windows it could see if the button is missing. The Mac side then waits up to 2 minutes
+  for NINA to list the Sky Simulator camera as online and raises an error pointing at that log if it does not.
+  Tested 14 Oct: restart to camera online in 36 s with nobody at the machine. The window must be on the logged-in desktop.
 - **After a Sky Simulator restart, devices are disconnected** and the focuser is back at 1; the
   reset reconnects them and drives the focuser to the baseline, which can take several minutes.
 - **What the key can do.** `authorized_keys` forces `nina-control.ps1`, with `restrict` (no shell,
@@ -62,5 +62,5 @@ Copy the changed `.ps1` files from `scripts/minipc/` to `C:\nina-control` (setup
 key or the task definitions change).
 
 ## Not yet verified
-The PowerShell scripts were written on a Mac and the UI Automation click has not yet been run on Windows. Expect to fix small
+The PowerShell scripts were written on a Mac but the restart and the Start simulation. click have been run on Windows (14 Oct). Expect to fix small
 things on first use; the Python side is covered by `tests/test_minipc.py`.
