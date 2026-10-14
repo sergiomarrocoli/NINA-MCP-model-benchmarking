@@ -50,10 +50,11 @@ function Get-Children($parent) {
 # Every top-level window of the app: Lazarus programs keep a hidden helper window that Windows reports as the
 # "main window", and the real form is another one.
 function Get-TopWindows($pids) {
+    $script:pids = $pids
     $script:tops = New-Object System.Collections.ArrayList
     $cb = [Win.Native+EnumTop]{ param($h, $l)
         $procId = 0; [void][Win.Native]::GetWindowThreadProcessId($h, [ref]$procId)
-        if ($pids -contains [int]$procId) {
+        if ($script:pids -contains [int]$procId) {
             $t = New-Object System.Text.StringBuilder 256; $c = New-Object System.Text.StringBuilder 256
             [void][Win.Native]::GetWindowText($h, $t, 256); [void][Win.Native]::GetClassName($h, $c, 256)
             [void]$script:tops.Add([pscustomobject]@{ Handle = $h; Text = $t.ToString(); Class = $c.ToString(); Visible = [Win.Native]::IsWindowVisible($h) })
