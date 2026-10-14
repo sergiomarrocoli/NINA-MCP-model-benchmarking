@@ -92,3 +92,26 @@ def test_reset_treats_a_request_timeout_as_a_failed_attempt(monkeypatch):
 
     monkeypatch.setattr(reset, "_reset_once", once)
     assert reset.reset(api=object()) == {"ok": True}
+
+
+def fake_nina(monkeypatch, display_name):
+    class Resp:
+        def json(self):
+            return {"Response": [{"Id": "No_Device", "DisplayName": "No camera"},
+                                 {"Id": minipc.SIM_CAMERA_ID, "DisplayName": display_name}]}
+
+    monkeypatch.setattr(minipc.requests, "get", lambda url, **kw: Resp())
+
+
+def test_sim_is_offline_until_nina_lists_the_camera_as_online(monkeypatch):
+    fake_nina(monkeypatch, "Camera Sky Simulator for ALPACA @ 127.0.0.1 #0 (OFFLINE)")
+    assert not minipc.sim_online()
+    fake_nina(monkeypatch, "Camera Sky Simulator for ALPACA @ 127.0.0.1 #0")
+    assert minipc.sim_online()
+
+
+def test_wait_for_sim_names_the_log_when_it_never_comes_up(monkeypatch):
+    monkeypatch.setattr(minipc, "sim_online", lambda: False)
+    monkeypatch.setattr(minipc.time, "sleep", lambda s: None)
+    with pytest.raises(TimeoutError, match="log.txt"):
+        minipc.wait_for_sim(timeout=0)

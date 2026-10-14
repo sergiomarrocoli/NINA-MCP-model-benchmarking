@@ -40,6 +40,13 @@ then tries once more. Unset it to turn that off.
   SSH has no desktop. The restart runs through a scheduled task in the logged-on user's session, so
   with nobody logged in it will not work. For an unattended rig, set Windows to log in automatically.
 - **A restart during a run ruins that run.** The hook only fires in the reset, between runs.
+- **Sky Simulator is started for you.** It comes up idle (its Alpaca server only starts when **Start simulation.**
+  is pressed, and v3.0.8 has no start-on-launch setting), so `restart-app.ps1` finds its window and presses the
+  button through Windows UI Automation, falling back to a mouse click on the button if it cannot be invoked.
+  The outcome, or the list of controls it could see if it found no button, goes to `C:\nina-control\log.txt`
+  (`START FAILED` lines). The Mac side then waits up to 2 minutes for NINA to list the Sky Simulator camera
+  as online and raises an error pointing at that log if it does not. The window must be on the logged-in desktop
+  (not minimised to nothing, no lock screen).
 - **After a Sky Simulator restart, devices are disconnected** and the focuser is back at 1; the
   reset reconnects them and drives the focuser to the baseline, which can take several minutes.
 - **What the key can do.** `authorized_keys` forces `nina-control.ps1`, with `restrict` (no shell,
@@ -50,6 +57,10 @@ then tries once more. Unset it to turn that off.
   `~\.ssh\authorized_keys`), `Stop-Service sshd; Set-Service sshd -StartupType Disabled`, and
   `Unregister-ScheduledTask NinaCtl-RestartSim, NinaCtl-RestartNina`.
 
+## Updating the scripts on the mini PC
+Copy the changed `.ps1` files from `scripts/minipc/` to `C:\nina-control` (setup does not need re-running unless the
+key or the task definitions change).
+
 ## Not yet verified
-The PowerShell scripts were written on a Mac and have not been run on Windows. Expect to fix small
+The PowerShell scripts were written on a Mac and the UI Automation click has not yet been run on Windows. Expect to fix small
 things on first use; the Python side is covered by `tests/test_minipc.py`.
