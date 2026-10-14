@@ -104,7 +104,7 @@ async def run(provider_name: str, task_id: str) -> Path:
 
             for step in range(MAX_STEPS):
                 t0 = time.monotonic()
-                resp = llm.chat.completions.create(model=provider.model, messages=messages, tools=tools)
+                resp = llm.chat.completions.create(model=provider.model, messages=messages, tools=tools, **provider.request_options)
                 msg = resp.choices[0].message
                 totals["prompt_tokens"] += resp.usage.prompt_tokens
                 totals["completion_tokens"] += resp.usage.completion_tokens
