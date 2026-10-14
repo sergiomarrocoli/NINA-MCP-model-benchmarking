@@ -51,7 +51,7 @@ at the peak rate.
 
 Needs NINA with the Advanced API plugin and Sky Simulator on a machine you can reach, a Python
 3.10+ environment and API keys. See [docs/simulator-notes.md](docs/simulator-notes.md) for how
-the simulators behave and what to watch for.
+the simulators behave and what to watch for, and [docs/local-model.md](docs/local-model.md) for the local model.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt

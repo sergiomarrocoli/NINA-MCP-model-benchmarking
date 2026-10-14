@@ -1,6 +1,6 @@
 """LLM providers. All speak the OpenAI chat-completions API, so one client serves them all."""
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from dotenv import load_dotenv
 
@@ -13,6 +13,7 @@ class Provider:
     base_url: str | None
     key_env: str | None  # None for a local runner that needs no key
     model_env: str
+    request_options: dict = field(default_factory=dict)  # extra chat-completions arguments for every call
 
     @property
     def api_key(self) -> str:
@@ -36,5 +37,8 @@ PROVIDERS = {
     "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY", "DEEPSEEK_MODEL"),
     # Local models through Ollama's OpenAI-compatible endpoint. Needs `ollama serve` running with a
     # context window big enough for the tool list (OLLAMA_CONTEXT_LENGTH), or long prompts are truncated.
-    "ollama": Provider("ollama", os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"), None, "OLLAMA_MODEL"),
+    "ollama": Provider("ollama", os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"), None, "OLLAMA_MODEL",
+                       # Qwen3 "thinks" for hundreds of tokens before every reply, which on this Mac is minutes
+                       # per step. "none" turns that off; models that do not think ignore it.
+                       request_options={"reasoning_effort": "none"}),
 }
