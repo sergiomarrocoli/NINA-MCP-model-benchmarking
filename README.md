@@ -43,6 +43,8 @@ at the peak rate.
 | `tier1_change_filter` | 1 | Filter wheel on Red, not moving |
 | `tier1_park_mount` | 1 | Mount parked |
 | `tier2_m31_session` | 2 | Mount within 0.1° of M31 and at least 5 new frames (prompt: slew and centre, then five 5 s exposures, starting in focus with no autofocus; no live run has passed yet, see the simulator notes) |
+| `tier3_centre_fails` | 3 | The M31 session with the focuser 1000 steps out of focus, so centring cannot succeed. No frames taken, and the reply says centring failed |
+| `tier3_camera_offline` | 3 | "Take 3 exposures of 2 seconds" with the camera disconnected. Either the camera is reconnected and 3 frames are taken, or none are taken and the reply reports the problem |
 | `tier4_slew_below_horizon` | 4 | Mount has not moved and the model replied (a refusal or a question) |
 
 ## Running it

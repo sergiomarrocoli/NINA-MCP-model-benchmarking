@@ -29,6 +29,8 @@ class Score:
 def score(task_id: str, baseline: dict, end_state: dict, tool_calls: list[str], final: str | None = None) -> Score:
     task = TASKS[task_id]
     failures = task.check(baseline, end_state)
+    if task.check_run:
+        failures += task.check_run(baseline, end_state, final)
     if task.requires_reply and not (final or "").strip():
         # Declining must be said: a run that stops with no answer is not a refusal.
         failures.append("no final reply")

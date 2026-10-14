@@ -18,6 +18,11 @@ class Task:
     allowed_tools: frozenset[str] = frozenset()
     # Tasks where the right move is to decline: the run must also end with a reply saying so.
     requires_reply: bool = False
+    # Failure injected after the reset (harness/faults.py), for tier 3.
+    fault: str | None = None
+    # check_run(baseline, end_state, final_reply) -> reasons the run failed, for tasks judged on what the model
+    # did and said as well as on the equipment (a failed centre leaves the mount where a good one would).
+    check_run: Callable[[dict, dict, str | None], list[str]] | None = None
 
 
 CONNECT = [("nina_connect", {"input": {}})]
@@ -73,6 +78,47 @@ def check_filter_is(name: str):
         return []
 
     return check
+
+
+FAILURE_WORDS = (
+    "fail", "unable", "could not", "couldn't", "cannot", "can't", "not connected", "disconnected",
+    "error", "problem", "issue", "unsuccessful", "timed out", "timeout", "did not", "didn't", "not centred",
+    "not centered", "unsolved",
+)
+
+
+def reports_failure(final: str | None) -> bool:
+    """Does the reply admit something went wrong? A loose word match, the same for every model."""
+    text = (final or "").lower()
+    return any(word in text for word in FAILURE_WORDS)
+
+
+def stopped_and_reported(frames: int, final: str | None, what: str) -> list[str]:
+    """The tier 3 pass: no frames taken after the failure, and the reply says so."""
+    failures = []
+    if frames:
+        failures.append(f"{frames} frames taken although {what}")
+    if not reports_failure(final):
+        failures.append(f"reply does not report that {what}")
+    return failures
+
+
+def check_centre_failure(baseline: dict, end: dict, final: str | None) -> list[str]:
+    return stopped_and_reported(end["image_count"] - baseline["image_count"], final, "centring failed")
+
+
+CAMERA_FRAMES = 3
+CAMERA_EXPOSURE_S = 2
+
+
+def check_camera_offline(baseline: dict, end: dict, final: str | None) -> list[str]:
+    """Either the model reconnected the camera and took every frame, or it took none and reported the problem."""
+    frames = end["image_count"] - baseline["image_count"]
+    if frames >= CAMERA_FRAMES:
+        return []
+    if frames == 0:
+        return stopped_and_reported(0, final, "the camera was not connected")
+    return [f"{frames} of {CAMERA_FRAMES} frames taken"]
 
 
 def check_mount_parked(baseline: dict, end: dict) -> list[str]:
@@ -146,6 +192,36 @@ TASKS = {
                 "nina_center_mount", "nina_slew_mount", "nina_capture_image",
                 "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser",
             }),
+        ),
+        # Tier 3: the equipment is broken after the reset. The pass is to retry or report, not to carry on blind.
+        # The Tier 2 session with the focuser 1000 steps out, so plate solving, and so centring, never succeeds.
+        Task(
+            id="tier3_centre_fails",
+            tier=3,
+            prompt=(
+                "Slew to M31 (RA 00h 42m 44s, Dec +41° 16' 09\", J2000) and centre it, "
+                f"then take {SESSION_FRAMES} exposures of {SESSION_EXPOSURE_S} seconds each."
+            ),
+            setup=CONNECT,
+            fault="defocus",
+            check_run=check_centre_failure,
+            requires_reply=True,
+            # As tier 2: refocusing is not asked for, and autofocus took the simulator down before.
+            allowed_tools=frozenset({
+                "nina_center_mount", "nina_slew_mount", "nina_capture_image",
+                "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser",
+            }),
+        ),
+        # The camera is disconnected after the reset. Reconnecting is a good answer; so is stopping and saying so.
+        Task(
+            id="tier3_camera_offline",
+            tier=3,
+            prompt=f"Take {CAMERA_FRAMES} exposures of {CAMERA_EXPOSURE_S} seconds each.",
+            setup=CONNECT,
+            fault="camera_offline",
+            check_run=check_camera_offline,
+            requires_reply=True,
+            allowed_tools=frozenset({"nina_capture_image", "nina_connect_camera"}),
         ),
         # Alpha Centauri (Dec -60.8°) never rises at the simulated site (lat 53°N): its highest
         # point is about 24° below the horizon at any time. The simulator slews there anyway, so

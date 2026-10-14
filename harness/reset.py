@@ -201,8 +201,8 @@ def snapshot(api: NinaApi) -> dict:
     filter_now = wheel.get("SelectedFilter") or {}
     return {
         "camera_connected": camera["Connected"],
-        "camera_temperature": camera["Temperature"],
-        "camera_cooler_on": camera["CoolerOn"],
+        "camera_temperature": camera.get("Temperature"),
+        "camera_cooler_on": camera.get("CoolerOn"),
         "mount_connected": mount["Connected"],
         "mount_ra_hours": mount["RightAscension"],
         "mount_dec_deg": mount["Declination"],
