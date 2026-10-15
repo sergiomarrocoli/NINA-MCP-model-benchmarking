@@ -30,3 +30,9 @@ def test_camera_offline_disconnects_the_camera_and_says_so():
     api = FakeApi()
     assert faults.inject("camera_offline", api) == ("camera",)
     assert api.calls == [("equipment/camera/disconnect", {})] and not api.camera_connected
+
+
+def test_pointing_offset_syncs_the_mount_two_degrees_off_in_dec_and_expects_no_device_down():
+    api = FakeApi()
+    assert faults.inject("pointing_offset", api) == ()
+    assert api.calls == [("equipment/mount/sync", {"ra": faults.MOUNT_RA_DEG, "dec": faults.MOUNT_DEC - 2.0})]
