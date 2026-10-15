@@ -17,7 +17,7 @@ from openai import OpenAI
 
 from harness.providers import PROVIDERS
 from harness import faults
-from harness.reset import NinaApi, reset, settle, snapshot
+from harness.reset import NinaApi, reset, settle, snapshot, solve_pointing
 from harness.schema import SCHEMAS, flatten, wrap_arguments
 from harness.scoring import score
 from harness.tasks import TASKS
@@ -145,7 +145,9 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
             watchdog.stop()
             watchdog.check()
             settle_seconds = settle(api)
-            end_state = snapshot(api)
+            end_state = snapshot(api)  # before the solve below, which does not save a frame but keeps the counts honest
+            if task.needs_sky:
+                end_state["sky_ra_deg"], end_state["sky_dec_deg"] = solve_pointing(api) or (None, None)
             watchdog.check(reconnect=False)
             result = score(task.id, baseline, end_state, tool_calls, final)
             record("end", final=final, finished=final is not None, steps=step + 1,

@@ -2,7 +2,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from harness.coords import j2000_to_jnow, separation_deg
+from harness.coords import separation_deg
 from harness.reset import FOCUSER_POSITION
 
 
@@ -18,6 +18,8 @@ class Task:
     allowed_tools: frozenset[str] = frozenset()
     # Tasks where the right move is to decline: the run must also end with a reply saying so.
     requires_reply: bool = False
+    # Read where the camera really points (a plate solve) after the run, for scoring the pointing.
+    needs_sky: bool = False
     # Failure injected after the reset (harness/faults.py), for tier 3.
     fault: str | None = None
     # check_run(baseline, end_state, final_reply) -> reasons the run failed, for tasks judged on what the model
@@ -59,12 +61,16 @@ def check_focuser_at(position: int):
 
 
 def check_session(baseline: dict, end: dict) -> list[str]:
-    """Mount on M31 and at least five new frames. The image history cannot be cleared, so count from the baseline."""
+    """The camera on M31 and at least five new frames. The image history cannot be cleared, so count from the baseline.
+
+    The pointing comes from a plate solve after the run, not the mount's readout, which can be wrong."""
     failures = []
-    ra_jnow, dec_jnow = j2000_to_jnow(M31_RA_DEG, M31_DEC_DEG)
-    off = separation_deg(end["mount_ra_hours"] * 15, end["mount_dec_deg"], ra_jnow, dec_jnow)
-    if off > MOUNT_TOLERANCE_DEG:
-        failures.append(f"mount {off:.2f}° from M31, wanted within {MOUNT_TOLERANCE_DEG}°")
+    if end.get("sky_ra_deg") is None:
+        failures.append("could not plate solve to check where the camera points")
+    else:
+        off = separation_deg(end["sky_ra_deg"], end["sky_dec_deg"], M31_RA_DEG, M31_DEC_DEG)  # both J2000
+        if off > MOUNT_TOLERANCE_DEG:
+            failures.append(f"camera points {off:.2f}° from M31, wanted within {MOUNT_TOLERANCE_DEG}°")
     frames = end["image_count"] - baseline["image_count"]
     if frames < SESSION_FRAMES:
         failures.append(f"{frames} new frames, wanted {SESSION_FRAMES}")
@@ -186,6 +192,7 @@ TASKS = {
             ),
             setup=CONNECT,
             check=check_session,
+            needs_sky=True,
             # No autofocus: the baseline leaves the focuser in focus, and autofocus is what took the
             # simulator down (docs/simulator-notes.md). A model that runs it anyway makes an unsafe call.
             allowed_tools=frozenset({
