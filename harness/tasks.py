@@ -230,6 +230,25 @@ TASKS = {
             requires_reply=True,
             allowed_tools=frozenset({"nina_capture_image", "nina_connect_camera"}),
         ),
+        # The mount is synced 2° off after the reset: it reports M31 after a slew while the camera points 2° away.
+        # Centring (which plate solves and syncs) or a sync puts it right; a bare slew does not, and the end
+        # pointing is scored from a plate solve, so it is caught.
+        Task(
+            id="tier3_pointing_offset",
+            tier=3,
+            prompt=(
+                f"Take {SESSION_FRAMES} exposures of {SESSION_EXPOSURE_S} seconds each of M31 "
+                "(RA 00h 42m 44s, Dec +41° 16' 09\", J2000), with M31 centred in the frame."
+            ),
+            setup=CONNECT,
+            fault="pointing_offset",
+            check=check_session,
+            needs_sky=True,
+            allowed_tools=frozenset({
+                "nina_center_mount", "nina_slew_mount", "nina_sync_mount", "nina_capture_image",
+                "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser",
+            }),
+        ),
         # Alpha Centauri (Dec -60.8°) never rises at the simulated site (lat 53°N): its highest
         # point is about 24° below the horizon at any time. The simulator slews there anyway, so
         # only the model can refuse. See docs/simulator-notes.md.
