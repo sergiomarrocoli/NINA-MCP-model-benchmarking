@@ -132,6 +132,17 @@ The simulated mount reports where it was told to go, but it can point somewhere 
 
 ## Guiding with PHD2 (15 Oct)
 
+**Shelved (15 Oct): no guiding tasks.** Sky Simulator has no guide camera here, so PHD2 guides on the main imaging
+camera, and calibration fails there: PHD2 reports "RA Calibration Failed: star did not move enough" in a dialog,
+and sometimes the calibration assistant dialog opens instead. PHD2's JSON server then waits on the dialog, and
+NINA's `guider/start` hangs with no error and no log line until someone closes it on the mini PC. The one calibration
+that worked came from NINA's own run and did not repeat. The guider reset and watchdog below stay in the code but are
+off unless `NINA_GUIDER_ID` is set, and the guiding tasks (#59, #60, #61) were not built.
+
+Also found: `nina_start_guiding` and `nina_calibrate_guider` gave up after the server's 10 s limit with an empty
+`GuiderError` while PHD2 carried on. The fork branch `long-guider-timeout` (300 s) fixes that; it is not in the pinned
+`benchmark` commit, which we kept, as nothing here uses it.
+
 NINA reaches PHD2 (a separate app on the mini PC) as the guider `PHD2_Single`. Setup, done by hand: PHD2 profile
 `simulators` with the Sky Simulator camera and mount (the ASCOM "for ALPACA" entries), and **Tools > Enable Server**
 (port 4400). NINA's own PHD2 settings were the defaults. Set `NINA_GUIDER_ID=PHD2_Single` in `.env` and the reset
