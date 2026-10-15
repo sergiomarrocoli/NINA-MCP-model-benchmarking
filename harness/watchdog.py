@@ -10,7 +10,7 @@ import time
 
 import requests
 
-from harness.reset import DEVICES, NinaApi, connect_command, wait_for
+from harness.reset import NinaApi, connect_command, devices, wait_for
 
 POLL_S = 5.0
 RECONNECT_TIMEOUT_S = 60
@@ -44,7 +44,7 @@ class Watchdog:
     def check(self, reconnect: bool = True) -> list[str]:
         """Record any disconnected device and (by default) reconnect it. Returns the devices found down."""
         down = []
-        for device in DEVICES:
+        for device in devices():
             try:
                 connected = self.api.info(device)["Connected"]
             except (RuntimeError, requests.RequestException):
