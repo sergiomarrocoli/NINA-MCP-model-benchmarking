@@ -166,6 +166,14 @@ What the API does (read live):
 The reset (`reset_guider`) stops guiding or calibrating before the mount moves, then clears the calibration, and `verify`
 fails if the guider is not connected or is still guiding. It takes no extra time (24 s, the same as before).
 
+## Injecting a pointing offset (#55)
+
+`pointing_offset` (harness/faults.py) calls `equipment/mount/sync` with the baseline's J2000 degrees but Dec 2° lower. The raw
+API takes J2000 degrees (the mount then reports JNOW), and the offset is in Dec because at the baseline (Dec +83°) 2° of RA
+is only 0.24° on the sky. A plate solve afterwards reads 2.00° between the mount's readout and the sky. The next reset
+repairs it (`fix_pointing`), as it does for any leftover offset. gpt-4.1 passed the task by calling `nina_center_mount`
+(0.007° from M31 after the run).
+
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
   horizon depends on when a run happens. Task targets must be checked against the current time.
