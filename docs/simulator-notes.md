@@ -174,6 +174,18 @@ is only 0.24° on the sky. A plate solve afterwards reads 2.00° between the mou
 repairs it (`fix_pointing`), as it does for any leftover offset. gpt-4.1 passed the task by calling `nina_center_mount`
 (0.007° from M31 after the run).
 
+## Plate solve and report (#56)
+
+`tier3_solve_and_report` uses the `pointing_offset` fault, so the mount's readout is 2° off and only a solve gives the answer.
+The reply is read by `harness/reply.py` (hms, colon, decimal hours or degrees, a bare RA read as hours or degrees) and checked
+against the plate solve taken after the run; any matching RA/Dec pair in the reply passes. The tolerance is 0.25°, so a JNOW
+position (0.17° from the J2000 one here) is accepted too.
+
+**A capture with `solve: true` and no duration fails to solve.** NINA's default exposure is too short (4 s call, `Success: false`,
+no error text); 1 s and 3 s solve. gpt-4.1 passed 1 of 3 runs: in the others it did not set a duration, saw the failed
+solve and reported that it could not say where the camera points, without retrying. The tool description does not mention
+exposure, so this is part of what the task measures.
+
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
   horizon depends on when a run happens. Task targets must be checked against the current time.
