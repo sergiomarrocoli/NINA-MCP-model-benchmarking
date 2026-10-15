@@ -1,4 +1,7 @@
+import pytest
+
 from harness import reset
+from harness.coords import j2000_to_jnow
 
 
 class FakeApi:
@@ -112,7 +115,7 @@ def test_snapshot_reads_the_filter():
         if device == "camera":
             base.update({"Temperature": 20, "CoolerOn": False})
         if device == "mount":
-            base.update({"RightAscension": 0.0, "Declination": 80.0, "TrackingEnabled": True, "AtPark": False, "Slewing": False})
+            base.update({"RightAscension": reset.MOUNT_RA_DEG / 15, "Declination": reset.MOUNT_DEC, "TrackingEnabled": True, "AtPark": False, "Slewing": False})
         return base
 
     api.info = info
@@ -121,3 +124,64 @@ def test_snapshot_reads_the_filter():
     state = reset.snapshot(api)
     assert state["filter_id"] == 1 and state["filter_name"] == "filter 1" and state["filterwheel_connected"]
     assert state["filterwheel_moving"] is False
+
+
+# --- pointing: the mount's readout against a plate solve -------------------------------------------
+
+SKY = (reset.MOUNT_RA_DEG, reset.MOUNT_DEC)  # where the camera points, J2000 degrees
+_jnow = j2000_to_jnow(*SKY)
+ALIGNED = (_jnow[0] / 15, _jnow[1])           # what a correctly synced mount reports: JNOW, RA in hours
+
+
+class PointingApi(FakeApi):
+    """A mount that reports (reported_ra_hours, reported_dec) and a sky the solver reads as `sky` (J2000 degrees)."""
+
+    def __init__(self, reported=ALIGNED):
+        super().__init__(position=reset.FOCUSER_POSITION)
+        self.reported = reported
+
+    def info(self, device):
+        if device == "mount":
+            return {"Connected": True, "RightAscension": self.reported[0], "Declination": self.reported[1], "Slewing": False}
+        return super().info(device)
+
+    def get(self, path, **params):
+        if path == "equipment/mount/sync":
+            self.reported = ALIGNED  # solved and synced: the readout now matches the sky
+        return super().get(path, **params)
+
+
+def solving(monkeypatch, api, sky=SKY):
+    monkeypatch.setattr(reset, "solve_frame", lambda a: (sky, "" if sky else "no stars"))
+    monkeypatch.setattr(reset, "slew_to_baseline", lambda a: None)
+    monkeypatch.setattr(reset, "settle", lambda a: 0.0)
+
+
+def test_pointing_that_matches_the_sky_is_left_alone(monkeypatch):
+    api = PointingApi()
+    solving(monkeypatch, api)
+    reset.fix_pointing(api)
+    assert [p for p, _ in api.calls if p == "equipment/mount/sync"] == []
+
+
+def test_a_mount_that_reports_the_wrong_place_is_synced_by_plate_solving(monkeypatch):
+    api = PointingApi(reported=(ALIGNED[0] + 2.0 / 15, ALIGNED[1]))  # reads 2° off in RA
+    solving(monkeypatch, api)
+    reset.fix_pointing(api)
+    assert [p for p, _ in api.calls if p == "equipment/mount/sync"] == ["equipment/mount/sync"]
+    assert [params for p, params in api.calls if p == "equipment/mount/sync"] == [{}]  # no coordinates: solve and sync
+
+
+def test_pointing_that_cannot_be_solved_fails_the_reset(monkeypatch):
+    api = PointingApi()
+    solving(monkeypatch, api, sky=None)
+    with pytest.raises(RuntimeError, match="could not plate solve"):
+        reset.fix_pointing(api)
+
+
+def test_pointing_that_a_sync_does_not_fix_fails_the_reset(monkeypatch):
+    api = PointingApi(reported=(ALIGNED[0] + 2.0 / 15, ALIGNED[1]))
+    api.get = lambda path, **params: {}  # the sync does nothing
+    solving(monkeypatch, api)
+    with pytest.raises(RuntimeError, match="after a sync"):
+        reset.fix_pointing(api)
