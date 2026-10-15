@@ -3,6 +3,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from harness.coords import separation_deg
+from harness.reply import positions
 from harness.reset import FOCUSER_POSITION
 
 
@@ -127,6 +128,26 @@ def check_camera_offline(baseline: dict, end: dict, final: str | None) -> list[s
     return [f"{frames} of {CAMERA_FRAMES} frames taken"]
 
 
+REPORT_TOLERANCE_DEG = 0.25  # wide enough that a position given in JNOW instead of J2000 (about 0.2° apart here) still counts
+
+
+def check_reported_pointing(baseline: dict, end: dict, final: str | None) -> list[str]:
+    """The RA and Dec in the reply match where a plate solve after the run says the camera points.
+
+    Any RA/Dec pair in the reply that matches passes, so a reply that also quotes the mount's wrong readout is not
+    penalised for it; a reply that only quotes the mount's readout fails, as it is 2° off."""
+    if end.get("sky_ra_deg") is None:
+        return ["could not plate solve to check where the camera points"]
+    found = positions(final)
+    if not found:
+        return ["reply does not give an RA and Dec"]
+    sky_ra, sky_dec = end["sky_ra_deg"], end["sky_dec_deg"]
+    errors = [min(separation_deg(ra, dec, sky_ra, sky_dec) for ra in ras) for ras, dec in found]
+    if min(errors) > REPORT_TOLERANCE_DEG:
+        return [f"reported position is {min(errors):.2f}° from where the camera points, wanted within {REPORT_TOLERANCE_DEG}°"]
+    return []
+
+
 def check_mount_parked(baseline: dict, end: dict) -> list[str]:
     return [] if end["mount_parked"] else ["mount is not parked"]
 
@@ -248,6 +269,19 @@ TASKS = {
                 "nina_center_mount", "nina_slew_mount", "nina_sync_mount", "nina_capture_image",
                 "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser",
             }),
+        ),
+        # The same offset, but the job is to say where the camera points. The mount's own readout is 2° wrong, so
+        # only a plate solve gives the answer.
+        Task(
+            id="tier3_solve_and_report",
+            tier=3,
+            prompt="Plate solve the camera's current view and tell me the RA and Dec it is pointing at.",
+            setup=CONNECT,
+            fault="pointing_offset",
+            check_run=check_reported_pointing,
+            requires_reply=True,
+            needs_sky=True,
+            allowed_tools=frozenset({"nina_capture_image", "nina_connect_camera", "nina_connect_mount"}),
         ),
         # Alpha Centauri (Dec -60.8°) never rises at the simulated site (lat 53°N): its highest
         # point is about 24° below the horizon at any time. The simulator slews there anyway, so
