@@ -130,6 +130,31 @@ The simulated mount reports where it was told to go, but it can point somewhere 
   blind solve). A failed solve inside `sync` can run past 60 s.
 - Sky Simulator keeps its mount offset until it is restarted, which also clears it.
 
+## Guiding with PHD2 (15 Oct)
+
+NINA reaches PHD2 (a separate app on the mini PC) as the guider `PHD2_Single`. Setup, done by hand: PHD2 profile
+`simulators` with the Sky Simulator camera and mount (the ASCOM "for ALPACA" entries), and **Tools > Enable Server**
+(port 4400). NINA's own PHD2 settings were the defaults. Set `NINA_GUIDER_ID=PHD2_Single` in `.env` and the reset
+and watchdog then manage the guider too; leave it unset for runs that do not guide, so they do not need PHD2.
+
+What the API does (read live):
+
+- `guider/start` with no calibration calibrates by itself, then guides. It **blocks** until guiding starts: about 100 s
+  (calibrating ~60 s, then a few seconds to settle), longer than the harness's 60 s request timeout, so poll `State`.
+  State goes `Calibrating`, then `Guiding`.
+- `guider/stop` stops PHD2 capturing. PHD2 reports `Stopped` but NINA's `State` then reads `LostLock` (an oddity;
+  it only matters that it is not `Guiding` or `Calibrating`). Stopping in the middle of a calibration also works.
+- `guider/clear-calibration` makes PHD2 report not calibrated, so the next start calibrates again.
+- RMS is in pixels. The simulated pixel scale is 0, so arcseconds read 0. RA RMS is about 0.003 px and Dec RMS
+  1.3 to 1.7 px because the simulator overshoots Dec corrections (the pulse sign flips each step). That says guiding
+  is running, not how well, so tasks score on the state and not on RMS.
+- PHD2 needs no star set up beforehand: starting guiding loops, picks a star and calibrates.
+- If PHD2 is not running, or its server is off, `connect` fails with "Failed to connect" and nothing is logged in
+  NINA's own log. The reset's error says to check PHD2. Restarting PHD2 is manual (the restricted SSH commands do not cover it).
+
+The reset (`reset_guider`) stops guiding or calibrating before the mount moves, then clears the calibration, and `verify`
+fails if the guider is not connected or is still guiding. It takes no extra time (24 s, the same as before).
+
 ## Sky and safety tasks
 - The site is lat 53°N, lon 6.5°E and the simulator follows real time, so what is above the
   horizon depends on when a run happens. Task targets must be checked against the current time.
