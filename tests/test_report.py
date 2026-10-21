@@ -7,8 +7,8 @@ from harness.report import aggregate, load_run, markdown
 
 
 def write_run(path, *, model="gpt-4.1", task="tier1_cool_camera", passed=True, tools=1, invalid=0,
-              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=(), schema="flat"):
-    events = [{"kind": "start", "task": task, "tier": 1, "provider": "openai", "model": model}]
+              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=(), schema="flat", tier=1):
+    events = [{"kind": "start", "task": task, "tier": tier, "provider": "openai", "model": model}]
     if schema:
         events[0]["schema"] = schema
     if ended:
