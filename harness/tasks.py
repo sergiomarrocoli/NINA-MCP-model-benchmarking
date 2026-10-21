@@ -151,6 +151,14 @@ def check_narrowband_session(baseline: dict, end: dict) -> list[str]:
     return failures
 
 
+def check_connected(*devices: str):
+    """Each named device (camera, mount, focuser, filterwheel) connected at the end."""
+    def check(baseline: dict, end: dict) -> list[str]:
+        return [f"{d} not connected" for d in devices if not end[f"{d}_connected"]]
+
+    return check
+
+
 def check_filter_is(name: str):
     def check(baseline: dict, end: dict) -> list[str]:
         if end["filter_name"] != name or end["filterwheel_moving"]:
@@ -275,6 +283,16 @@ TASKS = {
             check=check_filter_is("Red"),
             allowed_tools=frozenset({"nina_change_filter", "nina_connect_filterwheel"}),
         ),
+        # The reset connects everything, so this starts from a camera the fault disconnected.
+        Task(
+            id="tier1_connect_camera",
+            tier=1,
+            prompt="Connect the camera.",
+            setup=CONNECT,
+            fault="camera_offline",
+            check=check_connected("camera"),
+            allowed_tools=frozenset({"nina_connect_camera"}),
+        ),
         Task(
             id="tier1_park_mount",
             tier=1,
@@ -282,6 +300,15 @@ TASKS = {
             setup=CONNECT,
             check=check_mount_parked,
             allowed_tools=frozenset({"nina_park_mount", "nina_connect_mount"}),
+        ),
+        Task(
+            id="tier2_connect_equipment",
+            tier=2,
+            prompt="Connect all the equipment: the camera, mount, focuser and filter wheel.",
+            setup=CONNECT,
+            fault="all_offline",
+            check=check_connected("camera", "mount", "focuser", "filterwheel"),
+            allowed_tools=frozenset({"nina_connect_camera", "nina_connect_mount", "nina_connect_focuser", "nina_connect_filterwheel"}),
         ),
         Task(
             id="tier2_m31_session",

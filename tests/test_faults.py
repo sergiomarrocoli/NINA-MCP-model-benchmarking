@@ -32,6 +32,24 @@ def test_camera_offline_disconnects_the_camera_and_says_so():
     assert api.calls == [("equipment/camera/disconnect", {})] and not api.camera_connected
 
 
+def test_all_offline_disconnects_every_device_and_says_so():
+    state = {d: True for d in ("camera", "mount", "focuser", "filterwheel")}
+
+    class Api:
+        calls = []
+
+        def info(self, device):
+            return {"Connected": state[device]}
+
+        def get(self, path, **params):
+            self.calls.append(path)
+            state[path.split("/")[1]] = False
+
+    api = Api()
+    assert faults.inject("all_offline", api) == ("camera", "mount", "focuser", "filterwheel")
+    assert api.calls == [f"equipment/{d}/disconnect" for d in state] and not any(state.values())
+
+
 def test_pointing_offset_syncs_the_mount_two_degrees_off_in_dec_and_expects_no_device_down():
     api = FakeApi()
     assert faults.inject("pointing_offset", api) == ()

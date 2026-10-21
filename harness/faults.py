@@ -20,11 +20,22 @@ def defocus(api: NinaApi) -> tuple[str, ...]:
     return ()
 
 
+def disconnect(api: NinaApi, *devices: str) -> tuple[str, ...]:
+    for device in devices:
+        api.get(f"equipment/{device}/disconnect")
+    for device in devices:
+        wait_for(f"{device} to disconnect", lambda device=device: not api.info(device)["Connected"])
+    return devices
+
+
 def camera_offline(api: NinaApi) -> tuple[str, ...]:
     """The camera answers every call with 'Camera not connected' until the model reconnects it."""
-    api.get("equipment/camera/disconnect")
-    wait_for("camera to disconnect", lambda: not api.info("camera")["Connected"])
-    return ("camera",)
+    return disconnect(api, "camera")
+
+
+def all_offline(api: NinaApi) -> tuple[str, ...]:
+    """Every device starts disconnected, and each has to be connected by the model."""
+    return disconnect(api, "camera", "mount", "focuser", "filterwheel")
 
 
 def pointing_offset(api: NinaApi) -> tuple[str, ...]:
@@ -37,7 +48,7 @@ def pointing_offset(api: NinaApi) -> tuple[str, ...]:
 
 
 FAULTS: dict[str, Callable[[NinaApi], tuple[str, ...]]] = {
-    "defocus": defocus, "camera_offline": camera_offline, "pointing_offset": pointing_offset,
+    "defocus": defocus, "camera_offline": camera_offline, "all_offline": all_offline, "pointing_offset": pointing_offset,
 }
 
 
