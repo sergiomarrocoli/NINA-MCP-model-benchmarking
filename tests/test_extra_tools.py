@@ -36,7 +36,7 @@ def ok(response="OK"):
 
 
 async def tool(client, name, args):
-    result = await client.call_tool(name, {"input": args}, raise_on_error=False)
+    result = await client.call_tool(name, args, raise_on_error=False)
     return json.loads(result.content[0].text)
 
 
