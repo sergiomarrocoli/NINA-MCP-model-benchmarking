@@ -175,11 +175,12 @@ def radar_panel(rows: list[dict], models: list[str], colour: dict[str, str]) -> 
 
 
 def nice_max(value: float) -> float:
-    """The next 1, 2, 2.5, 5 or 10 times a power of ten at or above value, for an axis that ends on a round number."""
+    """The next 1, 2, 4, 8 or 10 times a power of ten at or above value. The axis has four steps, so these give round
+    ticks (a top of 2.5 would put one at 0.625)."""
     if value <= 0:
         return 1
     scale = 10 ** math.floor(math.log10(value))
-    return next(m * scale for m in (1, 2, 2.5, 5, 10) if m * scale >= value)
+    return next(m * scale for m in (1, 2, 4, 8, 10) if m * scale >= value)
 
 
 def axis(body: list[str], plot_l: float, plot_r: float, plot_t: float, plot_h: float, top: float, fmt) -> None:
