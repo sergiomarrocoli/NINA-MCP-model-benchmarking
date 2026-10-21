@@ -2,9 +2,9 @@
 
 The upstream server has no autofocus and no centring tool, although the Advanced API plugin offers
 both (`/equipment/focuser/auto-focus`, and `center=true` on `/equipment/mount/slew`). This adds
-them to the upstream server object, written in the same style as its other tools (arguments wrapped
-in `input`). Both wait for the operation to finish, with their own long timeout: the upstream
-client gives up after 10 s, which a real autofocus or centre never meets.
+them to the upstream server object, written in the same style as its other tools (a pydantic model that the
+`tool()` decorator publishes as flat arguments). Both wait for the operation to finish, with their own long
+timeout: the upstream client gives up after 10 s, which a real autofocus or centre never meets.
 
 Start it with: python -c "from harness.extra_tools import mcp; mcp.run()"
 """
@@ -14,7 +14,7 @@ import time
 from typing import Any
 
 import aiohttp
-from nina_advanced_mcp import create_error_response, mcp
+from nina_advanced_mcp import create_error_response, mcp, tool
 from pydantic import BaseModel, Field
 
 from harness.coords import j2000_to_jnow, separation_deg
@@ -71,7 +71,7 @@ async def _last_autofocus_timestamp() -> str | None:
     return response.get("Timestamp") if isinstance(response, dict) else None
 
 
-@mcp.tool()
+@tool()
 async def nina_autofocus(input: AutofocusInput) -> dict[str, Any]:
     """Run NINA's autofocus routine on the connected focuser and camera, or cancel a running one.
 
@@ -111,7 +111,7 @@ async def nina_autofocus(input: AutofocusInput) -> dict[str, Any]:
         return create_error_response("NINAFocuserError", _describe(e), {})
 
 
-@mcp.tool()
+@tool()
 async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
     """Slew the mount to coordinates and centre on them using NINA's plate solver.
 
