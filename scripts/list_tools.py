@@ -22,10 +22,10 @@ async def main():
         print(f"{len(tools)} tools")
         for t in tools:
             print(f"- {t.name}")
-        # Parameterised tools take their arguments wrapped in an "input" object.
+        # The fork publishes arguments flat; none of these take any.
         calls = [
-            ("nina_connect", {"input": {}}),
-            ("nina_get_version", {"input": {}}),
+            ("nina_connect", {}),
+            ("nina_get_version", {}),
             ("nina_get_camera_info", {}),
             ("nina_get_mount_info", {}),
             ("nina_get_focuser_info", {}),

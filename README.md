@@ -12,7 +12,7 @@ The full plan is in [NINA Agent Benchmark.md](NINA%20Agent%20Benchmark.md). Work
 
 No results yet: the first batch (local against frontier models, #13) will be reported here.
 
-Runs from 10 to 12 October were discarded. They used a different tool list (103 tools; now 105, and the MCP server
+Runs from 10 to 12 October were discarded. They used a different tool list (103 tools; now 106, and the MCP server
 is a fork with bug fixes), connected the simulator through a different route (NINA's own Alpaca client,
 which dropped the devices after about 4 minutes), and started from different baselines, so they cannot be
 compared with anything run now.
@@ -211,9 +211,10 @@ cp .env.example .env                 # then fill in the NINA host and API keys
 .venv/bin/python -m pytest tests
 ```
 
-By default the model sees the tools with their `input` wrapper taken off (44 of the 105 tools take one `input`
-object, which small models get wrong); the harness puts it back before calling the server. `--schema published`
-(on `run` and `batch`) gives the tools as the server serves them. The report shows one schema at a time
+The fork's MCP server publishes every tool's arguments flat. Upstream nests them in one `input` object (44 of its
+tools), which small models get wrong, so the fork's `tool()` decorator unwraps them and our own tools use it too.
+`--schema flat` (the default) would also unwrap the tools of a server that still nests, and `--schema published` shows
+the tools exactly as served; against the fork the two are the same. The report shows one schema at a time
 (`--schema flat` by default). See `harness/schema.py`.
 
 Every run calls the model's API and costs money (roughly $0.01-0.07 per single-command run), so use few

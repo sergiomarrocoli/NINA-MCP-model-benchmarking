@@ -45,7 +45,7 @@ def display_order() -> list[str]:
     return sorted(TASKS, key=lambda t: ("M31" in TASKS[t].prompt, TASKS[t].tier, index[t]))
 
 
-CONNECT = [("nina_connect", {"input": {}})]
+CONNECT = [("nina_connect", {})]
 FOCUSER_TOLERANCE_STEPS = 5
 FOCUSER_TARGET = FOCUSER_POSITION + 500  # a short move: the focuser travels about 80 steps/s
 
