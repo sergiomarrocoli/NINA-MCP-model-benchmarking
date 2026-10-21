@@ -1,0 +1,340 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1184" height="1030" viewBox="0 0 1184 1030" role="img" aria-label="Pass rate by task, one chart per task">
+<title>Pass rate by task, one chart per task</title>
+<rect width="1184" height="1030" fill="#ffffff"/>
+<text x="14.0" y="26.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Pass rate by task</text>
+<rect x="14.0" y="38" width="12" height="12" rx="2" fill="#0072B2"/>
+<text x="32.0" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="135.6" y="38" width="12" height="12" rx="2" fill="#E69F00"/>
+<text x="153.6" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="214.0" y="38" width="12" height="12" rx="2" fill="#009E73"/>
+<text x="232.0" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<svg x="12" y="66" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Cool the camera to -10 °C.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier1_cool_camera</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="114.0" width="44.0" height="80.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="110.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="154.0" width="44.0" height="40.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="402" y="66" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Move the focuser to position 25500.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier1_move_focuser</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="114.0" width="44.0" height="80.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="110.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="134.0" width="44.0" height="60.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="792" y="66" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Change the filter to Red.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier1_change_filter</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="114.0" width="44.0" height="80.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="110.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="94.0" width="44.0" height="100.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="12" y="304" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Park the mount.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier1_park_mount</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="94.0" width="44.0" height="100.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="154.0" width="44.0" height="40.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="402" y="304" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Take 3 exposures of 2 seconds each.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_camera_offline</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="134.0" width="44.0" height="60.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="134.0" width="44.0" height="60.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="134.0" width="44.0" height="60.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="792" y="304" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Plate solve the camera&#x27;s current view and tell</text>
+<text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">me the RA and Dec it is pointing at.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_solve_and_report</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="154.0" width="44.0" height="40.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="134.0" width="44.0" height="60.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="154.0" width="44.0" height="40.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="12" y="542" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Slew the mount to Alpha Centauri.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier4_slew_below_horizon</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="114.0" width="44.0" height="80.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="110.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="174.0" width="44.0" height="20.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="170.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">20%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="402" y="542" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">I want 5 minute narrowband frames of the Heart</text>
+<text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Nebula.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier5_heart_narrowband</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="154.0" width="44.0" height="40.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="311.3" y="190.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="792" y="542" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Slew to M31 (RA 00h 42m 44s, Dec +41° 16&#x27; 09&quot;,</text>
+<text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">J2000) and centre it, then take 5 exposures of</text>
+<text x="14.0" y="54.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">5 seconds each.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier2_m31_session</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="94.0" width="44.0" height="100.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="154.0" width="44.0" height="40.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="12" y="780" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Slew to M31 (RA 00h 42m 44s, Dec +41° 16&#x27; 09&quot;,</text>
+<text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">J2000) and centre it, then take 5 exposures of</text>
+<text x="14.0" y="54.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">5 seconds each.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_centre_fails</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="134.0" width="44.0" height="60.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="94.0" width="44.0" height="100.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="90.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="289.3" y="154.0" width="44.0" height="40.0" rx="2" fill="#009E73"/>
+<text x="311.3" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="402" y="780" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Take 5 exposures of 5 seconds each of M31 (RA</text>
+<text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">00h 42m 44s, Dec +41° 16&#x27; 09&quot;, J2000), with</text>
+<text x="14.0" y="54.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">M31 centred in the frame.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_pointing_offset</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<rect x="70.7" y="154.0" width="44.0" height="40.0" rx="2" fill="#0072B2"/>
+<text x="92.7" y="150.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="134.0" width="44.0" height="60.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="130.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="311.3" y="190.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<svg x="792" y="780" width="380" height="228" viewBox="0 0 380 228">
+<rect width="380" height="228" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">I want RGB frames of M31.</text>
+<text x="14.0" y="76.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier5_m31_rgb</text>
+<line x1="38" y1="194.0" x2="366" y2="194.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="197.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<line x1="38" y1="169.0" x2="366" y2="169.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="172.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<line x1="38" y1="144.0" x2="366" y2="144.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="147.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<line x1="38" y1="119.0" x2="366" y2="119.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="122.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<line x1="38" y1="94.0" x2="366" y2="94.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="32.0" y="97.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<text x="92.7" y="190.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<text x="92.7" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="92.7" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="180.0" y="114.0" width="44.0" height="80.0" rx="2" fill="#E69F00"/>
+<text x="202.0" y="110.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<text x="202.0" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="202.0" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="311.3" y="190.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<text x="311.3" y="219.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
+<text x="311.3" y="207.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+</svg>
+<text x="1172.0" y="1020.0" font-size="11" fill="#b42318" text-anchor="end" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">DUMMY DATA</text>
+</svg>

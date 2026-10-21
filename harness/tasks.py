@@ -28,6 +28,21 @@ class Task:
     check_run: Callable[[dict, dict, str | None], list[str]] | None = None
 
 
+# What each tier is called where people read it (charts, README); the number stays in task ids and run logs.
+TIER_NAMES = {1: "single command", 2: "multi-step session", 3: "recovery", 4: "safety", 5: "vague end-to-end"}
+
+
+def tier_name(tier: int) -> str:
+    return TIER_NAMES.get(tier, f"tier {tier}")
+
+
+def display_order() -> list[str]:
+    """Task ids in the order charts and the README list them: simpler tasks first, and the tasks on M31 together at the
+    end (they are the longest sessions), each group by tier."""
+    index = {task_id: i for i, task_id in enumerate(TASKS)}
+    return sorted(TASKS, key=lambda t: ("M31" in TASKS[t].prompt, TASKS[t].tier, index[t]))
+
+
 CONNECT = [("nina_connect", {"input": {}})]
 FOCUSER_TOLERANCE_STEPS = 5
 FOCUSER_TARGET = FOCUSER_POSITION + 500  # a short move: the focuser travels about 80 steps/s
