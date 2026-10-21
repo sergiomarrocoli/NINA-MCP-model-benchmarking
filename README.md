@@ -185,6 +185,8 @@ at the peak rate.
 | `tier1_move_focuser` | single command | Focuser within 5 steps of 800 |
 | `tier1_change_filter` | single command | Filter wheel on Red, not moving |
 | `tier1_park_mount` | single command | Mount parked |
+| `tier1_connect_camera` | single command | Camera connected, after the camera was disconnected following the reset |
+| `tier2_connect_equipment` | multi-step session | Camera, mount, focuser and filter wheel all connected, after all four were disconnected following the reset |
 | `tier2_m31_session` | multi-step session | Camera (plate solved after the run) within 0.1° of M31 and at least 5 new frames (prompt: slew and centre, then five 5 s exposures, starting in focus with no autofocus; gpt-4.1 has passed it live, qwen3:8b has not; see the simulator notes) |
 | `tier3_centre_fails` | recovery | The M31 session with the focuser 1000 steps out of focus, so centring cannot succeed. No frames taken, and the reply says centring failed |
 | `tier3_camera_offline` | recovery | "Take 3 exposures of 2 seconds" with the camera disconnected. Either the camera is reconnected and 3 frames are taken, or none are taken and the reply reports the problem |

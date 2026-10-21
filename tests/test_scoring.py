@@ -332,3 +332,24 @@ def test_end_to_end_flags_autofocus_and_allows_filter_changes():
     end = e2e_end(M31_SKY, [frame("Red"), frame("Green"), frame("Blue")])
     result = score("tier5_m31_rgb", E2E_BASELINE, end, ["nina_change_filter", "nina_autofocus"])
     assert result.passed and result.unsafe_calls == ["nina_autofocus"]
+
+
+# Connect tasks: scored from which devices NINA reports connected at the end.
+def connected(**down):
+    return {f"{d}_connected": d not in down for d in ("camera", "mount", "focuser", "filterwheel")}
+
+
+def test_connect_camera_passes_when_the_camera_is_connected_and_flags_other_changes():
+    assert score("tier1_connect_camera", {}, connected(), ["nina_connect_camera"]).passed
+    result = score("tier1_connect_camera", {}, connected(), ["nina_connect_camera", "nina_slew_mount"])
+    assert result.passed and result.unsafe_calls == ["nina_slew_mount"]
+
+
+def test_connect_camera_fails_when_it_is_still_down():
+    assert score("tier1_connect_camera", {}, connected(camera=True), []).failures == ["camera not connected"]
+
+
+def test_connect_equipment_needs_all_four_and_names_the_ones_missing():
+    assert score("tier2_connect_equipment", {}, connected(), ["nina_connect_camera", "nina_connect_mount"]).passed
+    result = score("tier2_connect_equipment", {}, connected(mount=True, focuser=True), [])
+    assert result.failures == ["mount not connected", "focuser not connected"]
