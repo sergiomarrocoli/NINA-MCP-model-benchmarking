@@ -185,3 +185,25 @@ def test_pointing_that_a_sync_does_not_fix_fails_the_reset(monkeypatch):
     solving(monkeypatch, api)
     with pytest.raises(RuntimeError, match="after a sync"):
         reset.fix_pointing(api)
+
+
+def test_frame_details_lists_only_frames_after_the_baseline_count():
+    from harness.reset import NinaApi, frame_details
+    api = NinaApi("x", "1")
+    history = [{"Filter": "Luminance", "ExposureTime": 5, "ImageType": "LIGHT"},
+               {"Filter": "Red", "ExposureTime": 30, "ImageType": "LIGHT"}]
+    api.get = lambda path, **p: history if (path, p) == ("image-history", {"all": "true"}) else None
+    assert frame_details(api, 1) == [{"filter": "Red", "exposure_s": 30, "type": "LIGHT"}]
+
+
+def test_frame_details_is_none_when_the_history_cannot_be_read():
+    from harness.reset import NinaApi, frame_details
+    api = NinaApi("x", "1")
+
+    def refuse(path, **p):
+        raise RuntimeError("image-history: bad request")
+
+    api.get = refuse
+    assert frame_details(api, 0) is None
+    api.get = lambda path, **p: 7  # a bare count, not a list
+    assert frame_details(api, 0) is None

@@ -21,6 +21,8 @@ class Task:
     requires_reply: bool = False
     # Read where the camera really points (a plate solve) after the run, for scoring the pointing.
     needs_sky: bool = False
+    # Read the filter and exposure time of each new frame after the run (`end["frames"]`), for scoring what was imaged.
+    needs_frames: bool = False
     # Failure injected after the reset (harness/faults.py), for tier 3.
     fault: str | None = None
     # check_run(baseline, end_state, final_reply) -> reasons the run failed, for tasks judged on what the model
@@ -61,20 +63,76 @@ def check_focuser_at(position: int):
     return check
 
 
+def pointing_failures(end: dict, name: str, ra_deg: float, dec_deg: float, tolerance_deg: float) -> list[str]:
+    """The camera within tolerance of a target (J2000 degrees), from the plate solve taken after the run."""
+    if end.get("sky_ra_deg") is None:
+        return ["could not plate solve to check where the camera points"]
+    off = separation_deg(end["sky_ra_deg"], end["sky_dec_deg"], ra_deg, dec_deg)  # both J2000
+    return [f"camera points {off:.2f}° from {name}, wanted within {tolerance_deg}°"] if off > tolerance_deg else []
+
+
 def check_session(baseline: dict, end: dict) -> list[str]:
     """The camera on M31 and at least five new frames. The image history cannot be cleared, so count from the baseline.
 
     The pointing comes from a plate solve after the run, not the mount's readout, which can be wrong."""
-    failures = []
-    if end.get("sky_ra_deg") is None:
-        failures.append("could not plate solve to check where the camera points")
-    else:
-        off = separation_deg(end["sky_ra_deg"], end["sky_dec_deg"], M31_RA_DEG, M31_DEC_DEG)  # both J2000
-        if off > MOUNT_TOLERANCE_DEG:
-            failures.append(f"camera points {off:.2f}° from M31, wanted within {MOUNT_TOLERANCE_DEG}°")
+    failures = pointing_failures(end, "M31", M31_RA_DEG, M31_DEC_DEG, MOUNT_TOLERANCE_DEG)
     frames = end["image_count"] - baseline["image_count"]
     if frames < SESSION_FRAMES:
         failures.append(f"{frames} new frames, wanted {SESSION_FRAMES}")
+    return failures
+
+
+# The vague end-to-end tasks give a target by name only, so the model works out the position from what it knows,
+# hence a wider tolerance than the tasks that give coordinates.
+VAGUE_TOLERANCE_DEG = 0.5  # M31 and the Heart Nebula are both a few degrees across, so catalogues put their centres apart
+RGB_FILTERS = ("red", "green", "blue")
+RGB_FRAMES_PER_FILTER = 1  # "RGB frames" names no number, so one in each colour is the least that answers it
+# The simulated wheel's narrowband filters (H-alpha, SII, O3; docs/simulator-notes.md), with the other common spellings.
+NARROWBAND_FILTERS = frozenset({"h-alpha", "ha", "sii", "s-ii", "o3", "oiii", "o-iii"})
+NARROWBAND_EXPOSURE_S = 300
+NARROWBAND_EXPOSURE_TOLERANCE = 0.1  # 10%, in case the simulator reports a slightly different time
+# The Heart Nebula (IC 1805), J2000. At Dec +61.5° it never sets from the benchmark site (lat 53°N; lowest point about
+# 24° up), so the task does not depend on the hour. It is a classic narrowband target.
+HEART_RA_DEG, HEART_DEC_DEG = 38.175, 61.45
+
+
+def new_frames(baseline: dict, end: dict) -> tuple[list[dict] | None, list[str]]:
+    """The new frames' details, or None and why they could not be read."""
+    frames, count = end.get("frames"), end["image_count"] - baseline["image_count"]
+    if frames is None:
+        return None, ["could not read the frames' filters and exposure times from NINA's image history"]
+    if len(frames) != count:
+        return None, [f"image history lists {len(frames)} new frames but the count rose by {count}"]
+    return frames, []
+
+
+def check_rgb_session(baseline: dict, end: dict) -> list[str]:
+    """The camera on M31, with at least one frame in each of Red, Green and Blue."""
+    failures = pointing_failures(end, "M31", M31_RA_DEG, M31_DEC_DEG, VAGUE_TOLERANCE_DEG)
+    frames, problems = new_frames(baseline, end)
+    if frames is None:
+        return failures + problems
+    taken = [str(f.get("filter") or "").lower() for f in frames]
+    for colour in RGB_FILTERS:
+        if taken.count(colour) < RGB_FRAMES_PER_FILTER:
+            failures.append(f"{taken.count(colour)} {colour} frames, wanted {RGB_FRAMES_PER_FILTER}")
+    return failures
+
+
+def check_narrowband_session(baseline: dict, end: dict) -> list[str]:
+    """The camera on the Heart Nebula, with at least one frame, every new frame narrowband and about 5 minutes long."""
+    failures = pointing_failures(end, "the Heart Nebula", HEART_RA_DEG, HEART_DEC_DEG, VAGUE_TOLERANCE_DEG)
+    frames, problems = new_frames(baseline, end)
+    if frames is None:
+        return failures + problems
+    if not frames:
+        return failures + ["no new frames"]
+    for f in frames:
+        if str(f.get("filter") or "").lower() not in NARROWBAND_FILTERS:
+            failures.append(f"a frame in {f.get('filter')}, not a narrowband filter")
+        exposure = f.get("exposure_s")
+        if exposure is None or abs(exposure - NARROWBAND_EXPOSURE_S) > NARROWBAND_EXPOSURE_S * NARROWBAND_EXPOSURE_TOLERANCE:
+            failures.append(f"a {exposure} s frame, wanted about {NARROWBAND_EXPOSURE_S} s")
     return failures
 
 
@@ -168,6 +226,12 @@ def check_mount_unmoved(baseline: dict, end: dict) -> list[str]:
         failures.append("mount was parked or left slewing")
     return failures
 
+
+# The tools an end-to-end session can reasonably need; anything else that changes state counts as unsafe.
+END_TO_END_TOOLS = frozenset({
+    "nina_center_mount", "nina_slew_mount", "nina_sync_mount", "nina_capture_image", "nina_change_filter",
+    "nina_connect_camera", "nina_connect_mount", "nina_connect_focuser", "nina_connect_filterwheel",
+})
 
 TASKS = {
     t.id: t
@@ -294,6 +358,28 @@ TASKS = {
             check=check_mount_unmoved,
             allowed_tools=frozenset({"nina_connect_mount"}),
             requires_reply=True,
+        ),
+        # Tier 5: a loose request, no coordinates, exposure times or tool hints. The model has to find the target,
+        # pick the filters and the exposure itself. Scored on what ended up on disk and where the camera points.
+        Task(
+            id="tier5_m31_rgb",
+            tier=5,
+            prompt="I want RGB frames of M31.",
+            setup=CONNECT,
+            check=check_rgb_session,
+            needs_sky=True,
+            needs_frames=True,
+            allowed_tools=END_TO_END_TOOLS,
+        ),
+        Task(
+            id="tier5_heart_narrowband",
+            tier=5,
+            prompt="I want 5 minute narrowband frames of the Heart Nebula.",
+            setup=CONNECT,
+            check=check_narrowband_session,
+            needs_sky=True,
+            needs_frames=True,
+            allowed_tools=END_TO_END_TOOLS,
         ),
     ]
 }
