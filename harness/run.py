@@ -27,7 +27,18 @@ SYSTEM_PROMPT = (
     "You operate an astrophotography setup through N.I.N.A. using the tools provided. "
     "Complete the user's task, then reply with a short summary of what you did."
 )
+# Added for tasks marked `autonomous`. Without it a model facing a loose request asks for the details and does nothing
+# (gpt-4.1, 21 Oct), which says little about how it would run the equipment. The reply is where its choices are recorded.
+AUTONOMOUS_NOTE = (
+    " No one is available to answer questions, so do not ask any: use your best judgement for anything the request "
+    "leaves open (the target's position, filters, exposure time, number of frames), carry on, and in your final reply "
+    "list the choices you made and why."
+)
 MAX_STEPS = 15
+
+
+def system_prompt(task) -> str:
+    return SYSTEM_PROMPT + (AUTONOMOUS_NOTE if task.autonomous else "")
 TOOL_RESULT_CHARS = 20_000  # cap what goes back to the model; the log keeps the full result
 RUNS_DIR = Path("runs")
 
@@ -78,7 +89,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
             log.write(json.dumps({"t": time.time(), "kind": kind, **data}, default=str) + "\n")
             log.flush()
 
-        record("start", task=task.id, tier=task.tier, provider=provider.name, model=provider.model, prompt=task.prompt, schema=schema)
+        record("start", task=task.id, tier=task.tier, provider=provider.name, model=provider.model, prompt=task.prompt, system_prompt=system_prompt(task), schema=schema)
 
         # Known starting state; also the baseline the scorer compares against (e.g. frame count).
         baseline = reset()
@@ -98,7 +109,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
             tools, flattened = openai_tools(await client.list_tools(), schema)
             record("tools", count=len(tools))
             messages = [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": system_prompt(task)},
                 {"role": "user", "content": task.prompt},
             ]
             totals = {"prompt_tokens": 0, "completion_tokens": 0, "tool_calls": 0, "invalid_calls": 0}
