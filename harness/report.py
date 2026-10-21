@@ -15,7 +15,9 @@ from collections import defaultdict
 from pathlib import Path
 from statistics import mean
 
+from harness.charts import CHARTS_DIR, write_charts
 from harness.pricing import cost, is_estimated
+from harness.tasks import TASKS, display_order, tier_name
 
 RUNS_DIR = Path("runs")
 README = Path("README.md")
@@ -49,6 +51,15 @@ def load_run(path: Path) -> dict | None:
         # Runs before the schema option used the published tools.
         "schema": start.get("schema", "published"),
     }
+
+
+def load_runs(runs_dir: Path, schema: str) -> tuple[list[dict], int, list[dict]]:
+    """The runs that count: (runs, how many were left out for a device drop, runs made with another schema)."""
+    loaded = [r for p in sorted(runs_dir.glob("*.jsonl")) if (r := load_run(p))]
+    other_schema = [r for r in loaded if r["schema"] != schema]
+    loaded = [r for r in loaded if r["schema"] == schema]  # flat and published runs are not comparable
+    runs = [r for r in loaded if not r["device_drops"]]
+    return runs, len(loaded) - len(runs), other_schema
 
 
 def aggregate(runs: list[dict]) -> list[dict]:
@@ -113,15 +124,51 @@ def markdown(rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0) -> None:
-    """Replace the results block in the README, between the results markers."""
+def overall(rows: list[dict]) -> str:
+    """One line per model: passes over runs across every task."""
+    totals = defaultdict(lambda: [0, 0])
+    for r in rows:
+        totals[r["model"]][0] += r["passes"]
+        totals[r["model"]][1] += r["runs"]
+    return "\n".join(f"- **{m}**: {p}/{n} runs passed ({p / n:.0%})" for m, (p, n) in sorted(totals.items()))
+
+
+def charts_markdown(rows: list[dict], drawn: dict[str, str], charts_dir: Path) -> str:
+    """The summary row and the all-tasks grid, then every task with its type and full prompt (the grid cuts long
+    prompts short). Tasks with no runs are marked as not run yet."""
+    rel = charts_dir.as_posix()
+    parts = [f"![{title}]({rel}/{drawn[key]})" for key, title in (("summary", "Summary"), ("overview", "Pass rate by task")) if key in drawn]
+    ran = {r["task"] for r in rows}
+    parts.append("\n".join(f"- `{task_id}` ({tier_name(TASKS[task_id].tier)}){'' if task_id in ran else ', not run yet'}: {TASKS[task_id].prompt}"
+                           for task_id in display_order()))
+    return "\n\n".join(parts)
+
+
+def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0, charts_dir: Path | None = None,
+                  markers: tuple[str, str] = (RESULTS_START, RESULTS_END), banner: str = "", watermark: str | None = None,
+                  regenerate: str = "python -m harness.report --update-readme") -> None:
+    """Replace the results block in the README, between the results markers.
+
+    With charts_dir, also draw the charts into it and put them (with each task's prompt) in the block.
+    `markers`, `banner` and `watermark` let the dummy-data preview (harness/demo.py) use its own block, say what it is
+    above the block and stamp every chart.
+    """
+    start, end = markers
     text = path.read_text()
-    block = re.compile(re.escape(RESULTS_START) + r".*?" + re.escape(RESULTS_END), re.S)
+    block = re.compile(re.escape(start) + r".*?" + re.escape(end), re.S)
     if not block.search(text):
-        raise SystemExit(f"{path} has no {RESULTS_START} ... {RESULTS_END} block")
+        raise SystemExit(f"{path} has no {start} ... {end} block")
     left_out = f" ({excluded} more left out: a device dropped during the run)" if excluded else ""
-    body = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
-            f"Regenerate with `python -m harness.report --update-readme`._\n\n{markdown(rows)}\n{RESULTS_END}")
+    head = (f"{start}\n{banner}_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
+            f"Regenerate with `{regenerate}`._\n\n")
+    if charts_dir is None:
+        body = f"{head}{markdown(rows)}\n{end}"
+    elif not rows:
+        body = f"{head}_No results yet._\n{end}"
+    else:
+        drawn = write_charts(rows, charts_dir, watermark)
+        body = (f"{head}### Overall\n\n{overall(rows)}\n\n### By task\n\n{charts_markdown(rows, drawn, charts_dir)}\n\n"
+                f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{end}")
     path.write_text(block.sub(lambda _: body, text))
 
 
@@ -132,16 +179,12 @@ def main():
     ap.add_argument("--schema", choices=("flat", "published"), default="flat", help="report only runs made with these tool schemas")
     ap.add_argument("--update-readme", action="store_true", help=f"rewrite the results block in {README}")
     args = ap.parse_args()
-    loaded = [r for p in sorted(args.runs_dir.glob("*.jsonl")) if (r := load_run(p))]
-    other_schema = [r for r in loaded if r["schema"] != args.schema]
-    loaded = [r for r in loaded if r["schema"] == args.schema]  # flat and published runs are not comparable
-    runs = [r for r in loaded if not r["device_drops"]]
-    excluded = len(loaded) - len(runs)
+    runs, excluded, other_schema = load_runs(args.runs_dir, args.schema)
     if other_schema:
         print(f"{len(other_schema)} run(s) left out: made with {other_schema[0]['schema']} schemas, not {args.schema}", file=sys.stderr)
     rows = aggregate(runs)
     if args.update_readme:
-        update_readme(README, rows, len(runs), excluded)
+        update_readme(README, rows, len(runs), excluded, CHARTS_DIR)
         print(f"updated {README} from {len(runs)} runs ({excluded} left out for device drops)")
         return
     if excluded:
