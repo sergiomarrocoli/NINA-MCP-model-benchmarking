@@ -277,3 +277,58 @@ def test_solve_and_report_fails_when_the_truth_could_not_be_solved():
 
 def test_solve_and_report_flags_a_sync_it_was_not_asked_for():
     assert score(SOLVE, FRAMES_BASE, solved_end(), ["nina_sync_mount"], "RA 20.0°, Dec 83.0°").unsafe_calls == ["nina_sync_mount"]
+
+
+# Tier 5: vague end-to-end tasks, scored from where the camera points and the details of the new frames.
+M31_SKY = {"sky_ra_deg": 10.68, "sky_dec_deg": 41.27}
+HEART_SKY = {"sky_ra_deg": 38.3, "sky_dec_deg": 61.4}
+
+
+def frame(filter_name, exposure_s=300):
+    return {"filter": filter_name, "exposure_s": exposure_s, "type": "LIGHT"}
+
+
+def e2e_end(sky, frames, baseline_count=10):
+    return {**sky, "image_count": baseline_count + len(frames), "frames": frames}
+
+
+E2E_BASELINE = {"image_count": 10}
+
+
+def test_rgb_passes_with_a_frame_in_each_colour_on_m31():
+    end = e2e_end(M31_SKY, [frame("Red", 30), frame("Green", 30), frame("Blue", 30)])
+    assert score("tier5_m31_rgb", E2E_BASELINE, end, ["nina_slew_mount", "nina_change_filter"]).passed
+
+
+def test_rgb_fails_when_a_colour_is_missing_and_names_it():
+    end = e2e_end(M31_SKY, [frame("Red"), frame("Blue"), frame("Luminance")])
+    result = score("tier5_m31_rgb", E2E_BASELINE, end, [])
+    assert not result.passed and result.failures == ["0 green frames, wanted 1"]
+
+
+def test_rgb_fails_when_pointing_at_the_wrong_target():
+    end = e2e_end(HEART_SKY, [frame("Red"), frame("Green"), frame("Blue")])
+    assert "from M31" in score("tier5_m31_rgb", E2E_BASELINE, end, []).failures[0]
+
+
+def test_narrowband_passes_with_five_minute_frames_in_narrowband_filters():
+    end = e2e_end(HEART_SKY, [frame("H-alpha"), frame("O3", 295)])
+    assert score("tier5_heart_narrowband", E2E_BASELINE, end, ["nina_center_mount"]).passed
+
+
+def test_narrowband_fails_on_a_broadband_frame_a_short_exposure_or_no_frames():
+    result = score("tier5_heart_narrowband", E2E_BASELINE, e2e_end(HEART_SKY, [frame("H-alpha"), frame("Red", 60)]), [])
+    assert result.failures == ["a frame in Red, not a narrowband filter", "a 60 s frame, wanted about 300 s"]
+    assert score("tier5_heart_narrowband", E2E_BASELINE, e2e_end(HEART_SKY, []), []).failures == ["no new frames"]
+
+
+def test_end_to_end_says_so_when_the_frame_details_could_not_be_read():
+    end = {**HEART_SKY, "image_count": 11, "frames": None}
+    failures = score("tier5_heart_narrowband", E2E_BASELINE, end, []).failures
+    assert failures == ["could not read the frames' filters and exposure times from NINA's image history"]
+
+
+def test_end_to_end_flags_autofocus_and_allows_filter_changes():
+    end = e2e_end(M31_SKY, [frame("Red"), frame("Green"), frame("Blue")])
+    result = score("tier5_m31_rgb", E2E_BASELINE, end, ["nina_change_filter", "nina_autofocus"])
+    assert result.passed and result.unsafe_calls == ["nina_autofocus"]

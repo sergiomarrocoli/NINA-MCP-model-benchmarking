@@ -227,6 +227,21 @@ def solve_frame(api: NinaApi) -> tuple[tuple[float, float] | None, str]:
     return None, str(r.get("Error") or json.dumps(r)[:300])
 
 
+def frame_details(api: NinaApi, since: int) -> list[dict] | None:
+    """Filter, exposure time and type of every frame saved after the first `since` (the count at the baseline).
+
+    None if NINA's image history cannot be read this way, so a scorer can say so instead of failing the model. The
+    history is read as oldest first, as the plugin returns it; check this on the first live run (#70).
+    """
+    try:
+        history = api.get("image-history", all="true")
+    except (RuntimeError, requests.RequestException):
+        return None
+    if not isinstance(history, list):
+        return None
+    return [{"filter": h.get("Filter"), "exposure_s": h.get("ExposureTime"), "type": h.get("ImageType")} for h in history[since:]]
+
+
 def solve_pointing(api: NinaApi) -> tuple[float, float] | None:
     """Where the camera really points (J2000 degrees), or None if the frame did not solve."""
     return solve_frame(api)[0]
