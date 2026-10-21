@@ -142,3 +142,9 @@ def test_display_order_puts_simple_tasks_first_and_the_m31_tasks_last():
     assert [TASKS[t].tier for t in rest] == sorted(TASKS[t].tier for t in rest)  # tier order within each group
     assert [TASKS[t].tier for t in m31] == sorted(TASKS[t].tier for t in m31)
     assert order[0].startswith("tier1_")
+
+
+def test_axis_tops_give_round_ticks():
+    from harness.charts import nice_max
+    assert [nice_max(v) for v in (0, 0.24, 0.9, 1.5, 3, 5, 9, 130)] == [1, 0.4, 1, 2, 4, 8, 10, 200]
+    assert all(nice_max(v) / 4 == round(nice_max(v) / 4, 3) for v in (0.24, 0.07, 3.1, 5.53))

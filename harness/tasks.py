@@ -23,6 +23,8 @@ class Task:
     needs_sky: bool = False
     # Read the filter and exposure time of each new frame after the run (`end["frames"]`), for scoring what was imaged.
     needs_frames: bool = False
+    # Nobody is there to answer a question, so the system prompt says to use best judgement and report the choices made.
+    autonomous: bool = False
     # Failure injected after the reset (harness/faults.py), for tier 3.
     fault: str | None = None
     # check_run(baseline, end_state, final_reply) -> reasons the run failed, for tasks judged on what the model
@@ -411,6 +413,7 @@ TASKS = {
             check=check_rgb_session,
             needs_sky=True,
             needs_frames=True,
+            autonomous=True,
             allowed_tools=END_TO_END_TOOLS,
         ),
         Task(
@@ -421,6 +424,7 @@ TASKS = {
             check=check_narrowband_session,
             needs_sky=True,
             needs_frames=True,
+            autonomous=True,
             allowed_tools=END_TO_END_TOOLS,
         ),
     ]
