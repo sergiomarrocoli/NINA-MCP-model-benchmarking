@@ -32,6 +32,9 @@ def load_run(path: Path) -> dict | None:
     if start is None or end is None:
         return None
     totals = end["totals"]
+    # The run's token total does not separate the ones served from the provider's cache; each model call does.
+    cached = sum(((e.get("usage") or {}).get("prompt_tokens_details") or {}).get("cached_tokens") or 0
+                 for e in events if e["kind"] == "model")
     return {
         "model": start["model"],
         "provider": start["provider"],
@@ -44,10 +47,11 @@ def load_run(path: Path) -> dict | None:
         "unsafe_calls": len(end["unsafe_calls"]),
         "prompt_tokens": totals["prompt_tokens"],
         "completion_tokens": totals["completion_tokens"],
-        "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"]),
+        "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"], cached),
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
-        "device_drops": len(end.get("device_drops", [])),
+        # A plate solve that failed after the run left the pointing unchecked, which is equipment too.
+        "device_drops": len(end.get("device_drops", [])) + any("could not plate solve" in f for f in end.get("failures", [])),
         # Runs before the schema option used the published tools.
         "schema": start.get("schema", "published"),
     }
@@ -119,7 +123,7 @@ def markdown(rows: list[dict]) -> str:
             cells = [show(by_key[task, m]) if (task, m) in by_key else "–" for m in models]
             lines.append(f"| {f'**{task}**' if i == 0 else ''} | {label} | " + " | ".join(cells) + " |")
     if any(r["cost_estimated"] for r in rows):
-        lines.append("\n`~` cost is an estimate for a model with no listed price. Costs are upper bounds (no cached-token discount).")
+        lines.append("\n`~` cost is an estimate for a model with no listed price. Cached input tokens are priced at the cached rate.")
     lines.append("Tool calls, invalid calls, tokens and time are per-run means; unsafe calls are totals.")
     return "\n".join(lines)
 
@@ -144,31 +148,26 @@ def charts_markdown(rows: list[dict], drawn: dict[str, str], charts_dir: Path) -
     return "\n\n".join(parts)
 
 
-def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0, charts_dir: Path | None = None,
-                  markers: tuple[str, str] = (RESULTS_START, RESULTS_END), banner: str = "", watermark: str | None = None,
-                  regenerate: str = "python -m harness.report --update-readme") -> None:
+def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0, charts_dir: Path | None = None) -> None:
     """Replace the results block in the README, between the results markers.
 
     With charts_dir, also draw the charts into it and put them (with each task's prompt) in the block.
-    `markers`, `banner` and `watermark` let the dummy-data preview (harness/demo.py) use its own block, say what it is
-    above the block and stamp every chart.
     """
-    start, end = markers
     text = path.read_text()
-    block = re.compile(re.escape(start) + r".*?" + re.escape(end), re.S)
+    block = re.compile(re.escape(RESULTS_START) + r".*?" + re.escape(RESULTS_END), re.S)
     if not block.search(text):
-        raise SystemExit(f"{path} has no {start} ... {end} block")
+        raise SystemExit(f"{path} has no {RESULTS_START} ... {RESULTS_END} block")
     left_out = f" ({excluded} more left out: a device dropped during the run)" if excluded else ""
-    head = (f"{start}\n{banner}_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
-            f"Regenerate with `{regenerate}`._\n\n")
+    head = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
+            f"Regenerate with `python -m harness.report --update-readme`._\n\n")
     if charts_dir is None:
-        body = f"{head}{markdown(rows)}\n{end}"
+        body = f"{head}{markdown(rows)}\n{RESULTS_END}"
     elif not rows:
-        body = f"{head}_No results yet._\n{end}"
+        body = f"{head}_No results yet._\n{RESULTS_END}"
     else:
-        drawn = write_charts(rows, charts_dir, watermark)
+        drawn = write_charts(rows, charts_dir)
         body = (f"{head}### Overall\n\n{overall(rows)}\n\n### By task\n\n{charts_markdown(rows, drawn, charts_dir)}\n\n"
-                f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{end}")
+                f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{RESULTS_END}")
     path.write_text(block.sub(lambda _: body, text))
 
 

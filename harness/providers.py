@@ -34,6 +34,10 @@ class Provider:
 
 PROVIDERS = {
     "openai": Provider("openai", None, "OPENAI_API_KEY", "OPENAI_MODEL"),
+    # A second OpenAI model, kept apart from gpt-4.1 so each has its own logs. gpt-6-sol takes function tools on chat
+    # completions only with reasoning off, so it is compared without reasoning, like the other models here.
+    "openai-sol": Provider("openai-sol", None, "OPENAI_API_KEY", "OPENAI_SOL_MODEL",
+                           request_options={"reasoning_effort": "none"}),
     "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY", "DEEPSEEK_MODEL"),
     # Local models through Ollama's OpenAI-compatible endpoint. Needs `ollama serve` running with a
     # context window big enough for the tool list (OLLAMA_CONTEXT_LENGTH), or long prompts are truncated.

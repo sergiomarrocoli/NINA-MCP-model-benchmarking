@@ -33,10 +33,8 @@ def text(x, y, s, size=13, fill=INK, anchor="start", weight="normal") -> str:
     return f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" fill="{fill}" text-anchor="{anchor}" font-weight="{weight}" {FONT}>{escape(s)}</text>'
 
 
-def svg(width: int, height: int, body: list[str], title: str, watermark: str | None = None) -> str:
+def svg(width: int, height: int, body: list[str], title: str) -> str:
     # An opaque background, so the chart reads the same on a light or dark page.
-    if watermark:
-        body = [*body, text(width - 12, height - 10, watermark, 11, "#b42318", "end", "bold")]
     return "\n".join([
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{escape(title, quote=True)}">',
         f"<title>{escape(title)}</title>",
@@ -94,7 +92,7 @@ def task_body(task_id: str, rows: list[dict], models: list[str], colour: dict[st
 
 
 def grid(title: str, panels: list[tuple[list[str], int, int]], models: list[str], colour: dict[str, str],
-         watermark: str | None, label: str, columns: int = 3) -> str:
+         label: str, columns: int = 3) -> str:
     """Panels (shapes, width, height) in a grid with a title and the model legend. Every cell is as big as the biggest panel."""
     pad, gap = 12, 10
     cell_w, cell_h = max(w for _, w, _ in panels), max(h for _, _, h in panels)
@@ -108,15 +106,15 @@ def grid(title: str, panels: list[tuple[list[str], int, int]], models: list[str]
         body += [f'<svg x="{x}" y="{cy}" width="{cell_w}" height="{cell_h}" viewBox="0 0 {w} {h}">',
                  f'<rect width="{w}" height="{h}" fill="{PAPER}" stroke="{GRID}"/>', *cell, "</svg>"]
     rows_n = -(-len(panels) // columns)
-    return svg(inner_w + 2 * pad, int(top + rows_n * (cell_h + gap) + pad), body, label, watermark)
+    return svg(inner_w + 2 * pad, int(top + rows_n * (cell_h + gap) + pad), body, label)
 
 
-def overview_chart(rows: list[dict], models: list[str], colour: dict[str, str], watermark: str | None = None, columns: int = 3) -> str | None:
+def overview_chart(rows: list[dict], models: list[str], colour: dict[str, str], columns: int = 3) -> str | None:
     """Every task's bars in one grid, `columns` to a row, in `display_order`. None when no task has runs."""
     panels = [task_body(t, rs, models, colour) for t in display_order() if (rs := [r for r in rows if r["task"] == t])]
     if not panels:
         return None
-    return grid("Pass rate by task", panels, models, colour, watermark, "Pass rate by task, one chart per task", columns)
+    return grid("Pass rate by task", panels, models, colour, "Pass rate by task, one chart per task", columns)
 
 
 def tier_scores(rows: list[dict]) -> dict[str, dict[int, tuple[int, int]]]:
@@ -226,7 +224,7 @@ def cost_panel(rows: list[dict], models: list[str], colour: dict[str, str]) -> t
         if h >= 0.5:
             body.append(f'<rect x="{cx - bar_w / 2:.1f}" y="{y:.1f}" width="{bar_w:.1f}" height="{h:.1f}" rx="2" fill="{colour[m]}"/>')
         body.append(text(cx, y - 4, ("~" if estimated[m] else "") + money(shown[m]), 11, INK, "middle", "bold"))
-    body.append(text(14, PANEL_H - 12, "List prices, all input tokens uncached (an upper bound). ~ = estimated price.", 9, MUTED))
+    body.append(text(14, PANEL_H - 12, "List prices, cached input at the cached rate. ~ = estimated price.", 9, MUTED))
     return body, CELL_W, PANEL_H
 
 
@@ -264,15 +262,15 @@ def calls_panel(rows: list[dict], models: list[str], colour: dict[str, str]) -> 
     return body, CELL_W, PANEL_H
 
 
-def summary_chart(rows: list[dict], models: list[str], colour: dict[str, str], watermark: str | None = None) -> str | None:
+def summary_chart(rows: list[dict], models: list[str], colour: dict[str, str]) -> str | None:
     """The summary row: pass rate by task type, total cost, and invalid and unsafe calls. None when there are no rows."""
     if not rows:
         return None
     panels = [p for p in (radar_panel(rows, models, colour), cost_panel(rows, models, colour), calls_panel(rows, models, colour)) if p]
-    return grid("Summary", panels, models, colour, watermark, "Summary: pass rate by task type, cost, invalid and unsafe calls")
+    return grid("Summary", panels, models, colour, "Summary: pass rate by task type, cost, invalid and unsafe calls")
 
 
-def write_charts(rows: list[dict], out_dir: Path = CHARTS_DIR, watermark: str | None = None) -> dict[str, str]:
+def write_charts(rows: list[dict], out_dir: Path = CHARTS_DIR) -> dict[str, str]:
     """Write the charts the rows support into out_dir; returns {key: file name} (keys: 'summary' and 'overview').
 
     Charts that are no longer drawn are removed, so the folder matches the results.
@@ -280,7 +278,7 @@ def write_charts(rows: list[dict], out_dir: Path = CHARTS_DIR, watermark: str | 
     out_dir.mkdir(parents=True, exist_ok=True)
     models = sorted({r["model"] for r in rows})
     colour = colours(models)
-    charts = {"summary": summary_chart(rows, models, colour, watermark), "overview": overview_chart(rows, models, colour, watermark)}
+    charts = {"summary": summary_chart(rows, models, colour), "overview": overview_chart(rows, models, colour)}
     drawn = {key: f"{key}.svg" for key, chart in charts.items() if chart}
     for key, name in drawn.items():
         (out_dir / name).write_text(charts[key] + "\n")
