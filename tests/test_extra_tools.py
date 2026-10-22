@@ -193,6 +193,18 @@ def test_a_timeout_gets_a_readable_error(monkeypatch):
     assert not result["Success"] and "Timed out" in result["Error"]
 
 
+@pytest.mark.parametrize("ra, dec", [(42.44, 41.27), (-1, 41.27), (24, 41.27), (0.7, 91)])
+def test_centre_rejects_coordinates_out_of_range_instead_of_wrapping_them(monkeypatch, ra, dec):
+    called = []
+
+    async def slew(request):
+        called.append(1)
+        return web.json_response(ok())
+
+    result = run_against({"equipment/mount/slew": slew}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": ra, "dec": dec}))
+    assert not result["Success"] and "must be between" in result["Error"] and not called
+
+
 # --- nina_capture_image (the fork's, installed from its benchmark branch): waits, and only reports a frame that was really saved ---
 
 

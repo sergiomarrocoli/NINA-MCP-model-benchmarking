@@ -127,6 +127,11 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
     Returns:
         Dict containing the success status and a message.
     """
+    # Same checks as nina_slew_mount. Without them 42.44 "hours" wraps to 18.4 h and is reported as centred.
+    if not 0 <= input.ra < 24:
+        return create_error_response("NINAMountError", "Right Ascension must be between 0 and 24 hours", {"StatusCode": 400})
+    if not -90 <= input.dec <= 90:
+        return create_error_response("NINAMountError", "Declination must be between -90 and +90 degrees", {"StatusCode": 400})
     try:
         params = {"ra": input.ra * 15, "dec": input.dec, "center": "true",
                   "waitForResult": str(input.wait_for_completion).lower()}

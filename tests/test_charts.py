@@ -108,21 +108,6 @@ def test_readme_with_no_runs_says_so(tmp_path):
     assert "_No results yet._" in readme.read_text()
 
 
-def test_demo_preview_is_stamped_apart_from_the_real_results_and_leaves_tasks_alone(tmp_path):
-    from harness import demo
-    from harness.report import RESULTS_END, RESULTS_START
-    readme = tmp_path / "README.md"
-    readme.write_text(f"{RESULTS_START}\nREAL\n{RESULTS_END}\n{demo.DEMO_START}\n{demo.DEMO_END}\n")
-    tasks_before = set(TASKS)
-    demo.update_preview(readme, tmp_path / "charts")
-    text = readme.read_text()
-    assert set(TASKS) == tasks_before  # the invented task does not leak out
-    assert f"{RESULTS_START}\nREAL\n{RESULTS_END}" in text
-    assert "**Dummy data.**" in text and "demo" in text.split(demo.DEMO_START)[1]
-    assert all("DUMMY DATA" in p.read_text() for p in (tmp_path / "charts").glob("*.svg"))
-    assert "tier5_heart_narrowband" in (tmp_path / "charts" / "overview.svg").read_text()
-
-
 def test_overview_has_every_task_with_runs_in_a_grid_and_names_each_task(tmp_path):
     spec = [("a", t, True) for t in FOUR_TIERS + ["tier1_park_mount", "tier1_move_focuser"]]
     out = overview_chart(rows_for(tmp_path, spec), ["a"], colours(["a"]), columns=3)

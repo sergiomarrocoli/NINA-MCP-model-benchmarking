@@ -34,7 +34,10 @@ AUTONOMOUS_NOTE = (
     "leaves open (the target's position, filters, exposure time, number of frames), carry on, and in your final reply "
     "list the choices you made and why."
 )
-MAX_STEPS = 15
+# 15 cut off gpt-6-sol and deepseek on the open-ended tasks: they check status, cool and focus first, and ran out of
+# steps with frames in two of three filters (25 runs hit it, 22 Oct).
+MAX_STEPS = 30
+SOLVE_ATTEMPTS = 3  # a frame that does not solve says nothing about the model, so try again before giving up
 
 
 def system_prompt(task) -> str:
@@ -160,7 +163,12 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
             if task.needs_frames:
                 end_state["frames"] = frame_details(api, baseline["image_count"])
             if task.needs_sky:
-                end_state["sky_ra_deg"], end_state["sky_dec_deg"] = solve_pointing(api) or (None, None)
+                for attempt in range(SOLVE_ATTEMPTS):
+                    sky = solve_pointing(api)
+                    if sky:
+                        break
+                    settle(api)
+                end_state["sky_ra_deg"], end_state["sky_dec_deg"] = sky or (None, None)
             watchdog.check(reconnect=False)
             result = score(task.id, baseline, end_state, tool_calls, final)
             record("end", final=final, finished=final is not None, steps=step + 1,
