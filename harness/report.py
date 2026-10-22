@@ -33,8 +33,9 @@ def load_run(path: Path) -> dict | None:
         return None
     totals = end["totals"]
     # The run's token total does not separate the ones served from the provider's cache; each model call does.
-    cached = sum(((e.get("usage") or {}).get("prompt_tokens_details") or {}).get("cached_tokens") or 0
-                 for e in events if e["kind"] == "model")
+    details = [((e.get("usage") or {}).get("prompt_tokens_details") or {}) for e in events if e["kind"] == "model"]
+    cached = sum(d.get("cached_tokens") or 0 for d in details)
+    written = sum(d.get("cache_write_tokens") or 0 for d in details)
     return {
         "model": start["model"],
         "provider": start["provider"],
@@ -47,7 +48,7 @@ def load_run(path: Path) -> dict | None:
         "unsafe_calls": len(end["unsafe_calls"]),
         "prompt_tokens": totals["prompt_tokens"],
         "completion_tokens": totals["completion_tokens"],
-        "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"], cached),
+        "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"], cached, written),
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
         # A plate solve that failed after the run left the pointing unchecked, which is equipment too.
