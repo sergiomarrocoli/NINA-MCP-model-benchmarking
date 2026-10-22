@@ -25,6 +25,8 @@ PRICES = {
     # the legacy names are served by it. Priced at its peak (higher) rate, https://api-docs.deepseek.com/quick_start/pricing,
     # checked 2026-10-22: $0.30 cache miss, $0.006 cache hit, $1.20 output. Off-peak is half of each.
     "deepseek-chat": Price(0.30, 1.20, cached_input_per_m=0.006, estimated=True, note="DeepSeek-V4.1-Flash peak rate"),
+    # DeepSeek V4 Pro at the peak rate (off-peak is half), same page, checked 2026-10-22.
+    "deepseek-v4-pro": Price(1.32, 3.96, cached_input_per_m=0.044),
     # Local models cost nothing per token (electricity and the machine are not counted).
     "qwen3:8b": Price(0.0, 0.0, note="runs locally"),
 }
