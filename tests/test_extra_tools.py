@@ -205,6 +205,33 @@ def test_centre_rejects_coordinates_out_of_range_instead_of_wrapping_them(monkey
     assert not result["Success"] and "must be between" in result["Error"] and not called
 
 
+def test_wait_is_capped_and_says_what_was_asked_and_what_was_waited(monkeypatch):
+    slept = []
+
+    async def fake_sleep(seconds):
+        slept.append(seconds)
+
+    monkeypatch.setattr(extra_tools, "_sleep", fake_sleep)
+    long = run_against({}, monkeypatch, lambda c: tool(c, "nina_wait", {"seconds": 3600}))
+    short = run_against({}, monkeypatch, lambda c: tool(c, "nina_wait", {"seconds": 12.5}))
+    assert slept == [300, 12.5]
+    assert long["Success"] and long["Details"] == {"requested_seconds": 3600, "waited_seconds": 300}
+    assert "you asked for 3600" in long["Message"] and "300 seconds" in long["Message"]
+    assert short["Details"] == {"requested_seconds": 12.5, "waited_seconds": 12.5} and "asked" not in short["Message"]
+
+
+def test_wait_rejects_a_negative_duration(monkeypatch):
+    result = run_against({}, monkeypatch, lambda c: tool(c, "nina_wait", {"seconds": -1}))
+    assert not result["Success"] and "negative" in result["Error"]
+
+
+def test_the_server_has_one_nina_wait_and_it_is_ours(monkeypatch):
+    names = [t.name for t in run_against({}, monkeypatch, lambda c: c.list_tools())]
+    assert names.count("nina_wait") == 1
+    desc = next(t.description for t in run_against({}, monkeypatch, lambda c: c.list_tools()) if t.name == "nina_wait")
+    assert "at most 300" in desc
+
+
 # --- nina_capture_image (the fork's, installed from its benchmark branch): waits, and only reports a frame that was really saved ---
 
 
