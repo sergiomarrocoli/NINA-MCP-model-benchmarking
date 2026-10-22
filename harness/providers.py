@@ -39,6 +39,10 @@ PROVIDERS = {
     "openai-sol": Provider("openai-sol", None, "OPENAI_API_KEY", "OPENAI_SOL_MODEL",
                            request_options={"reasoning_effort": "none"}),
     "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY", "DEEPSEEK_MODEL"),
+    # DeepSeek V4 Pro, same API and key. Thinking is on by default there; it is switched off so the model is compared
+    # like the others here. (Thinking on needs reasoning_content passed back on every turn when tools are present.)
+    "deepseek-pro": Provider("deepseek-pro", "https://api.deepseek.com", "DEEPSEEK_API_KEY", "DEEPSEEK_PRO_MODEL",
+                             request_options={"extra_body": {"thinking": {"type": "disabled"}}}),
     # Local models through Ollama's OpenAI-compatible endpoint. Needs `ollama serve` running with a
     # context window big enough for the tool list (OLLAMA_CONTEXT_LENGTH), or long prompts are truncated.
     "ollama": Provider("ollama", os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"), None, "OLLAMA_MODEL",
