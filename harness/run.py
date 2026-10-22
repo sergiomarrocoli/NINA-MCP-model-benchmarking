@@ -13,8 +13,8 @@ from pathlib import Path
 
 from fastmcp import Client
 from fastmcp.client.transports import StdioTransport
-from openai import OpenAI
 
+from harness.llm import open_chat
 from harness.providers import PROVIDERS
 from harness import faults
 from harness.reset import NinaApi, frame_details, reset, settle, snapshot, solve_pointing
@@ -82,7 +82,6 @@ async def call_tool(client: Client, name: str, args: dict) -> tuple[str, bool, f
 
 async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
     provider, task = PROVIDERS[provider_name], TASKS[task_id]
-    llm = OpenAI(api_key=provider.api_key, base_url=provider.base_url)
     RUNS_DIR.mkdir(exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     log_path = RUNS_DIR / f"{stamp}_{task.id}_{provider.name}.jsonl"
@@ -111,10 +110,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
 
             tools, flattened = openai_tools(await client.list_tools(), schema)
             record("tools", count=len(tools))
-            messages = [
-                {"role": "system", "content": system_prompt(task)},
-                {"role": "user", "content": task.prompt},
-            ]
+            chat = open_chat(provider, system_prompt(task), task.prompt, tools)
             totals = {"prompt_tokens": 0, "completion_tokens": 0, "tool_calls": 0, "invalid_calls": 0}
             started = time.monotonic()
             final = None
@@ -122,37 +118,37 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
 
             for step in range(MAX_STEPS):
                 t0 = time.monotonic()
-                resp = llm.chat.completions.create(model=provider.model, messages=messages, tools=tools, **provider.request_options)
-                msg = resp.choices[0].message
-                totals["prompt_tokens"] += resp.usage.prompt_tokens
-                totals["completion_tokens"] += resp.usage.completion_tokens
+                turn = chat.step()
+                totals["prompt_tokens"] += turn.prompt_tokens
+                totals["completion_tokens"] += turn.completion_tokens
                 record(
-                    "model", step=step, content=msg.content, seconds=time.monotonic() - t0,
-                    tool_calls=[tc.function.name for tc in msg.tool_calls or []],
-                    usage=resp.usage.model_dump(),
+                    "model", step=step, content=turn.text, seconds=time.monotonic() - t0,
+                    tool_calls=[tc.name for tc in turn.tool_calls], usage=turn.usage, stop_reason=turn.stop_reason,
                 )
-                messages.append(msg.model_dump(exclude_none=True))
-                if not msg.tool_calls:
-                    final = msg.content
+                if not turn.tool_calls:
+                    final = turn.text
                     break
 
-                for tc in msg.tool_calls:
+                results = []
+                for tc in turn.tool_calls:
                     totals["tool_calls"] += 1
-                    tool_calls.append(tc.function.name)
+                    tool_calls.append(tc.name)
                     try:
-                        args = json.loads(tc.function.arguments or "{}")
+                        args = json.loads(tc.arguments or "{}")
                     except json.JSONDecodeError:
-                        text, is_error, secs = f"Invalid JSON arguments: {tc.function.arguments}", True, 0.0
-                        args = {"_raw": tc.function.arguments}
+                        text, is_error, secs = f"Invalid JSON arguments: {tc.arguments}", True, 0.0
+                        args = {"_raw": tc.arguments}
                     else:
-                        sent = wrap_arguments(args, tc.function.name in flattened)
-                        text, is_error, secs = await call_tool(client, tc.function.name, sent)
+                        sent = wrap_arguments(args, tc.name in flattened)
+                        text, is_error, secs = await call_tool(client, tc.name, sent)
                     # Validation errors and NINA-side failures both count as a failed call.
-                    if is_error or '"Success":false' in text.replace(" ", ""):
+                    failed = is_error or '"Success":false' in text.replace(" ", "")
+                    if failed:
                         totals["invalid_calls"] += 1
-                    record("tool_call", step=step, tool=tc.function.name, args=args, result=text,
-                           is_error=is_error, seconds=secs, flattened=tc.function.name in flattened)
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": text[:TOOL_RESULT_CHARS]})
+                    record("tool_call", step=step, tool=tc.name, args=args, result=text,
+                           is_error=is_error, seconds=secs, flattened=tc.name in flattened)
+                    results.append((tc.id, text[:TOOL_RESULT_CHARS], failed))
+                chat.add_tool_results(results)
 
             # The scorer reads NINA directly, not through the tools the model used.
             run_seconds = time.monotonic() - started  # the model's own time, before waiting on equipment
