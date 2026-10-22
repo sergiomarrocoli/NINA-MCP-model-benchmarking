@@ -7,13 +7,13 @@ from harness.report import aggregate, load_run, markdown
 
 
 def write_run(path, *, model="gpt-4.1", task="tier1_cool_camera", passed=True, tools=1, invalid=0,
-              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=(), schema="flat", tier=1):
+              prompt=10_000, completion=50, seconds=5.0, unsafe=(), finished=True, ended=True, drops=(), schema="flat", tier=1, failures=()):
     events = [{"kind": "start", "task": task, "tier": tier, "provider": "openai", "model": model}]
     if schema:
         events[0]["schema"] = schema
     if ended:
         events.append({"kind": "end", "passed": passed, "finished": finished, "seconds": seconds,
-                       "unsafe_calls": list(unsafe), "device_drops": list(drops),
+                       "unsafe_calls": list(unsafe), "device_drops": list(drops), "failures": list(failures),
                        "totals": {"tool_calls": tools, "invalid_calls": invalid,
                                   "prompt_tokens": prompt, "completion_tokens": completion}})
     path.write_text("\n".join(json.dumps(e) for e in events))
@@ -23,6 +23,23 @@ def write_run(path, *, model="gpt-4.1", task="tier1_cool_camera", passed=True, t
 def test_cost_uses_per_million_rates():
     assert cost("gpt-4.1", 1_000_000, 1_000_000) == pytest.approx(10.0)
     assert cost("gpt-4.1", 10_000, 50) == pytest.approx(0.0204)
+
+
+def test_cached_input_is_priced_at_the_cached_rate_where_one_is_known():
+    # 1M prompt tokens, 900k of them cached: 100k at $2 + 900k at $0.50
+    assert cost("gpt-4.1", 1_000_000, 0, cached_tokens=900_000) == pytest.approx(0.2 + 0.45)
+    assert cost("gpt-6-sol", 1_000_000, 0, cached_tokens=900_000) == pytest.approx(0.2 + 0.18)
+    assert cost("deepseek-chat", 1_000_000, 0, cached_tokens=900_000) == pytest.approx(0.03 + 0.0054)
+    # a model with no cached rate prices cached tokens as uncached
+    assert cost("qwen3:8b", 1_000_000, 0, cached_tokens=900_000) == 0
+
+
+def test_load_run_prices_the_cached_tokens_the_model_calls_report(tmp_path):
+    path = write_run(tmp_path / "a.jsonl", prompt=10_000, completion=0)
+    events = [json.loads(l) for l in path.read_text().splitlines()]
+    events.insert(1, {"kind": "model", "usage": {"prompt_tokens": 10_000, "prompt_tokens_details": {"cached_tokens": 9_000}}})
+    path.write_text("\n".join(json.dumps(e) for e in events))
+    assert load_run(path)["cost"] == pytest.approx(0.002 + 0.0045)
 
 
 def test_unknown_model_has_no_cost():
@@ -133,6 +150,12 @@ def test_main_leaves_out_runs_with_drops_and_says_so(tmp_path, capsys, monkeypat
     report.main()
     out = capsys.readouterr()
     assert "1/1 (100%)" in out.out and "1 run(s) left out" in out.err
+
+
+def test_a_run_the_scorer_could_not_check_is_left_out_like_a_device_drop(tmp_path):
+    run = load_run(write_run(tmp_path / "a.jsonl", passed=False, failures=["could not plate solve to check where the camera points"]))
+    assert run["device_drops"] == 1
+    assert load_run(write_run(tmp_path / "b.jsonl", passed=False, failures=["0 blue frames, wanted 1"]))["device_drops"] == 0
 
 
 def test_load_run_reads_the_schema_and_older_runs_count_as_published(tmp_path):
