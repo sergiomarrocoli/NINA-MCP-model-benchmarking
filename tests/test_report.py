@@ -42,6 +42,19 @@ def test_load_run_prices_the_cached_tokens_the_model_calls_report(tmp_path):
     assert load_run(path)["cost"] == pytest.approx(0.002 + 0.0045)
 
 
+def test_deepseek_pro_is_priced_with_its_cached_rate():
+    assert cost("deepseek-v4-pro", 1_000_000, 1_000_000, cached_tokens=1_000_000) == pytest.approx(0.044 + 3.96)
+    assert not is_estimated("deepseek-v4-pro")
+
+
+def test_deepseek_pro_runs_with_thinking_off(monkeypatch):
+    from harness.providers import PROVIDERS
+
+    monkeypatch.setenv("DEEPSEEK_PRO_MODEL", "deepseek-v4-pro")
+    pro = PROVIDERS["deepseek-pro"]
+    assert pro.model == "deepseek-v4-pro" and pro.request_options == {"extra_body": {"thinking": {"type": "disabled"}}}
+
+
 def test_unknown_model_has_no_cost():
     assert cost("some-local-model", 1000, 1000) is None
     assert not is_estimated("some-local-model")
