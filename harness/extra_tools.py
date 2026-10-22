@@ -21,6 +21,7 @@ from harness.coords import j2000_to_jnow, separation_deg
 
 AUTOFOCUS_TIMEOUT_S = 300
 CENTER_TIMEOUT_S = 300
+WAIT_MAX_S = 300  # the longest wait any model has made and finished (qwen, tier 5); see nina_wait
 POLL_S = 2
 CENTERED_WITHIN_DEG = 0.05  # 3 arc-minutes
 
@@ -149,6 +150,33 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
         return create_error_response("NINAMountError", result.get("Error") or str(result.get("Response")), result)
     except Exception as e:
         return create_error_response("NINAMountError", _describe(e), {})
+
+
+_sleep = asyncio.sleep  # a name the tests can replace
+
+
+@tool()
+async def nina_wait(seconds: float) -> dict[str, Any]:
+    """Wait for a specified duration in seconds, at most 300.
+
+    Replaces the upstream tool, which waits for as long as it is asked: one model sat in it for over 15 minutes and
+    held up everything behind it. A longer request is shortened, and the reply says so. What was asked for and what
+    was waited both come back in Details, so the run log has them.
+
+    Args:
+        seconds: Duration to wait in seconds (can be fractional), up to 300
+
+    Returns:
+        Dict containing the success status, a message, and the requested and waited seconds.
+    """
+    if seconds < 0:
+        return create_error_response("InvalidParameter", "Wait duration cannot be negative", {"StatusCode": 400})
+    waited = min(seconds, WAIT_MAX_S)
+    await _sleep(waited)
+    message = f"Waited for {waited:g} seconds"
+    if waited < seconds:
+        message += f" (you asked for {seconds:g}; the longest wait is {WAIT_MAX_S} seconds)"
+    return {"Success": True, "Message": message, "Details": {"requested_seconds": seconds, "waited_seconds": waited}, "Type": "NINA_API"}
 
 
 if __name__ == "__main__":
