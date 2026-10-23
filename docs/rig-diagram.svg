@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1020" viewBox="0 0 1180 1020" role="img" aria-label="Diagram of an imaging rig, the mini PC, the MCP server and the language model, marked by what the benchmark tests">
+<title>Imaging rig and benchmark: what connects to what</title>
+<defs>
+<marker id="a-138a70" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#138a70"/></marker>
+<marker id="a-1f86c4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f86c4"/></marker>
+<marker id="a-66738a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#66738a"/></marker>
+<marker id="a-6b57c9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b57c9"/></marker>
+<marker id="a-b87508" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b87508"/></marker>
+</defs>
+<rect width="1180" height="1020" fill="#ffffff"/>
+<text x="30" y="38" font-size="24" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Imaging rig and benchmark</text>
+<text x="30" y="60" font-size="13.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Every part of a full rig, what connects to what, and what the benchmark touches.</text>
+<rect x="30" y="78" width="26" height="16" rx="3" fill="#e4f4ef" stroke="#138a70" stroke-width="1.6"/>
+<text x="64" y="91" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Tested in the benchmark</text>
+<rect x="248.70000000000002" y="78" width="26" height="16" rx="3" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="282.70000000000005" y="91" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MCP tools exist, not tested</text>
+<rect x="495.0" y="78" width="26" height="16" rx="3" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="529.0" y="91" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Not covered (no tools)</text>
+<rect x="706.8" y="78" width="26" height="16" rx="3" fill="#eeeafc" stroke="#6b57c9" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="740.8" y="91" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Simulated in the benchmark</text>
+<rect x="30" y="112" width="1120" height="420" rx="10" fill="none" stroke="#d0d7de" stroke-width="1.4"/>
+<text x="44" y="134" font-size="12" fill="#656d76" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">THE RIG</text>
+<text x="99.68" y="134" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">as it would be set up in the field</text>
+<rect x="50" y="150" width="780" height="255" rx="6" fill="#e4f4ef" stroke="#138a70" stroke-width="1.6"/>
+<text x="60" y="170" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Mount</text>
+<text x="60" y="188" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Equatorial GoTo head on a tripod: slews, tracks, parks.</text>
+<text x="822" y="168" font-size="10.5" fill="#138a70" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">12 tools</text>
+<rect x="70" y="196" width="740" height="195" rx="6" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="80" y="216" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Telescope</text>
+<text x="80" y="234" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Optical tube, about 430 mm focal length: a field of 1.3 by 1.0 degrees on this camera.</text>
+<text x="802" y="214" font-size="10.5" fill="#66738a" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">no tools</text>
+<rect x="84" y="244" width="96" height="100" rx="6" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="94" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Flat panel</text>
+<text x="94" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Even light for</text>
+<text x="94" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">calibration</text>
+<text x="94" y="312" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">frames</text>
+<text x="172" y="336" font-size="10.5" fill="#b87508" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8 tools</text>
+<rect x="192" y="244" width="100" height="100" rx="6" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="202" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Dew shield</text>
+<text x="202" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">and heater strap</text>
+<text x="202" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">keep glass dry</text>
+<rect x="304" y="244" width="96" height="100" rx="6" fill="#e4f4ef" stroke="#138a70" stroke-width="1.6"/>
+<text x="314" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Focuser</text>
+<text x="314" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Motorised: sets</text>
+<text x="314" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">sharp focus</text>
+<text x="392" y="336" font-size="10.5" fill="#138a70" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">7 tools</text>
+<rect x="412" y="244" width="108" height="100" rx="6" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="422" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Rotator</text>
+<text x="422" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Turns the camera</text>
+<text x="422" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">to frame a target</text>
+<text x="512" y="336" font-size="10.5" fill="#b87508" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">9 tools</text>
+<rect x="532" y="244" width="112" height="100" rx="6" fill="#e4f4ef" stroke="#138a70" stroke-width="1.6"/>
+<text x="542" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Filter wheel</text>
+<text x="542" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">L, R, G, B and</text>
+<text x="542" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">narrowband filters</text>
+<text x="636" y="336" font-size="10.5" fill="#138a70" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">5 tools</text>
+<rect x="656" y="244" width="100" height="100" rx="6" fill="#e4f4ef" stroke="#138a70" stroke-width="1.6"/>
+<text x="666" y="264" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Camera</text>
+<text x="666" y="282" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Cooled sensor,</text>
+<text x="666" y="297" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">2000 x 1500 px</text>
+<text x="748" y="336" font-size="10.5" fill="#138a70" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">4 tools</text>
+<text x="84" y="372" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">light enters here</text>
+<line x1="170" y1="368" x2="780" y2="368" stroke="#656d76" stroke-width="1.4" marker-end="url(#a-66738a)"/>
+<text x="780" y="384" font-size="11.5" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">to the sensor</text>
+<rect x="884" y="150" width="248" height="126" rx="6" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="894" y="170" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Guide scope and camera</text>
+<text x="894" y="188" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A second small scope riding on the</text>
+<text x="894" y="203" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tube. It watches a star and sends</text>
+<text x="894" y="218" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">corrections to the mount, usually</text>
+<text x="894" y="233" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">through PHD2 on the mini PC.</text>
+<text x="1124" y="168" font-size="10.5" fill="#b87508" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">8 tools</text>
+<line x1="810" y1="236" x2="884" y2="236" stroke="#b87508" stroke-width="1.6" stroke-dasharray="4 3"/>
+<rect x="884" y="290" width="248" height="101" rx="6" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="894" y="310" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Power box and dew heaters</text>
+<text x="894" y="328" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Switched 12 V for the gear, and the</text>
+<text x="894" y="343" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">heater bands. A model cannot see or</text>
+<text x="894" y="358" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">switch them.</text>
+<text x="1124" y="308" font-size="10.5" fill="#66738a" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">no tools</text>
+<rect x="50" y="422" width="360" height="90" rx="6" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="60" y="442" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Dome or roll-off roof</text>
+<text x="60" y="460" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Opens, closes and follows the telescope.</text>
+<text x="60" y="475" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The simulated setup has none.</text>
+<text x="402" y="440" font-size="10.5" fill="#b87508" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">14 tools</text>
+<rect x="430" y="422" width="400" height="90" rx="6" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="440" y="442" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Weather and safety monitor</text>
+<text x="440" y="460" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Cloud, rain and wind sensors that say when it is unsafe</text>
+<text x="440" y="475" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">to observe. No tools, so no safety test can use them.</text>
+<text x="822" y="440" font-size="10.5" fill="#66738a" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">no tools</text>
+<rect x="852" y="410" width="280" height="102" rx="6" fill="#eff1f5" stroke="#66738a" stroke-width="1.6" stroke-dasharray="2 4"/>
+<text x="862" y="430" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">N.I.N.A. features with no tools</text>
+<text x="862" y="448" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Sequencer, framing assistant, polar</text>
+<text x="862" y="463" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">alignment and equipment profiles.</text>
+<text x="862" y="478" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A model cannot use any of them.</text>
+<text x="1124" y="428" font-size="10.5" fill="#66738a" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">no tools</text>
+<line x1="110" y1="532" x2="110" y2="606" stroke="#138a70" stroke-width="3" marker-end="url(#a-138a70)"/>
+<text x="124" y="560" font-size="11.5" fill="#138a70" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Mount, camera, focuser,</text>
+<text x="124" y="574" font-size="11.5" fill="#138a70" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">filter wheel</text>
+<text x="124" y="588" font-size="11.5" fill="#138a70" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">USB or serial, through ASCOM</text>
+<line x1="375" y1="532" x2="375" y2="606" stroke="#b87508" stroke-width="2" stroke-dasharray="7 4" marker-end="url(#a-b87508)"/>
+<text x="389" y="560" font-size="11.5" fill="#b87508" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Guide camera (PHD2),</text>
+<text x="389" y="574" font-size="11.5" fill="#b87508" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">flat panel, rotator, dome</text>
+<line x1="640" y1="532" x2="640" y2="572" stroke="#66738a" stroke-width="2" stroke-dasharray="2 4"/>
+<line x1="626" y1="572" x2="654" y2="572" stroke="#66738a" stroke-width="3"/>
+<text x="664" y="552" font-size="11.5" fill="#66738a" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Power and weather: no link</text>
+<text x="664" y="566" font-size="11.5" fill="#66738a" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">to the software at all</text>
+<rect x="30" y="608" width="470" height="372" rx="10" fill="none" stroke="#d0d7de" stroke-width="1.4"/>
+<text x="44" y="630" font-size="12" fill="#656d76" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MINI PC</text>
+<text x="99.68" y="630" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">the N.I.N.A. node</text>
+<rect x="48" y="640" width="434" height="56" rx="6" fill="#e6f2fa" stroke="#1f86c4" stroke-width="1.6"/>
+<text x="58" y="660" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ASCOM drivers and Alpaca</text>
+<text x="58" y="678" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The devices connect here. In the benchmark they are simulated.</text>
+<rect x="48" y="708" width="434" height="96" rx="6" fill="#e6f2fa" stroke="#1f86c4" stroke-width="1.6"/>
+<text x="58" y="728" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">N.I.N.A. imaging software</text>
+<text x="58" y="746" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Connects the devices, slews, captures, plate solves and</text>
+<text x="58" y="761" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">autofocuses. The Advanced API plugin (2.2.15.2) exposes</text>
+<text x="58" y="776" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">all of it as REST on port 1888.</text>
+<rect x="48" y="816" width="434" height="56" rx="6" fill="#fdf3df" stroke="#b87508" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="58" y="836" font-size="12.5" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">PHD2 (guiding)</text>
+<text x="58" y="854" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A separate program that N.I.N.A. connects to. No task needs it.</text>
+<rect x="48" y="884" width="434" height="84" rx="6" fill="#eeeafc" stroke="#6b57c9" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="58" y="904" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Sky Simulator  (benchmark only)</text>
+<text x="58" y="922" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ASCOM Alpaca simulators for the camera, mount, focuser and</text>
+<text x="58" y="937" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">filter wheel: they stand in for the real hardware above.</text>
+<text x="58" y="952" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Reset before every run, restarted over SSH if that fails.</text>
+<rect x="580" y="608" width="330" height="372" rx="10" fill="none" stroke="#d0d7de" stroke-width="1.4"/>
+<text x="594" y="630" font-size="12" fill="#656d76" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MAC</text>
+<text x="624.72" y="630" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">the benchmark host</text>
+<rect x="598" y="640" width="294" height="140" rx="6" fill="#e6f2fa" stroke="#1f86c4" stroke-width="1.6"/>
+<text x="608" y="660" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Harness</text>
+<text x="608" y="678" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Resets the simulators, runs one task with</text>
+<text x="608" y="693" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">one model, reads the equipment&#x27;s end</text>
+<text x="608" y="708" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">state to score it, and logs every call.</text>
+<text x="608" y="723" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Then builds the charts and the README.</text>
+<rect x="598" y="830" width="294" height="138" rx="6" fill="#e6f2fa" stroke="#1f86c4" stroke-width="1.6"/>
+<text x="608" y="850" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MCP server</text>
+<text x="608" y="868" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">nina-advanced-mcp, started fresh for every</text>
+<text x="608" y="883" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">run. 106 tools; the harness adds autofocus,</text>
+<text x="608" y="898" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">centre-on-target and a capped wait.</text>
+<text x="884" y="848" font-size="10.5" fill="#1f86c4" text-anchor="end" font-weight="normal" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">106 tools</text>
+<line x1="745" y1="780" x2="745" y2="830" stroke="#1f86c4" stroke-width="2" marker-start="url(#a-1f86c4)" marker-end="url(#a-1f86c4)"/>
+<text x="757" y="810" font-size="11.5" fill="#1f86c4" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MCP over stdio</text>
+<rect x="990" y="608" width="160" height="372" rx="10" fill="none" stroke="#d0d7de" stroke-width="1.4"/>
+<text x="1004" y="630" font-size="12" fill="#656d76" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">THE MODEL</text>
+<rect x="1004" y="640" width="132" height="328" rx="6" fill="#eeeafc" stroke="#6b57c9" stroke-width="1.6"/>
+<text x="1014" y="660" font-size="13" fill="#1f2328" text-anchor="start" font-weight="600" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">One per run</text>
+<text x="1014" y="678" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="1014" y="693" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
+<text x="1014" y="708" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">(OpenAI)</text>
+<text x="1014" y="723" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"></text>
+<text x="1014" y="738" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Claude Haiku,</text>
+<text x="1014" y="753" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Sonnet, Opus 5.5</text>
+<text x="1014" y="768" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">(Anthropic)</text>
+<text x="1014" y="783" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"></text>
+<text x="1014" y="798" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat,</text>
+<text x="1014" y="813" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">DeepSeek V4 Pro</text>
+<text x="1014" y="828" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"></text>
+<text x="1014" y="843" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<text x="1014" y="858" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">(local, Ollama)</text>
+<line x1="598" y1="735" x2="482" y2="735" stroke="#1f86c4" stroke-width="2" marker-start="url(#a-1f86c4)" marker-end="url(#a-1f86c4)"/>
+<text x="540" y="700" font-size="11.5" fill="#1f86c4" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">reset and</text>
+<text x="540" y="714" font-size="11.5" fill="#1f86c4" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">score</text>
+<text x="540" y="728" font-size="11.5" fill="#1f86c4" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">(REST)</text>
+<polyline points="598,900 540,900 540,785 482,785" fill="none" stroke="#1f86c4" stroke-width="2" marker-end="url(#a-1f86c4)" marker-start="url(#a-1f86c4)"/>
+<text x="540" y="922" font-size="11.5" fill="#1f86c4" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tool calls:</text>
+<text x="540" y="936" font-size="11.5" fill="#1f86c4" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">HTTP :1888</text>
+<line x1="892" y1="700" x2="1004" y2="700" stroke="#6b57c9" stroke-width="2" marker-start="url(#a-6b57c9)" marker-end="url(#a-6b57c9)"/>
+<text x="948" y="680" font-size="11.5" fill="#6b57c9" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">chat API</text>
+<text x="948" y="694" font-size="11.5" fill="#6b57c9" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">with tools</text>
+<text x="948" y="726" font-size="11.5" fill="#6b57c9" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tool calls out,</text>
+<text x="948" y="740" font-size="11.5" fill="#6b57c9" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">results back</text>
+<text x="30" y="1000" font-size="11" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Tool counts are the MCP tools whose names mention the device. The benchmark scores from the equipment&#x27;s end state, not from what the model says.</text>
+</svg>

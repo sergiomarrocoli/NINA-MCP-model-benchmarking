@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1184" height="890" viewBox="0 0 1184 890" role="img" aria-label="Pass rate by task type, one plot per model">
+<title>Pass rate by task type, one plot per model</title>
+<rect width="1184" height="890" fill="#ffffff"/>
+<text x="14.0" y="26.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Pass rate by task type</text>
+<svg x="12" y="38" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#4D4D4D"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,97.2 226.1,146.3 207.4,181.9 190.0,158.0 190.0,158.0" fill="#4D4D4D" fill-opacity="0.15" stroke="#4D4D4D" stroke-width="2"/>
+<circle cx="190.0" cy="97.2" r="3" fill="#4D4D4D"/>
+<circle cx="226.1" cy="146.3" r="3" fill="#4D4D4D"/>
+<circle cx="207.4" cy="181.9" r="3" fill="#4D4D4D"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#4D4D4D"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#4D4D4D"/>
+</svg>
+<svg x="402" y="38" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#CC79A7"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,88.1 262.3,134.5 221.3,201.0 190.0,158.0 117.7,134.5" fill="#CC79A7" fill-opacity="0.15" stroke="#CC79A7" stroke-width="2"/>
+<circle cx="190.0" cy="88.1" r="3" fill="#CC79A7"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#CC79A7"/>
+<circle cx="221.3" cy="201.0" r="3" fill="#CC79A7"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#CC79A7"/>
+<circle cx="117.7" cy="134.5" r="3" fill="#CC79A7"/>
+</svg>
+<svg x="792" y="38" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#D55E00"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-v4-pro</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 219.0,198.0 190.0,158.0 117.7,134.5" fill="#D55E00" fill-opacity="0.15" stroke="#D55E00" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#D55E00"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#D55E00"/>
+<circle cx="219.0" cy="198.0" r="3" fill="#D55E00"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#D55E00"/>
+<circle cx="117.7" cy="134.5" r="3" fill="#D55E00"/>
+</svg>
+<svg x="12" y="318" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#0072B2"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-haiku-5-5</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 190.0,158.0 124.9,136.9" fill="#0072B2" fill-opacity="0.15" stroke="#0072B2" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#0072B2"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#0072B2"/>
+<circle cx="223.5" cy="204.1" r="3" fill="#0072B2"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#0072B2"/>
+<circle cx="124.9" cy="136.9" r="3" fill="#0072B2"/>
+</svg>
+<svg x="402" y="318" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#009E73"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-sonnet-5-5</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 163.2,194.9 117.7,134.5" fill="#009E73" fill-opacity="0.15" stroke="#009E73" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#009E73"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#009E73"/>
+<circle cx="223.5" cy="204.1" r="3" fill="#009E73"/>
+<circle cx="163.2" cy="194.9" r="3" fill="#009E73"/>
+<circle cx="117.7" cy="134.5" r="3" fill="#009E73"/>
+</svg>
+<svg x="792" y="318" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#E69F00"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-opus-5-5</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 163.2,194.9 117.7,134.5" fill="#E69F00" fill-opacity="0.15" stroke="#E69F00" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#E69F00"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#E69F00"/>
+<circle cx="223.5" cy="204.1" r="3" fill="#E69F00"/>
+<circle cx="163.2" cy="194.9" r="3" fill="#E69F00"/>
+<circle cx="117.7" cy="134.5" r="3" fill="#E69F00"/>
+</svg>
+<svg x="12" y="598" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#56B4E9"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 212.3,188.7 190.0,158.0 153.9,146.3" fill="#56B4E9" fill-opacity="0.15" stroke="#56B4E9" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#56B4E9"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#56B4E9"/>
+<circle cx="212.3" cy="188.7" r="3" fill="#56B4E9"/>
+<circle cx="190.0" cy="158.0" r="3" fill="#56B4E9"/>
+<circle cx="153.9" cy="146.3" r="3" fill="#56B4E9"/>
+</svg>
+<svg x="402" y="598" width="380" height="270" viewBox="0 0 380 270">
+<rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
+<rect x="14" y="12" width="12" height="12" rx="2" fill="#F0E442"/>
+<text x="32.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
+<polygon points="190.0,139.0 208.1,152.1 201.2,173.4 178.8,173.4 171.9,152.1" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="137.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">25%</text>
+<polygon points="190.0,120.0 226.1,146.3 212.3,188.7 167.7,188.7 153.9,146.3" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="118.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">50%</text>
+<polygon points="190.0,101.0 244.2,140.4 223.5,204.1 156.5,204.1 135.8,140.4" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="99.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">75%</text>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 145.3,219.5 117.7,134.5" fill="none" stroke="#d0d7de" stroke-width="1"/>
+<text x="193.0" y="80.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
+<line x1="190.0" y1="158" x2="190.0" y2="82.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="190.0" y="69.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Single command</text>
+<line x1="190.0" y1="158" x2="262.3" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="268.3" y="133.3" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Multi-step session</text>
+<line x1="190.0" y1="158" x2="234.7" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="240.7" y="237.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Recovery</text>
+<line x1="190.0" y1="158" x2="145.3" y2="219.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
+<line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
+<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 154.3,207.2 124.9,136.9" fill="#F0E442" fill-opacity="0.15" stroke="#F0E442" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#F0E442"/>
+<circle cx="262.3" cy="134.5" r="3" fill="#F0E442"/>
+<circle cx="223.5" cy="204.1" r="3" fill="#F0E442"/>
+<circle cx="154.3" cy="207.2" r="3" fill="#F0E442"/>
+<circle cx="124.9" cy="136.9" r="3" fill="#F0E442"/>
+</svg>
+</svg>

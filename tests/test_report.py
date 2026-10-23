@@ -171,6 +171,40 @@ def test_a_run_the_scorer_could_not_check_is_left_out_like_a_device_drop(tmp_pat
     assert load_run(write_run(tmp_path / "b.jsonl", passed=False, failures=["0 blue frames, wanted 1"]))["device_drops"] == 0
 
 
+def test_a_readme_with_a_details_block_gets_only_the_images_in_the_results_block(tmp_path):
+    from harness.report import DETAILS_END, DETAILS_START, RESULTS_END, RESULTS_START, update_readme
+    readme = tmp_path / "README.md"
+    readme.write_text(f"{RESULTS_START}\nSTALE\n{RESULTS_END}\nmiddle\n{DETAILS_START}\nSTALE\n{DETAILS_END}\n")
+    rows = aggregate([load_run(write_run(tmp_path / f"{i}.jsonl", task=t, tier=1)) for i, t in enumerate(("tier1_cool_camera", "tier1_park_mount", "tier1_move_focuser"))])
+    update_readme(readme, rows, 3, charts_dir=tmp_path / "charts")
+    text = readme.read_text()
+    results = text[text.index(RESULTS_START):text.index(RESULTS_END)]
+    details = text[text.index(DETAILS_START):text.index(DETAILS_END)]
+    assert "overview.svg" in results and "runs passed" not in results and "Cool the camera" not in results and "Updated" not in results
+    assert "STALE" not in text and "runs passed" in details and "`tier1_cool_camera`" in details and "All numbers" in details
+
+
+def test_the_task_table_covers_every_task_in_chart_order_and_says_how_each_starts_and_passes():
+    from harness.report import tasks_table
+    from harness.tasks import PASS_CONDITIONS, TASKS, display_order, start_condition
+    assert set(PASS_CONDITIONS) == set(TASKS)
+    lines = tasks_table().splitlines()
+    assert lines[0].startswith("| Task | Type | Prompt | Starts with | Passes if |") and len(lines) == 2 + len(TASKS)
+    assert [line.split("`")[1] for line in lines[2:]] == display_order()
+    assert "1000 steps out of focus" in start_condition(TASKS["tier3_centre_fails"])
+    assert "2° off" in start_condition(TASKS["tier3_pointing_offset"])
+    assert "best judgement" in start_condition(TASKS["tier5_m31_rgb"]) and "best judgement" not in start_condition(TASKS["tier1_park_mount"])
+
+
+def test_update_readme_refreshes_a_tasks_block(tmp_path):
+    from harness.report import TASKS_END, TASKS_START, RESULTS_END, RESULTS_START, update_readme
+    readme = tmp_path / "README.md"
+    readme.write_text(f"{RESULTS_START}\nx\n{RESULTS_END}\n{TASKS_START}\nSTALE\n{TASKS_END}\n")
+    update_readme(readme, [], 0)
+    text = readme.read_text()
+    assert "STALE" not in text and "`tier1_park_mount`" in text and "| Task | Type | Prompt | Starts with | Passes if |" in text
+
+
 def test_load_run_reads_the_schema_and_older_runs_count_as_published(tmp_path):
     assert load_run(write_run(tmp_path / "old.jsonl", schema=None))["schema"] == "published"
     assert load_run(write_run(tmp_path / "new.jsonl"))["schema"] == "flat"
