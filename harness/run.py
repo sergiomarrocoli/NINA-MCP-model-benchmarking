@@ -35,8 +35,9 @@ AUTONOMOUS_NOTE = (
     "list the choices you made and why."
 )
 # 15 cut off gpt-6-sol and deepseek on the open-ended tasks: they check status, cool and focus first, and ran out of
-# steps with frames in two of three filters (25 runs hit it, 22 Oct).
-MAX_STEPS = 30
+# steps with frames in two of three filters (25 runs hit it, 22 Oct). At 30, deepseek-chat still used every step on 5 of
+# 10 tier 5 runs and gpt-6-sol on 1 of 5; no other model used more than 18 (23 Oct).
+MAX_STEPS = 50
 SOLVE_ATTEMPTS = 3  # a frame that does not solve says nothing about the model, so try again before giving up
 
 
