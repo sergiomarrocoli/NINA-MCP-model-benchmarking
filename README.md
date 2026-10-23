@@ -262,7 +262,7 @@ at the peak rate ($0.30 cache miss, $0.006 cache hit, $1.20 output per million).
 ## Running it
 
 Needs NINA with the Advanced API plugin and Sky Simulator on a machine you can reach, a Python
-3.10+ environment and API keys. See [docs/simulator-notes.md](docs/simulator-notes.md) for how
+3.12+ environment (the tests run in CI on 3.12 and 3.14) and API keys. See [docs/simulator-notes.md](docs/simulator-notes.md) for how
 the simulators behave and what to watch for, and [docs/local-model.md](docs/local-model.md) for the local model.
 
 ```bash
