@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="735" viewBox="0 0 1180 735" role="img" aria-label="A labelled line drawing of a telescope rig: pier, motorised mount, telescope, guide scope, focuser, filter wheel, camera, and the mini computer that controls them">
+<title>An astrophotography rig</title>
+<rect width="1180" height="735" fill="#ffffff"/>
+<text x="30.0" y="40.0" font-size="25" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">An astrophotography rig</text>
+<rect x="30" y="62" width="64" height="18" rx="9" fill="none" stroke="#138a70" stroke-width="1.5"/>
+<text x="62.0" y="75.0" font-size="10" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<text x="102.0" y="75.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">moves, or is controlled by a computer</text>
+<rect x="361.4" y="62" width="64" height="18" rx="9" fill="none" stroke="#b87508" stroke-width="1.5"/>
+<text x="393.4" y="75.0" font-size="10" fill="#b87508" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">POWERED</text>
+<text x="433.4" y="75.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">electrical, simple on/off</text>
+<rect x="618.4" y="62" width="64" height="18" rx="9" fill="none" stroke="#66738a" stroke-width="1.5"/>
+<text x="650.4" y="75.0" font-size="10" fill="#66738a" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">PASSIVE</text>
+<text x="690.4" y="75.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">no electronics</text>
+<rect x="0" y="650" width="1180" height="85" fill="#f3f5f8"/>
+<line x1="0" y1="650" x2="1180" y2="650" stroke="#d0d7de" stroke-width="1.5"/>
+<g transform="translate(1180 0) scale(-1 1)">
+<path d="M469,646 A62,10 0 0 0 593,646 A62,10 0 0 0 469,646 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M499,648 L499,524 A32,7 0 0 1 563,524 L563,648" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M499,524 A32,7 0 0 0 563,524" fill="none" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="517.0" y1="545.7" x2="517.0" y2="638.0" stroke="#9aa3b0" stroke-width="1.4" stroke-linecap="round"/>
+<line x1="545.0" y1="545.7" x2="545.0" y2="638.0" stroke="#9aa3b0" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M501,524 L501,498 A30,6 0 0 1 561,498 L561,524 A30,6 0 0 1 501,524 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M501,498 A30,6 0 0 0 561,498" fill="none" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M561,510 L579,510" fill="none" stroke="#c2413b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="583" cy="510" r="9" fill="#ffffff" stroke="#c2413b" stroke-width="2.3"/>
+<line x1="577.0" y1="509.7" x2="589.0" y2="509.7" stroke="#c2413b" stroke-width="1.8" stroke-linecap="round"/>
+<line x1="583.0" y1="503.7" x2="583.0" y2="515.7" stroke="#c2413b" stroke-width="1.8" stroke-linecap="round"/>
+<g transform="translate(531.0 475.7) rotate(-48)">
+<path d="M100,-24 L128,-24 L128,24 L100,24 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="108.0" y1="-24.0" x2="108.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="116.0" y1="-24.0" x2="116.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+</g>
+<g transform="translate(531.0 475.7) rotate(-48)">
+<path d="M-4,-34 L96,-34 Q108,-34 108,-22 L108,22 Q108,34 96,34 L-4,34 Q-16,34 -16,22 L-16,-22 Q-16,-34 -4,-34 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12,-20 L82,-20 L82,20 L12,20 Z" fill="none" stroke="#c2413b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g transform="translate(560 300) rotate(-48) translate(-165 0)">
+<path d="M120,44 L210,44 L210,60 L120,60 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="126" cy="52" r="3" fill="#ffffff" stroke="#c2413b" stroke-width="1.6"/>
+<circle cx="204" cy="52" r="3" fill="#ffffff" stroke="#c2413b" stroke-width="1.6"/>
+<rect x="138" y="60" width="56" height="82" rx="12" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linejoin="round"/>
+<path d="M156,60 L170,60 L170,142 L156,142 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M30,30 L300,30 L300,44 L30,44 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M66,44 L84,44 L84,58 L66,58 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M250,44 L268,44 L268,58 L250,58 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M84,-30 L96,-30 L96,30 L84,30 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M238,-30 L250,-30 L250,30 L238,30 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="0" y="-30" width="330" height="60" rx="10" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linejoin="round"/>
+<path d="M330,-36 L394,-36 L394,36 L330,36 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="346.0" y1="-36.0" x2="346.0" y2="36.0" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M352,-38 L364,-38 L364,38 L352,38 Z" fill="#ffffff" stroke="#b87508" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M398,-44 L406,-44 L406,44 L398,44 Z" fill="#fff7dd" stroke="#b87508" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3"/>
+<line x1="112.0" y1="-52.0" x2="112.0" y2="-30.0" stroke="#c2413b" stroke-width="3" stroke-linecap="round"/>
+<path d="M104,-84 L120,-84 L120,-48 L104,-48 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="232.0" y1="-52.0" x2="232.0" y2="-30.0" stroke="#c2413b" stroke-width="3" stroke-linecap="round"/>
+<path d="M224,-84 L240,-84 L240,-48 L224,-48 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="88" y="-80" width="190" height="28" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linejoin="round"/>
+<path d="M278,-82 L300,-82 L300,-50 L278,-50 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M52,-78 L88,-78 L88,-54 L52,-54 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-42,-24 L0,-24 L0,24 L-42,24 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="-34.0" y1="-24.0" x2="-34.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="-26.0" y1="-24.0" x2="-26.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="-18.0" y1="-24.0" x2="-18.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="-10.0" y1="-24.0" x2="-10.0" y2="24.0" stroke="#9aa3b0" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M-30,-40 L-12,-40 L-12,-24 L-30,-24 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-64,-28 L-42,-28 L-42,28 L-64,28 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3"/>
+<path d="M-114,-34 L-64,-34 L-64,34 L-114,34 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="-89" cy="-21" r="5" fill="#ffffff" stroke="#d64545" stroke-width="2"/>
+<circle cx="-89" cy="-7" r="5" fill="#ffffff" stroke="#2e9e5b" stroke-width="2"/>
+<circle cx="-89" cy="7" r="5" fill="#ffffff" stroke="#3b6fd6" stroke-width="2"/>
+<circle cx="-89" cy="21" r="5" fill="#ffffff" stroke="#9aa3b0" stroke-width="2"/>
+<path d="M-178,-28 L-114,-28 L-114,28 L-178,28 Z" fill="#ffffff" stroke="#c2413b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="-170.0" y1="-28.0" x2="-170.0" y2="-40.0" stroke="#c2413b" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="-160.0" y1="-28.0" x2="-160.0" y2="-40.0" stroke="#c2413b" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="-150.0" y1="-28.0" x2="-150.0" y2="-40.0" stroke="#c2413b" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="-140.0" y1="-28.0" x2="-140.0" y2="-40.0" stroke="#c2413b" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="-130.0" y1="-28.0" x2="-130.0" y2="-40.0" stroke="#c2413b" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M-188,-20 L-178,-20 L-178,20 L-188,20 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M324,562 C324,632 364,628 434,628 L690,628 C700,628 698,604 705,604" fill="none" stroke="#2b3138" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M415,512 C415,582 455,632 525,632 L690,632 C700,632 698,611 705,611" fill="none" stroke="#2b3138" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M454,454 C454,524 494,636 564,636 L690,636 C700,636 698,618 705,618" fill="none" stroke="#2b3138" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M571,510 C571,580 611,640 681,640 L690,640 C700,640 698,625 705,625" fill="none" stroke="#2b3138" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M435,340 C435,410 475,644 545,644 L690,644 C700,644 698,632 705,632" fill="none" stroke="#2b3138" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M705,598 Q705,590 713,590 L847,590 Q855,590 855,598 L855,636 Q855,644 847,644 L713,644 Q705,644 705,636 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="719.0" y1="606.0" x2="775.0" y2="606.0" stroke="#1f2328" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="835" cy="607" r="4" fill="#ffffff" stroke="#138a70" stroke-width="2"/>
+<text transform="translate(780.0 632.0) scale(-1 1)" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">MINI PC</text>
+<text transform="translate(560.0 678.0) scale(-1 1)" font-size="12" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">USB cables</text>
+</g>
+<rect x="30" y="108" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="108" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="46.0" y="129.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Flat panel (optional)</text>
+<text x="46.0" y="146.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A lamp held over the lens for</text>
+<text x="46.0" y="161.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">calibration photos.</text>
+<rect x="212" y="117" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="247.0" y="129.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="292" y1="150" x2="476.3" y2="110.5" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="476.3" cy="110.5" r="4" fill="#1f2328"/>
+<rect x="30" y="204" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="204" width="5" height="84" rx="2" fill="#b87508"/>
+<text x="46.0" y="225.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Dew heater</text>
+<text x="46.0" y="242.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A heated band that stops the lens</text>
+<text x="46.0" y="257.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">fogging up on cold, damp nights.</text>
+<rect x="212" y="213" width="70" height="16" rx="8" fill="none" stroke="#b87508" stroke-width="1.4"/>
+<text x="247.0" y="225.0" font-size="9.5" fill="#b87508" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">POWERED</text>
+<line x1="292" y1="246" x2="468.6" y2="176.6" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="468.6" cy="176.6" r="4" fill="#1f2328"/>
+<rect x="30" y="300" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="300" width="5" height="84" rx="2" fill="#66738a"/>
+<text x="46.0" y="321.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Telescope</text>
+<text x="46.0" y="338.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Gathers faint starlight and focuses</text>
+<text x="46.0" y="353.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">it into an image. Glass and metal,</text>
+<text x="46.0" y="368.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">no electronics.</text>
+<rect x="212" y="309" width="70" height="16" rx="8" fill="none" stroke="#66738a" stroke-width="1.4"/>
+<text x="247.0" y="321.0" font-size="9.5" fill="#66738a" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">PASSIVE</text>
+<line x1="292" y1="342" x2="522.2" y2="206.4" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="522.2" cy="206.4" r="4" fill="#1f2328"/>
+<rect x="30" y="396" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="396" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="46.0" y="417.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Mount</text>
+<text x="46.0" y="434.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The robot arm: a compact mount with</text>
+<text x="46.0" y="449.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">built-in gears. It swings the telescope</text>
+<text x="46.0" y="464.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">across the sky and follows it.</text>
+<rect x="212" y="405" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="247.0" y="417.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="292" y1="438" x2="602.2" y2="423.7" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="602.2" cy="423.7" r="4" fill="#1f2328"/>
+<rect x="30" y="492" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="492" width="5" height="84" rx="2" fill="#66738a"/>
+<text x="46.0" y="513.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Pier</text>
+<text x="46.0" y="530.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A solid column that holds the mount</text>
+<text x="46.0" y="545.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">steady, at a comfortable height.</text>
+<rect x="212" y="501" width="70" height="16" rx="8" fill="none" stroke="#66738a" stroke-width="1.4"/>
+<text x="247.0" y="513.0" font-size="9.5" fill="#66738a" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">PASSIVE</text>
+<line x1="292" y1="534" x2="649.0" y2="575.0" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="649.0" cy="575.0" r="4" fill="#1f2328"/>
+<rect x="30" y="588" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="30" y="588" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="46.0" y="609.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Mini PC</text>
+<text x="46.0" y="626.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The brain at the telescope: a small</text>
+<text x="46.0" y="641.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">computer that talks to every motor and</text>
+<text x="46.0" y="656.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">camera over USB. A model controls it.</text>
+<rect x="212" y="597" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="247.0" y="609.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="292" y1="630" x2="325.0" y2="617.0" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="325.0" cy="617.0" r="4" fill="#1f2328"/>
+<rect x="888" y="108" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="888" y="108" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="904.0" y="129.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Guide scope</text>
+<text x="904.0" y="146.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A second small telescope with its own</text>
+<text x="904.0" y="161.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">camera. It watches one star and corrects</text>
+<text x="904.0" y="176.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">the mount&#x27;s tracking drift.</text>
+<rect x="1070" y="117" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="1105.0" y="129.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="888" y1="150" x2="667.2" y2="250.8" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="667.2" cy="250.8" r="4" fill="#1f2328"/>
+<rect x="888" y="228" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="888" y="228" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="904.0" y="249.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Focuser</text>
+<text x="904.0" y="266.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A tiny motor that slides the camera</text>
+<text x="904.0" y="281.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">in and out until stars are sharp.</text>
+<rect x="1070" y="237" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="1105.0" y="249.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="888" y1="270" x2="761.6" y2="421.4" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="761.6" cy="421.4" r="4" fill="#1f2328"/>
+<rect x="888" y="324" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="888" y="324" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="904.0" y="345.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Rotator (optional)</text>
+<text x="904.0" y="362.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Turns the camera, to frame a</text>
+<text x="904.0" y="377.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">target at the right angle.</text>
+<rect x="1070" y="333" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="1105.0" y="345.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="888" y1="366" x2="765.9" y2="462.0" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="765.9" cy="462.0" r="4" fill="#1f2328"/>
+<rect x="888" y="420" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="888" y="420" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="904.0" y="441.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Filter wheel</text>
+<text x="904.0" y="458.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A motorised carousel of coloured</text>
+<text x="904.0" y="473.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">filters. Each photo uses one.</text>
+<rect x="1070" y="429" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="1105.0" y="441.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="888" y1="462" x2="813.7" y2="482.2" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="813.7" cy="482.2" r="4" fill="#1f2328"/>
+<rect x="888" y="516" width="262" height="84" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.3"/>
+<rect x="888" y="516" width="5" height="84" rx="2" fill="#138a70"/>
+<text x="904.0" y="537.0" font-size="14" fill="#1f2328" text-anchor="start" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Camera</text>
+<text x="904.0" y="554.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A cooled astronomy camera. Chilling</text>
+<text x="904.0" y="569.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">the sensor cuts noise so faint</text>
+<text x="904.0" y="584.0" font-size="12" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">objects show.</text>
+<rect x="1070" y="525" width="70" height="16" rx="8" fill="none" stroke="#138a70" stroke-width="1.4"/>
+<text x="1105.0" y="537.0" font-size="9.5" fill="#138a70" text-anchor="middle" font-weight="700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ROBOTIC</text>
+<line x1="888" y1="558" x2="820.4" y2="543.5" stroke="#656d76" stroke-width="1.2"/>
+<circle cx="820.4" cy="543.5" r="4" fill="#1f2328"/>
+<text x="30.0" y="718.0" font-size="11.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Also found in bigger set-ups, and not drawn: an observatory dome, weather and safety sensors, and a switched power box.</text>
+</svg>

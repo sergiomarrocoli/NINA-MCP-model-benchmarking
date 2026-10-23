@@ -17,12 +17,16 @@ from statistics import mean
 
 from harness.charts import CHARTS_DIR, write_charts
 from harness.pricing import cost, is_estimated
-from harness.tasks import TASKS, display_order, tier_name
+from harness.tasks import PASS_CONDITIONS, TASKS, display_order, start_condition, tier_name
 
 RUNS_DIR = Path("runs")
 README = Path("README.md")
 RESULTS_START = "<!-- results:start -->"
 RESULTS_END = "<!-- results:end -->"
+TASKS_START = "<!-- tasks:start -->"
+TASKS_END = "<!-- tasks:end -->"
+DETAILS_START = "<!-- details:start -->"
+DETAILS_END = "<!-- details:end -->"
 
 
 def load_run(path: Path) -> dict | None:
@@ -138,38 +142,73 @@ def overall(rows: list[dict]) -> str:
     return "\n".join(f"- **{m}**: {p}/{n} runs passed ({p / n:.0%})" for m, (p, n) in sorted(totals.items()))
 
 
-def charts_markdown(rows: list[dict], drawn: dict[str, str], charts_dir: Path) -> str:
-    """The summary row and the all-tasks grid, then every task with its type and full prompt (the grid cuts long
-    prompts short). Tasks with no runs are marked as not run yet."""
+def images_markdown(drawn: dict[str, str], charts_dir: Path) -> str:
+    """Just the chart images: the per-model radar plots, the cost and unsafe-calls panels, and the per-task grid."""
     rel = charts_dir.as_posix()
-    parts = [f"![{title}]({rel}/{drawn[key]})" for key, title in (("summary", "Summary"), ("overview", "Pass rate by task")) if key in drawn]
+    return "\n\n".join(f"![{title}]({rel}/{drawn[key]})" for key, title in (
+        ("radar", "Pass rate by task type, one plot per model"),
+        ("summary", "Cost, and invalid and unsafe calls"),
+        ("overview", "Pass rate by task")) if key in drawn)
+
+
+def task_list_markdown(rows: list[dict]) -> str:
+    """Every task with its type and full prompt (the grid cuts long prompts short). Tasks with no runs are marked."""
     ran = {r["task"] for r in rows}
-    parts.append("\n".join(f"- `{task_id}` ({tier_name(TASKS[task_id].tier)}){'' if task_id in ran else ', not run yet'}: {TASKS[task_id].prompt}"
-                           for task_id in display_order()))
-    return "\n\n".join(parts)
+    return "\n".join(f"- `{task_id}` ({tier_name(TASKS[task_id].tier)}){'' if task_id in ran else ', not run yet'}: {TASKS[task_id].prompt}"
+                     for task_id in display_order())
+
+
+def tasks_table() -> str:
+    """Every task, in chart order: its prompt, how it starts, and what the scorer checks. Built from the task definitions."""
+    cell = lambda x: x.replace("|", "\\|")
+    rows = [f"| `{t}` | {tier_name(TASKS[t].tier)} | {cell(TASKS[t].prompt)} | {cell(start_condition(TASKS[t]))} | {cell(PASS_CONDITIONS[t])} |"
+            for t in display_order()]
+    return "\n".join(["| Task | Type | Prompt | Starts with | Passes if |", "| --- | --- | --- | --- | --- |", *rows])
+
+
+def charts_markdown(rows: list[dict], drawn: dict[str, str], charts_dir: Path) -> str:
+    """The chart images, then every task with its type and full prompt."""
+    return "\n\n".join(part for part in (images_markdown(drawn, charts_dir), task_list_markdown(rows)) if part)
 
 
 def update_readme(path: Path, rows: list[dict], runs: int, excluded: int = 0, charts_dir: Path | None = None) -> None:
-    """Replace the results block in the README, between the results markers.
+    """Replace the generated blocks in the README, between their markers.
 
-    With charts_dir, also draw the charts into it and put them (with each task's prompt) in the block.
+    The results block holds only the chart images. If the README also has a details block, the written numbers, the task
+    prompts and the full tables go there. Without one, everything goes in the results block.
     """
     text = path.read_text()
     block = re.compile(re.escape(RESULTS_START) + r".*?" + re.escape(RESULTS_END), re.S)
     if not block.search(text):
         raise SystemExit(f"{path} has no {RESULTS_START} ... {RESULTS_END} block")
+    details_block = re.compile(re.escape(DETAILS_START) + r".*?" + re.escape(DETAILS_END), re.S)
+    split = bool(details_block.search(text)) and charts_dir is not None
     left_out = f" ({excluded} more left out: a device dropped during the run)" if excluded else ""
-    head = (f"{RESULTS_START}\n_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
-            f"Regenerate with `python -m harness.report --update-readme`._\n\n")
+    stamp = (f"_Updated {date.today().isoformat()} from {runs} runs{left_out}. "
+             f"Regenerate with `python -m harness.report --update-readme`._\n\n")
     if charts_dir is None:
-        body = f"{head}{markdown(rows)}\n{RESULTS_END}"
+        results = f"{RESULTS_START}\n{stamp}{markdown(rows)}\n{RESULTS_END}"
+        details = None
     elif not rows:
-        body = f"{head}_No results yet._\n{RESULTS_END}"
+        results = f"{RESULTS_START}\n{stamp}_No results yet._\n{RESULTS_END}"
+        details = f"{DETAILS_START}\n_No results yet._\n{DETAILS_END}"
     else:
         drawn = write_charts(rows, charts_dir)
-        body = (f"{head}### Overall\n\n{overall(rows)}\n\n### By task\n\n{charts_markdown(rows, drawn, charts_dir)}\n\n"
-                f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{RESULTS_END}")
-    path.write_text(block.sub(lambda _: body, text))
+        if split:
+            results = f"{RESULTS_START}\n{images_markdown(drawn, charts_dir)}\n{RESULTS_END}"
+            details = (f"{DETAILS_START}\n{stamp}### Overall\n\n{overall(rows)}\n\n### The tasks\n\n{task_list_markdown(rows)}\n\n"
+                       f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{DETAILS_END}")
+        else:
+            results = (f"{RESULTS_START}\n{stamp}### Overall\n\n{overall(rows)}\n\n### By task\n\n{charts_markdown(rows, drawn, charts_dir)}\n\n"
+                       f"<details><summary>All numbers</summary>\n\n{markdown(rows)}\n\n</details>\n{RESULTS_END}")
+            details = None
+    text = block.sub(lambda _: results, text)
+    if split:
+        text = details_block.sub(lambda _: details, text)
+    tasks_block = re.compile(re.escape(TASKS_START) + r".*?" + re.escape(TASKS_END), re.S)
+    if tasks_block.search(text):
+        text = tasks_block.sub(lambda _: f"{TASKS_START}\n{tasks_table()}\n{TASKS_END}", text)
+    path.write_text(text)
 
 
 def main():

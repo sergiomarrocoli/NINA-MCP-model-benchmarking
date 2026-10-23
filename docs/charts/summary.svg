@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1184" height="388" viewBox="0 0 1184 388" role="img" aria-label="Total cost, and invalid and unsafe calls per run">
+<title>Total cost, and invalid and unsafe calls per run</title>
+<rect width="1184" height="388" fill="#ffffff"/>
+<text x="14.0" y="26.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Cost, and invalid and unsafe calls</text>
+<rect x="14.0" y="38" width="12" height="12" rx="2" fill="#4D4D4D"/>
+<text x="32.0" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<rect x="99.6" y="38" width="12" height="12" rx="2" fill="#CC79A7"/>
+<text x="117.6" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-chat</text>
+<rect x="221.2" y="38" width="12" height="12" rx="2" fill="#D55E00"/>
+<text x="239.2" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-v4-pro</text>
+<rect x="357.2" y="38" width="12" height="12" rx="2" fill="#0072B2"/>
+<text x="375.2" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-haiku-5-5</text>
+<rect x="500.4" y="38" width="12" height="12" rx="2" fill="#009E73"/>
+<text x="518.4" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-sonnet-5-5</text>
+<rect x="650.8" y="38" width="12" height="12" rx="2" fill="#E69F00"/>
+<text x="668.8" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-opus-5-5</text>
+<rect x="786.8" y="38" width="12" height="12" rx="2" fill="#56B4E9"/>
+<text x="804.8" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<rect x="865.2" y="38" width="12" height="12" rx="2" fill="#F0E442"/>
+<text x="883.2" y="48.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
+<svg x="12" y="66" width="575" height="300" viewBox="0 0 575 300">
+<rect width="575" height="300" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Total cost of all runs</text>
+<line x1="46" y1="222.0" x2="561" y2="222.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="225.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$0</text>
+<line x1="46" y1="179.5" x2="561" y2="179.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="182.5" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$2</text>
+<line x1="46" y1="137.0" x2="561" y2="137.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="140.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$4</text>
+<line x1="46" y1="94.5" x2="561" y2="94.5" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="97.5" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$6</text>
+<line x1="46" y1="52.0" x2="561" y2="52.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="55.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$8</text>
+<text x="78.2" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<text x="142.6" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-</text>
+<text x="142.6" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">chat</text>
+<text x="206.9" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-</text>
+<text x="206.9" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">v4-pro</text>
+<text x="271.3" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="271.3" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">haiku-5-5</text>
+<text x="335.7" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="335.7" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">sonnet-5-5</text>
+<text x="400.1" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="400.1" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
+<text x="464.4" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="528.8" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
+<text x="78.2" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60 runs</text>
+<text x="78.2" y="218.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$0.00</text>
+<text x="142.6" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">65 runs</text>
+<rect x="123.2" y="218.8" width="38.6" height="3.2" rx="2" fill="#CC79A7"/>
+<text x="142.6" y="214.8" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">~$0.15</text>
+<text x="206.9" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="187.6" y="213.8" width="38.6" height="8.2" rx="2" fill="#D55E00"/>
+<text x="206.9" y="209.8" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$0.39</text>
+<text x="271.3" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="252.0" y="218.7" width="38.6" height="3.3" rx="2" fill="#0072B2"/>
+<text x="271.3" y="214.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$0.15</text>
+<text x="335.7" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">65 runs</text>
+<rect x="316.4" y="137.2" width="38.6" height="84.8" rx="2" fill="#009E73"/>
+<text x="335.7" y="133.2" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$3.99</text>
+<text x="400.1" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">64 runs</text>
+<rect x="380.8" y="132.7" width="38.6" height="89.3" rx="2" fill="#E69F00"/>
+<text x="400.1" y="128.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$4.20</text>
+<text x="464.4" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">68 runs</text>
+<rect x="445.1" y="198.4" width="38.6" height="23.6" rx="2" fill="#56B4E9"/>
+<text x="464.4" y="194.4" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$1.11</text>
+<text x="528.8" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="509.5" y="190.8" width="38.6" height="31.2" rx="2" fill="#F0E442"/>
+<text x="528.8" y="186.8" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">$1.47</text>
+<text x="14.0" y="288.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">List prices, cached input at the cached rate. ~ = estimated price.</text>
+</svg>
+<svg x="597" y="66" width="575" height="300" viewBox="0 0 575 300">
+<rect width="575" height="300" fill="#ffffff" stroke="#d0d7de"/>
+<text x="14.0" y="22.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Invalid and unsafe calls per run</text>
+<rect x="14" y="30" width="10" height="10" fill="#656d76"/>
+<text x="28.0" y="39.0" font-size="10" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">invalid</text>
+<rect x="76" y="30" width="10" height="10" fill="#656d76" fill-opacity="0.35"/>
+<text x="90.0" y="39.0" font-size="10" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">unsafe</text>
+<line x1="46" y1="222.0" x2="561" y2="222.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="225.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0</text>
+<line x1="46" y1="182.0" x2="561" y2="182.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="185.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">1</text>
+<line x1="46" y1="142.0" x2="561" y2="142.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="145.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">2</text>
+<line x1="46" y1="102.0" x2="561" y2="102.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="105.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">3</text>
+<line x1="46" y1="62.0" x2="561" y2="62.0" stroke="#d0d7de" stroke-width="1"/>
+<text x="40.0" y="65.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">4</text>
+<text x="78.2" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">qwen3:8b</text>
+<text x="142.6" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-</text>
+<text x="142.6" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">chat</text>
+<text x="206.9" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">deepseek-</text>
+<text x="206.9" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">v4-pro</text>
+<text x="271.3" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="271.3" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">haiku-5-5</text>
+<text x="335.7" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="335.7" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">sonnet-5-5</text>
+<text x="400.1" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">claude-</text>
+<text x="400.1" y="247.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
+<text x="464.4" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
+<text x="528.8" y="236.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
+<text x="78.2" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60 runs</text>
+<rect x="55.3" y="84.0" width="21.9" height="138.0" rx="2" fill="#4D4D4D" fill-opacity="1"/>
+<text x="66.2" y="80.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">3.5</text>
+<rect x="79.2" y="205.3" width="21.9" height="16.7" rx="2" fill="#4D4D4D" fill-opacity="0.35"/>
+<text x="90.1" y="201.3" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.4</text>
+<text x="142.6" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">65 runs</text>
+<rect x="119.7" y="202.9" width="21.9" height="19.1" rx="2" fill="#CC79A7" fill-opacity="1"/>
+<text x="130.6" y="198.9" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.5</text>
+<rect x="143.6" y="204.8" width="21.9" height="17.2" rx="2" fill="#CC79A7" fill-opacity="0.35"/>
+<text x="154.5" y="200.8" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.4</text>
+<text x="206.9" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="184.1" y="198.6" width="21.9" height="23.4" rx="2" fill="#D55E00" fill-opacity="1"/>
+<text x="195.0" y="194.6" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.6</text>
+<rect x="207.9" y="214.6" width="21.9" height="7.4" rx="2" fill="#D55E00" fill-opacity="0.35"/>
+<text x="218.9" y="210.6" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.2</text>
+<text x="271.3" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="248.4" y="200.9" width="21.9" height="21.1" rx="2" fill="#0072B2" fill-opacity="1"/>
+<text x="259.4" y="196.9" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.5</text>
+<rect x="272.3" y="210.6" width="21.9" height="11.4" rx="2" fill="#0072B2" fill-opacity="0.35"/>
+<text x="283.3" y="206.6" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.3</text>
+<text x="335.7" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">65 runs</text>
+<rect x="312.8" y="201.7" width="21.9" height="20.3" rx="2" fill="#009E73" fill-opacity="1"/>
+<text x="323.7" y="197.7" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.5</text>
+<rect x="336.7" y="211.5" width="21.9" height="10.5" rx="2" fill="#009E73" fill-opacity="0.35"/>
+<text x="347.6" y="207.5" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.3</text>
+<text x="400.1" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">64 runs</text>
+<rect x="377.2" y="198.9" width="21.9" height="23.1" rx="2" fill="#E69F00" fill-opacity="1"/>
+<text x="388.1" y="194.9" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.6</text>
+<rect x="401.1" y="207.0" width="21.9" height="15.0" rx="2" fill="#E69F00" fill-opacity="0.35"/>
+<text x="412.0" y="203.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.4</text>
+<text x="464.4" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">68 runs</text>
+<rect x="441.6" y="197.3" width="21.9" height="24.7" rx="2" fill="#56B4E9" fill-opacity="1"/>
+<text x="452.5" y="193.3" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.6</text>
+<rect x="465.4" y="219.1" width="21.9" height="2.9" rx="2" fill="#56B4E9" fill-opacity="0.35"/>
+<text x="476.4" y="215.1" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.1</text>
+<text x="528.8" y="259.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">70 runs</text>
+<rect x="505.9" y="191.7" width="21.9" height="30.3" rx="2" fill="#F0E442" fill-opacity="1"/>
+<text x="516.9" y="187.7" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.8</text>
+<rect x="529.8" y="194.6" width="21.9" height="27.4" rx="2" fill="#F0E442" fill-opacity="0.35"/>
+<text x="540.8" y="190.6" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0.7</text>
+<text x="14.0" y="288.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Unsafe: a state-changing call the task did not ask for.</text>
+</svg>
+</svg>
