@@ -1,5 +1,7 @@
 # NINA MCP model benchmarking
 
+[![tests](https://github.com/sergiomarrocoli/NINA-MCP-model-benchmarking/actions/workflows/tests.yml/badge.svg)](https://github.com/sergiomarrocoli/NINA-MCP-model-benchmarking/actions/workflows/tests.yml)
+
 Astrophotography takes a surprisingly complex set-up of electronic components, because it has two hard
 problems to solve.
 
@@ -90,7 +92,7 @@ server, and the model. Three real runs, printed step by step, are in [docs/sampl
 
 _How it is wired up. Green parts are tested, dashed amber ones have MCP tools but no task, dotted grey ones have no tools at all, and violet is simulated._
 
-The full plan is in [NINA Agent Benchmark.md](NINA%20Agent%20Benchmark.md). Work is tracked on the
+The plan, written on 10 October before the build (some details have since changed), is in [docs/plan.md](docs/plan.md). Work is tracked on the
 [project board](https://github.com/users/sergiomarrocoli/projects/11).
 
 1. **Reset.** `harness/reset.py` puts the simulated camera, mount and focuser in a known state.
@@ -312,7 +314,7 @@ at the peak rate ($0.30 cache miss, $0.006 cache hit, $1.20 output per million).
 ## Running it
 
 Needs NINA with the Advanced API plugin and Sky Simulator on a machine you can reach, a Python
-3.10+ environment and API keys. See [docs/simulator-notes.md](docs/simulator-notes.md) for how
+3.12+ environment (the tests run in CI on 3.12 and 3.14) and API keys. See [docs/simulator-notes.md](docs/simulator-notes.md) for how
 the simulators behave and what to watch for, and [docs/local-model.md](docs/local-model.md) for the local model.
 
 ```bash
@@ -335,3 +337,18 @@ the tools exactly as served; against the fork the two are the same. The report s
 Every run calls the model's API and costs money (roughly $0.01-0.07 per single-command run), so use few
 repeats while developing. Runs share one set of simulated equipment, so they go one at a time. A run that crashes (for
 example because a simulator dropped a device) is left out of the report.
+
+## Acknowledgements
+
+This project stands on other people's work:
+
+- [N.I.N.A.](https://nighttime-imaging.eu/) (Nighttime Imaging 'N' Astronomy), the imaging software the models operate.
+- The [Advanced API plugin](https://github.com/christian-photo/ninaAPI) by christian-photo, which exposes N.I.N.A. over HTTP.
+- [nina-advanced-mcp](https://pypi.org/project/nina-advanced-mcp/), the MCP server that turns those calls into tools. Its source is
+  [PaDev1/Nina_advanced_api_mcp](https://github.com/PaDev1/Nina_advanced_api_mcp); this project installs
+  [a fork](https://github.com/sergiomarrocoli/Nina_advanced_api_mcp) with the fixes the benchmark needed.
+- ASCOM and Alpaca, and the Sky Simulator devices that stand in for the real hardware.
+
+## Licence
+
+[MIT](LICENSE).
