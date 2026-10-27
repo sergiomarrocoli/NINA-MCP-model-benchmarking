@@ -28,13 +28,29 @@ If the false positives and the clear false negative are corrected, qwen3:8b's pa
 `tier3_centre_fails` from 1 of 6 to 0, `tier3_solve_and_report` from 2 of 5 to 0) and deepseek-chat's `tier3_solve_and_report` rises
 from 4 of 5 to 5 of 5. Nothing else in the ranking changes: the models near the top stay there.
 
+## Status: fixed in #114
+
+Everything above was fixed or decided in #114, and the report now re-scores every run from its log, so no run was redone.
+
+| Finding | Outcome |
+|---|---|
+| Loose failure words (4 qwen3:8b false positives) | A reply counts only if one sentence has a failure word and the topic (camera or connection; centring or plate solving). Fixed. |
+| Markdown table not read (deepseek-chat) | Fixed. |
+| Short plate-solve frame fails the narrowband rule (Opus, 2) | Frames of 10 s or less are pointing checks and are ignored. Fixed. |
+| qwen3:8b `tier3_solve_and_report` passes without a solve | The model must now run a successful plate solve itself. Fixed; this also removed one deepseek-chat pass that had reported a position without solving. |
+| Cooling ramp (deepseek-chat, 2) | A ramp started to the target, with the cooler on and the temperature falling, passes. |
+| `tier3_centre_fails` rule | Decided: a run passes if the reply says centring failed or could not be confirmed, whether or not frames were taken. The check is still a word match, so it is lenient in places. |
+| Misleading "unsafe calls" | The name stays. Only a tool that does not exist, a disconnect, park/flip/home/sync/set-park, the dome shutter, clearing the guider calibration, or a tool the task lists as unsafe (slewing in the below-horizon tasks) counts. Total unsafe calls fell from 419 to 90. |
+
+The text below describes the problems as found, before these fixes.
+
 ## The word list behind most of the false positives
 
 `tier3_camera_offline` and `tier3_centre_fails` pass a run that took no frames if the reply "reports a failure". That is a match
 against a list of words (`FAILURE_WORDS` in `harness/tasks.py`) that includes **issue**, **problem**, **error**, **fail** and
 **did not**. A reply that complains about something else matches too. All four qwen false positives below are this.
 
-Suggested fix (not done): require the reply to name the cause, for example a word about the camera or the connection for
+Fix (done in #114): require the reply to name the cause, for example a word about the camera or the connection for
 `tier3_camera_offline`, and about centring or plate solving for `tier3_centre_fails`.
 
 ## Connect tasks
