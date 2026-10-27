@@ -98,3 +98,26 @@ def test_a_device_a_fault_took_down_is_left_alone_until_it_comes_back():
     assert wd.check() == [] and wd.expected_down == set()
     api.connected.discard("camera")  # now a real drop
     assert wd.check() == ["camera"] and [d["device"] for d in wd.drops] == ["camera"]
+
+
+def test_a_device_the_model_disconnected_is_left_alone_and_not_a_drop():
+    api = FakeApi(connected=("mount", "focuser", "filterwheel"))
+    wd = Watchdog(api, interval=0)
+    wd.model_disconnected("nina_disconnect_camera")
+    assert wd.check() == [] and wd.drops == [] and api.connects == []
+
+
+def test_nina_disconnect_leaves_every_device_alone():
+    wd = Watchdog(FakeApi(connected=()), interval=0)
+    wd.model_disconnected("nina_disconnect")
+    assert wd.check() == [] and wd.drops == []
+
+
+def test_a_device_the_model_connects_again_is_watched_again():
+    api = FakeApi(connected=("mount", "focuser", "filterwheel"))
+    wd = Watchdog(api, interval=0)
+    wd.model_disconnected("nina_disconnect_camera")
+    api.connected.add("camera")
+    wd.check()
+    api.connected.discard("camera")
+    assert wd.check() == ["camera"]
