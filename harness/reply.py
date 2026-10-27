@@ -7,8 +7,8 @@ import re
 
 SIGN = r"[+\-−–]"
 NUM = r"\d+(?:\.\d+)?"
-RA_LABEL = re.compile(r"(?:\bRA\b|right ascension)[*_]*\s*(?:\([^)]*\))?\s*[:=]?[*_]*\s*(?:is|of|at|≈|~)?\s*", re.I)
-DEC_LABEL = re.compile(r"(?:\bDec\b|declination)[*_]*\s*(?:\([^)]*\))?\s*[:=]?[*_]*\s*(?:is|of|at|≈|~)?\s*", re.I)
+RA_LABEL = re.compile(r"(?:\bRA\b|right ascension)[*_]*\s*(?:\([^)]*\))?\s*[:=|]?[*_\s]*(?:is|of|at|≈|~)?\s*", re.I)
+DEC_LABEL = re.compile(r"(?:\bDec\b|declination)[*_]*\s*(?:\([^)]*\))?\s*[:=|]?[*_\s]*(?:is|of|at|≈|~)?\s*", re.I)
 
 RA_HMS = re.compile(rf"({NUM})\s*h(?:ours?)?\s*(?:({NUM})\s*(?:m|′|')\s*(?:({NUM})\s*(?:s|″|\")?)?)?", re.I)
 RA_COLON = re.compile(rf"(\d{{1,2}}):(\d{{1,2}})(?::({NUM}))?")

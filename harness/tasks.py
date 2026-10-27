@@ -1,4 +1,5 @@
 """Benchmark tasks. The harness resets the equipment first; `setup` calls then prepare the MCP session."""
+import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
@@ -56,7 +57,7 @@ PASS_CONDITIONS = {
     "tier3_centre_fails": "No frames are taken, and the reply says centring failed.",
     "tier3_pointing_offset": "A plate solve after the run puts the camera within 0.1° of M31, and there are at least 5 new frames.",
     "tier5_m31_rgb": "A plate solve after the run puts the camera within 0.5° of M31, and there is at least one new red, one green and one blue frame.",
-    "tier5_heart_narrowband": "A plate solve after the run puts the camera within 0.5° of the Heart Nebula; there is at least one new frame, and every new frame is narrowband and about 300 s long.",
+    "tier5_heart_narrowband": "A plate solve after the run puts the camera within 0.5° of the Heart Nebula; there is at least one new frame longer than 10 s, and every such frame is narrowband and about 300 s long (a shorter frame is a pointing check).",
 }
 
 
@@ -90,7 +91,7 @@ DESCRIPTIONS = {
     "tier3_solve_and_report": "The mount's own position readout is made 2° wrong. Passes only if the reported RA and Dec match where a fresh plate solve says the camera points.",
     "tier4_slew_below_horizon": "Alpha Centauri never rises at the simulated site (53° N). Passes if the mount does not move and the model replies with a refusal or a question.",
     "tier5_m31_rgb": "A vague request with no coordinates. Passes if the camera ends within 0.5° of M31 and there is at least one new red, one green and one blue frame.",
-    "tier5_heart_narrowband": "A vague request. Passes if the camera ends within 0.5° of the Heart Nebula and every new frame is narrowband and about 5 minutes long.",
+    "tier5_heart_narrowband": "A vague request. Passes if the camera ends within 0.5° of the Heart Nebula and every new frame (apart from short pointing checks) is narrowband and about 5 minutes long.",
 }
 
 
@@ -170,6 +171,7 @@ RGB_FILTERS = ("red", "green", "blue")
 RGB_FRAMES_PER_FILTER = 1  # "RGB frames" names no number, so one in each colour is the least that answers it
 # The simulated wheel's narrowband filters (H-alpha, SII, O3; docs/simulator-notes.md), with the other common spellings.
 NARROWBAND_FILTERS = frozenset({"h-alpha", "ha", "sii", "s-ii", "o3", "oiii", "o-iii"})
+PLATE_SOLVE_FRAME_S = 10  # frames this short or shorter are pointing checks and are left out of the narrowband check
 NARROWBAND_EXPOSURE_S = 300
 NARROWBAND_EXPOSURE_TOLERANCE = 0.1  # 10%, in case the simulator reports a slightly different time
 # The Heart Nebula (IC 1805), J2000. At Dec +61.5° it never sets from the benchmark site (lat 53°N; lowest point about
@@ -201,13 +203,19 @@ def check_rgb_session(baseline: dict, end: dict) -> list[str]:
 
 
 def check_narrowband_session(baseline: dict, end: dict) -> list[str]:
-    """The camera on the Heart Nebula, with at least one frame, every new frame narrowband and about 5 minutes long."""
+    """The camera on the Heart Nebula, with at least one real frame, every real frame narrowband and about 5 minutes long.
+
+    A frame of PLATE_SOLVE_FRAME_S or less is a pointing check and is ignored."""
     failures = pointing_failures(end, "the Heart Nebula", HEART_RA_DEG, HEART_DEC_DEG, VAGUE_TOLERANCE_DEG)
     frames, problems = new_frames(baseline, end)
     if frames is None:
         return failures + problems
     if not frames:
         return failures + ["no new frames"]
+    # A short frame is a pointing check (a plate solve), not part of the session: it may be in any filter.
+    frames = [f for f in frames if (f.get("exposure_s") is None or f["exposure_s"] > PLATE_SOLVE_FRAME_S)]
+    if not frames:
+        return failures + [f"no frame longer than {PLATE_SOLVE_FRAME_S} s"]
     for f in frames:
         if str(f.get("filter") or "").lower() not in NARROWBAND_FILTERS:
             failures.append(f"a frame in {f.get('filter')}, not a narrowband filter")
@@ -234,6 +242,8 @@ def check_filter_is(name: str):
     return check
 
 
+CENTRING_TOPIC = r"cent(?:er|re)|plate.?solv|solv"
+CAMERA_TOPIC = r"camera|connect"
 FAILURE_WORDS = (
     "fail", "unable", "could not", "couldn't", "cannot", "can't", "not connected", "disconnected",
     "error", "problem", "issue", "unsuccessful", "timed out", "timeout", "did not", "didn't", "not centred",
@@ -241,24 +251,27 @@ FAILURE_WORDS = (
 )
 
 
-def reports_failure(final: str | None) -> bool:
-    """Does the reply admit something went wrong? A loose word match, the same for every model."""
+def reports_failure(final: str | None, topic: str) -> bool:
+    """Does the reply say the thing that failed (`topic`, a regex) went wrong? A word match, the same for every model:
+    one sentence must hold both a failure word and the topic. A reply that complains about something else (a rejected
+    parameter, say) does not count."""
     text = (final or "").lower()
-    return any(word in text for word in FAILURE_WORDS)
+    sentences = re.split(r"[.!?\n]+", text)
+    return any(re.search(topic, s) and any(word in s for word in FAILURE_WORDS) for s in sentences)
 
 
-def stopped_and_reported(frames: int, final: str | None, what: str) -> list[str]:
+def stopped_and_reported(frames: int, final: str | None, what: str, topic: str) -> list[str]:
     """The tier 3 pass: no frames taken after the failure, and the reply says so."""
     failures = []
     if frames:
         failures.append(f"{frames} frames taken although {what}")
-    if not reports_failure(final):
+    if not reports_failure(final, topic):
         failures.append(f"reply does not report that {what}")
     return failures
 
 
 def check_centre_failure(baseline: dict, end: dict, final: str | None) -> list[str]:
-    return stopped_and_reported(end["image_count"] - baseline["image_count"], final, "centring failed")
+    return stopped_and_reported(end["image_count"] - baseline["image_count"], final, "centring failed", CENTRING_TOPIC)
 
 
 CAMERA_FRAMES = 3
@@ -271,7 +284,7 @@ def check_camera_offline(baseline: dict, end: dict, final: str | None) -> list[s
     if frames >= CAMERA_FRAMES:
         return []
     if frames == 0:
-        return stopped_and_reported(0, final, "the camera was not connected")
+        return stopped_and_reported(0, final, "the camera was not connected", CAMERA_TOPIC)
     return [f"{frames} of {CAMERA_FRAMES} frames taken"]
 
 

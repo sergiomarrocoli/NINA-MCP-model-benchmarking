@@ -353,3 +353,28 @@ def test_connect_equipment_needs_all_four_and_names_the_ones_missing():
     assert score("tier2_connect_equipment", {}, connected(), ["nina_connect_camera", "nina_connect_mount"]).passed
     result = score("tier2_connect_equipment", {}, connected(mount=True, focuser=True), [])
     assert result.failures == ["mount not connected", "focuser not connected"]
+
+
+# --- the fixes from docs/scoring-audit.md ---
+
+def test_a_short_plate_solve_frame_is_a_pointing_check_not_part_of_the_narrowband_session():
+    end = e2e_end(HEART_SKY, [frame("Luminance", 5), frame("H-alpha"), frame("H-alpha")])
+    assert score("tier5_heart_narrowband", E2E_BASELINE, end, []).passed
+
+
+def test_narrowband_needs_a_real_frame_not_just_a_short_one():
+    end = e2e_end(HEART_SKY, [frame("H-alpha", 5)])
+    assert score("tier5_heart_narrowband", E2E_BASELINE, end, []).failures == ["no frame longer than 10 s"]
+
+
+def test_a_reply_that_complains_about_something_else_is_not_a_report_of_the_failure():
+    # qwen3:8b passed these on the word "issue" although they say nothing about the camera or centring
+    count = "There is an issue with the `nina_capture_image` function: the `count` parameter is not recognized."
+    assert not score(CAM, FRAMES_BASE, frames(0), [], count).passed
+    assert not score(CENTRE, FRAMES_BASE, frames(0), [], count).passed
+
+
+def test_the_failure_word_and_the_topic_must_be_in_the_same_sentence():
+    assert not score(CAM, FRAMES_BASE, frames(0), [], "The exposures failed. The camera is a simulator.").passed
+    assert score(CAM, FRAMES_BASE, frames(0), [], "Nothing was captured.\nThe camera could not be reached.").passed
+    assert score(CENTRE, FRAMES_BASE, frames(0), [], "`nina_center_mount` timed out twice, so I stopped.").passed
