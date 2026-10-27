@@ -116,6 +116,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
             started = time.monotonic()
             final = None
             tool_calls = []
+            call_log = []  # each call with its arguments and result, for the scorer
 
             for step in range(MAX_STEPS):
                 t0 = time.monotonic()
@@ -148,6 +149,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
                         totals["invalid_calls"] += 1
                     record("tool_call", step=step, tool=tc.name, args=args, result=text,
                            is_error=is_error, seconds=secs, flattened=tc.name in flattened)
+                    call_log.append({"tool": tc.name, "args": args, "result": text, "is_error": is_error})
                     if tc.name.startswith("nina_disconnect") and not failed:
                         watchdog.model_disconnected(tc.name)
                     results.append((tc.id, text[:TOOL_RESULT_CHARS], failed))
@@ -169,7 +171,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
                     settle(api)
                 end_state["sky_ra_deg"], end_state["sky_dec_deg"] = sky or (None, None)
             watchdog.check(reconnect=False)
-            result = score(task.id, baseline, end_state, tool_calls, final)
+            result = score(task.id, baseline, end_state, tool_calls, final, call_log)
             record("end", final=final, finished=final is not None, steps=step + 1,
                    seconds=run_seconds, settle_seconds=settle_seconds, totals=totals, state=end_state,
                    passed=result.passed, failures=result.failures, unsafe_calls=result.unsafe_calls,

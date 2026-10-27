@@ -24,10 +24,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,97.2 226.1,146.3 205.5,179.4 190.0,158.0 190.0,158.0" fill="#4D4D4D" fill-opacity="0.15" stroke="#4D4D4D" stroke-width="2"/>
+<polygon points="190.0,97.2 226.1,146.3 193.9,163.3 190.0,158.0 190.0,158.0" fill="#4D4D4D" fill-opacity="0.15" stroke="#4D4D4D" stroke-width="2"/>
 <circle cx="190.0" cy="97.2" r="3" fill="#4D4D4D"/>
 <circle cx="226.1" cy="146.3" r="3" fill="#4D4D4D"/>
-<circle cx="205.5" cy="179.4" r="3" fill="#4D4D4D"/>
+<circle cx="193.9" cy="163.3" r="3" fill="#4D4D4D"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#4D4D4D"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#4D4D4D"/>
 </svg>
@@ -53,10 +53,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,88.1 262.3,134.5 221.3,201.0 190.0,158.0 124.9,136.9" fill="#CC79A7" fill-opacity="0.15" stroke="#CC79A7" stroke-width="2"/>
-<circle cx="190.0" cy="88.1" r="3" fill="#CC79A7"/>
+<polygon points="190.0,82.0 262.3,134.5 228.0,210.3 190.0,158.0 124.9,136.9" fill="#CC79A7" fill-opacity="0.15" stroke="#CC79A7" stroke-width="2"/>
+<circle cx="190.0" cy="82.0" r="3" fill="#CC79A7"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#CC79A7"/>
-<circle cx="221.3" cy="201.0" r="3" fill="#CC79A7"/>
+<circle cx="228.0" cy="210.3" r="3" fill="#CC79A7"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#CC79A7"/>
 <circle cx="124.9" cy="136.9" r="3" fill="#CC79A7"/>
 </svg>
@@ -82,10 +82,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 219.0,198.0 190.0,158.0 117.7,134.5" fill="#D55E00" fill-opacity="0.15" stroke="#D55E00" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 228.0,210.3 190.0,158.0 117.7,134.5" fill="#D55E00" fill-opacity="0.15" stroke="#D55E00" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#D55E00"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#D55E00"/>
-<circle cx="219.0" cy="198.0" r="3" fill="#D55E00"/>
+<circle cx="228.0" cy="210.3" r="3" fill="#D55E00"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#D55E00"/>
 <circle cx="117.7" cy="134.5" r="3" fill="#D55E00"/>
 </svg>
@@ -111,10 +111,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 190.0,158.0 124.9,136.9" fill="#0072B2" fill-opacity="0.15" stroke="#0072B2" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 230.2,213.3 190.0,158.0 124.9,136.9" fill="#0072B2" fill-opacity="0.15" stroke="#0072B2" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#0072B2"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#0072B2"/>
-<circle cx="223.5" cy="204.1" r="3" fill="#0072B2"/>
+<circle cx="230.2" cy="213.3" r="3" fill="#0072B2"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#0072B2"/>
 <circle cx="124.9" cy="136.9" r="3" fill="#0072B2"/>
 </svg>
@@ -140,10 +140,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 163.2,194.9 117.7,134.5" fill="#009E73" fill-opacity="0.15" stroke="#009E73" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 163.2,194.9 117.7,134.5" fill="#009E73" fill-opacity="0.15" stroke="#009E73" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#009E73"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#009E73"/>
-<circle cx="223.5" cy="204.1" r="3" fill="#009E73"/>
+<circle cx="234.7" cy="219.5" r="3" fill="#009E73"/>
 <circle cx="163.2" cy="194.9" r="3" fill="#009E73"/>
 <circle cx="117.7" cy="134.5" r="3" fill="#009E73"/>
 </svg>
@@ -169,12 +169,12 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 163.2,194.9 132.2,139.2" fill="#E69F00" fill-opacity="0.15" stroke="#E69F00" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 234.7,219.5 163.2,194.9 117.7,134.5" fill="#E69F00" fill-opacity="0.15" stroke="#E69F00" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#E69F00"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#E69F00"/>
-<circle cx="223.5" cy="204.1" r="3" fill="#E69F00"/>
+<circle cx="234.7" cy="219.5" r="3" fill="#E69F00"/>
 <circle cx="163.2" cy="194.9" r="3" fill="#E69F00"/>
-<circle cx="132.2" cy="139.2" r="3" fill="#E69F00"/>
+<circle cx="117.7" cy="134.5" r="3" fill="#E69F00"/>
 </svg>
 <svg x="12" y="598" width="380" height="270" viewBox="0 0 380 270">
 <rect width="380" height="270" fill="#ffffff" stroke="#d0d7de"/>
@@ -198,10 +198,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 212.3,188.7 190.0,158.0 153.9,146.3" fill="#56B4E9" fill-opacity="0.15" stroke="#56B4E9" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 216.8,194.9 190.0,158.0 153.9,146.3" fill="#56B4E9" fill-opacity="0.15" stroke="#56B4E9" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#56B4E9"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#56B4E9"/>
-<circle cx="212.3" cy="188.7" r="3" fill="#56B4E9"/>
+<circle cx="216.8" cy="194.9" r="3" fill="#56B4E9"/>
 <circle cx="190.0" cy="158.0" r="3" fill="#56B4E9"/>
 <circle cx="153.9" cy="146.3" r="3" fill="#56B4E9"/>
 </svg>
@@ -227,10 +227,10 @@
 <text x="139.3" y="237.0" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Safety</text>
 <line x1="190.0" y1="158" x2="117.7" y2="134.5" stroke="#d0d7de" stroke-width="1"/>
 <text x="111.7" y="133.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Vague end-to-end</text>
-<polygon points="190.0,82.0 262.3,134.5 223.5,204.1 154.3,207.2 124.9,136.9" fill="#F0E442" fill-opacity="0.15" stroke="#F0E442" stroke-width="2"/>
+<polygon points="190.0,82.0 262.3,134.5 225.7,207.2 154.3,207.2 124.9,136.9" fill="#F0E442" fill-opacity="0.15" stroke="#F0E442" stroke-width="2"/>
 <circle cx="190.0" cy="82.0" r="3" fill="#F0E442"/>
 <circle cx="262.3" cy="134.5" r="3" fill="#F0E442"/>
-<circle cx="223.5" cy="204.1" r="3" fill="#F0E442"/>
+<circle cx="225.7" cy="207.2" r="3" fill="#F0E442"/>
 <circle cx="154.3" cy="207.2" r="3" fill="#F0E442"/>
 <circle cx="124.9" cy="136.9" r="3" fill="#F0E442"/>
 </svg>
