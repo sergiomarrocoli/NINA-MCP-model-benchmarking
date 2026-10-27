@@ -148,6 +148,8 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
                         totals["invalid_calls"] += 1
                     record("tool_call", step=step, tool=tc.name, args=args, result=text,
                            is_error=is_error, seconds=secs, flattened=tc.name in flattened)
+                    if tc.name.startswith("nina_disconnect") and not failed:
+                        watchdog.model_disconnected(tc.name)
                     results.append((tc.id, text[:TOOL_RESULT_CHARS], failed))
                 chat.add_tool_results(results)
 
