@@ -28,6 +28,14 @@ class Watchdog:
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._loop, daemon=True)
 
+    def model_disconnected(self, tool: str) -> None:
+        """The model disconnected equipment itself (`nina_disconnect`, or `nina_disconnect_<device>`): that is the
+        model's choice, not a drop, so leave those devices down until the model connects them again."""
+        if tool == "nina_disconnect":
+            self.expected_down.update(devices())
+        elif tool.removeprefix("nina_disconnect_") in devices():
+            self.expected_down.add(tool.removeprefix("nina_disconnect_"))
+
     def start(self) -> "Watchdog":
         self._thread.start()
         return self

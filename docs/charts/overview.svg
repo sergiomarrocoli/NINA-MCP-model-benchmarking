@@ -129,7 +129,8 @@
 <svg x="12" y="354" width="575" height="278" viewBox="0 0 575 278">
 <rect width="575" height="278" fill="#ffffff" stroke="#d0d7de"/>
 <text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Cool the camera to -10 °C.</text>
-<text x="14.0" y="40.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A single command. Passes if the camera ends at -10 °C (within 1 °C) with its cooler running.</text>
+<text x="14.0" y="40.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A single command. Passes if the camera is at -10 °C (within 1 °C) or cooling toward it, with its cooler</text>
+<text x="14.0" y="54.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">running.</text>
 <text x="14.0" y="96.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier1_cool_camera</text>
 <line x1="38" y1="220.0" x2="561" y2="220.0" stroke="#d0d7de" stroke-width="1"/>
 <text x="32.0" y="223.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
@@ -157,8 +158,8 @@
 <rect x="51.1" y="120.0" width="39.2" height="100.0" rx="2" fill="#4D4D4D"/>
 <text x="70.7" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<rect x="116.5" y="160.0" width="39.2" height="60.0" rx="2" fill="#CC79A7"/>
-<text x="136.1" y="156.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<rect x="116.5" y="120.0" width="39.2" height="100.0" rx="2" fill="#CC79A7"/>
+<text x="136.1" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="136.1" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
 <rect x="181.8" y="120.0" width="39.2" height="100.0" rx="2" fill="#D55E00"/>
 <text x="201.4" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
@@ -366,8 +367,8 @@
 <text x="397.6" y="244.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
-<rect x="51.1" y="140.0" width="39.2" height="80.0" rx="2" fill="#4D4D4D"/>
-<text x="70.7" y="136.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
+<rect x="51.1" y="200.0" width="39.2" height="20.0" rx="2" fill="#4D4D4D"/>
+<text x="70.7" y="196.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">20%</text>
 <text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
 <rect x="116.5" y="120.0" width="39.2" height="100.0" rx="2" fill="#CC79A7"/>
 <text x="136.1" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
@@ -395,8 +396,8 @@
 <rect width="575" height="278" fill="#ffffff" stroke="#d0d7de"/>
 <text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Plate solve the camera&#x27;s current view and tell me the RA and Dec it is</text>
 <text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">pointing at.</text>
-<text x="14.0" y="56.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The mount&#x27;s own position readout is made 2° wrong. Passes only if the reported RA and Dec match where a</text>
-<text x="14.0" y="70.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">fresh plate solve says the camera points.</text>
+<text x="14.0" y="56.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The mount&#x27;s own position readout is made 2° wrong. Passes only if the model plate solves and its</text>
+<text x="14.0" y="70.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">reported RA and Dec match where a fresh plate solve says the camera points.</text>
 <text x="14.0" y="96.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_solve_and_report</text>
 <line x1="38" y1="220.0" x2="561" y2="220.0" stroke="#d0d7de" stroke-width="1"/>
 <text x="32.0" y="223.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
@@ -421,8 +422,7 @@
 <text x="397.6" y="244.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
-<rect x="51.1" y="180.0" width="39.2" height="40.0" rx="2" fill="#4D4D4D"/>
-<text x="70.7" y="176.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<text x="70.7" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
 <text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
 <rect x="116.5" y="140.0" width="39.2" height="80.0" rx="2" fill="#CC79A7"/>
 <text x="136.1" y="136.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
@@ -552,8 +552,8 @@
 <rect width="575" height="278" fill="#ffffff" stroke="#d0d7de"/>
 <text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">Slew to M31 (RA 00h 42m 44s, Dec +41° 16&#x27; 09&quot;, J2000) and centre it,</text>
 <text x="14.0" y="38.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">then take 5 exposures of 5 seconds each.</text>
-<text x="14.0" y="56.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The same session, but the focuser is far out of focus, so centring cannot work. Passes only if no</text>
-<text x="14.0" y="70.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">frames are taken and the reply says centring failed.</text>
+<text x="14.0" y="56.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">The same session, but the focuser is far out of focus, so centring cannot work. Passes if the reply</text>
+<text x="14.0" y="70.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">says centring failed, whether or not frames were taken.</text>
 <text x="14.0" y="96.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier3_centre_fails</text>
 <line x1="38" y1="220.0" x2="561" y2="220.0" stroke="#d0d7de" stroke-width="1"/>
 <text x="32.0" y="223.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
@@ -578,23 +578,28 @@
 <text x="397.6" y="244.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
-<rect x="51.1" y="200.0" width="39.2" height="20.0" rx="2" fill="#4D4D4D"/>
-<text x="70.7" y="196.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">20%</text>
+<text x="70.7" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
 <text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="136.1" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="116.5" y="160.0" width="39.2" height="60.0" rx="2" fill="#CC79A7"/>
+<text x="136.1" y="156.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
 <text x="136.1" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="201.4" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="181.8" y="140.0" width="39.2" height="80.0" rx="2" fill="#D55E00"/>
+<text x="201.4" y="136.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
 <text x="201.4" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<rect x="247.2" y="180.0" width="39.2" height="40.0" rx="2" fill="#0072B2"/>
-<text x="266.8" y="176.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
+<rect x="247.2" y="120.0" width="39.2" height="100.0" rx="2" fill="#0072B2"/>
+<text x="266.8" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="266.8" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="332.2" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="312.6" y="120.0" width="39.2" height="100.0" rx="2" fill="#009E73"/>
+<text x="332.2" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="332.2" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="397.6" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="377.9" y="120.0" width="39.2" height="100.0" rx="2" fill="#E69F00"/>
+<text x="397.6" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="397.6" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="462.9" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="443.3" y="180.0" width="39.2" height="40.0" rx="2" fill="#56B4E9"/>
+<text x="462.9" y="176.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">40%</text>
 <text x="462.9" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<text x="528.3" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
+<rect x="508.7" y="200.0" width="39.2" height="20.0" rx="2" fill="#F0E442"/>
+<text x="528.3" y="196.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">20%</text>
 <text x="528.3" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
 </svg>
 <svg x="597" y="1506" width="575" height="278" viewBox="0 0 575 278">
@@ -627,8 +632,9 @@
 <text x="397.6" y="244.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">opus-5-5</text>
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
-<text x="70.7" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
-<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=4</text>
+<rect x="51.1" y="207.5" width="39.2" height="12.5" rx="2" fill="#4D4D4D"/>
+<text x="70.7" y="203.5" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">12%</text>
+<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=8</text>
 <rect x="116.5" y="120.0" width="39.2" height="100.0" rx="2" fill="#CC79A7"/>
 <text x="136.1" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="136.1" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
@@ -681,7 +687,7 @@
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
 <text x="70.7" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
-<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=4</text>
+<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=9</text>
 <rect x="116.5" y="120.0" width="39.2" height="100.0" rx="2" fill="#CC79A7"/>
 <text x="136.1" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="136.1" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
@@ -707,8 +713,8 @@
 <svg x="597" y="1794" width="575" height="278" viewBox="0 0 575 278">
 <rect width="575" height="278" fill="#ffffff" stroke="#d0d7de"/>
 <text x="14.0" y="22.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">I want 5 minute narrowband frames of the Heart Nebula.</text>
-<text x="14.0" y="40.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A vague request. Passes if the camera ends within 0.5° of the Heart Nebula and every new frame is</text>
-<text x="14.0" y="54.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">narrowband and about 5 minutes long.</text>
+<text x="14.0" y="40.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">A vague request. Passes if the camera ends within 0.5° of the Heart Nebula and every new frame (apart</text>
+<text x="14.0" y="54.0" font-size="10.5" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">from short pointing checks) is narrowband and about 5 minutes long.</text>
 <text x="14.0" y="96.0" font-size="9" fill="#656d76" text-anchor="start" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">tier5_heart_narrowband</text>
 <line x1="38" y1="220.0" x2="561" y2="220.0" stroke="#d0d7de" stroke-width="1"/>
 <text x="32.0" y="223.0" font-size="9" fill="#656d76" text-anchor="end" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
@@ -734,7 +740,7 @@
 <text x="462.9" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-4.1</text>
 <text x="528.3" y="233.0" font-size="10" fill="#1f2328" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">gpt-6-sol</text>
 <text x="70.7" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
-<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=1</text>
+<text x="70.7" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=9</text>
 <rect x="116.5" y="140.0" width="39.2" height="80.0" rx="2" fill="#CC79A7"/>
 <text x="136.1" y="136.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">80%</text>
 <text x="136.1" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
@@ -747,8 +753,8 @@
 <rect x="312.6" y="120.0" width="39.2" height="100.0" rx="2" fill="#009E73"/>
 <text x="332.2" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="332.2" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
-<rect x="377.9" y="160.0" width="39.2" height="60.0" rx="2" fill="#E69F00"/>
-<text x="397.6" y="156.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">60%</text>
+<rect x="377.9" y="120.0" width="39.2" height="100.0" rx="2" fill="#E69F00"/>
+<text x="397.6" y="116.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">100%</text>
 <text x="397.6" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>
 <text x="462.9" y="216.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="bold" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">0%</text>
 <text x="462.9" y="256.0" font-size="9" fill="#656d76" text-anchor="middle" font-weight="normal" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">n=5</text>

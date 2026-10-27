@@ -17,6 +17,8 @@ from statistics import mean
 
 from harness.charts import CHARTS_DIR, write_charts
 from harness.pricing import cost, is_estimated
+from harness.scoring import score
+from harness.watchdog import POLL_S
 from harness.tasks import PASS_CONDITIONS, TASKS, display_order, start_condition, tier_name
 
 RUNS_DIR = Path("runs")
@@ -29,6 +31,30 @@ DETAILS_START = "<!-- details:start -->"
 DETAILS_END = "<!-- details:end -->"
 
 
+def equipment_drops(events: list[dict], end: dict) -> list[dict]:
+    """The logged drops that were not the model's own doing. Before the watchdog learned to tell, a device the model
+    disconnected itself (qwen3:8b does, at the end of imaging runs) was logged as a drop and the run left out."""
+    disconnects = [(e["t"], e["tool"]) for e in events
+                   if e["kind"] == "tool_call" and e.get("tool", "").startswith("nina_disconnect")
+                   and '"Success":false' not in e.get("result", "").replace(" ", "")]
+    drops = end.get("device_drops", [])
+    return [d for d in drops
+            if not any(t <= d["t"] + POLL_S and tool in ("nina_disconnect", f"nina_disconnect_{d['device']}")
+                       for t, tool in disconnects)]
+
+
+def rescored(events: list[dict], start: dict, end: dict) -> tuple[bool, list[str], int]:
+    """(passed, failures, unsafe calls) from the scorer as it is now, so a fix to the scorer also corrects the runs
+    already logged. A log the scorer cannot read (an old task, a log without a baseline) keeps its recorded verdict."""
+    try:
+        baseline = next(e["baseline"] for e in events if e["kind"] == "reset")
+        calls = [e for e in events if e["kind"] == "tool_call"]
+        result = score(start["task"], baseline, end["state"], [c["tool"] for c in calls], end.get("final"), calls)
+    except (StopIteration, KeyError):
+        return end["passed"], end.get("failures", []), len(end["unsafe_calls"])
+    return result.passed, result.failures, len(result.unsafe_calls)
+
+
 def load_run(path: Path) -> dict | None:
     events = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
     start = next((e for e in events if e["kind"] == "start"), None)
@@ -36,6 +62,7 @@ def load_run(path: Path) -> dict | None:
     if start is None or end is None:
         return None
     totals = end["totals"]
+    passed, failures, unsafe = rescored(events, start, end)
     # The run's token total does not separate the ones served from the provider's cache; each model call does.
     details = [((e.get("usage") or {}).get("prompt_tokens_details") or {}) for e in events if e["kind"] == "model"]
     cached = sum(d.get("cached_tokens") or 0 for d in details)
@@ -45,18 +72,18 @@ def load_run(path: Path) -> dict | None:
         "provider": start["provider"],
         "task": start["task"],
         "tier": start["tier"],
-        "passed": end["passed"],
+        "passed": passed,
         "finished": end["finished"],
         "tool_calls": totals["tool_calls"],
         "invalid_calls": totals["invalid_calls"],
-        "unsafe_calls": len(end["unsafe_calls"]),
+        "unsafe_calls": unsafe,
         "prompt_tokens": totals["prompt_tokens"],
         "completion_tokens": totals["completion_tokens"],
         "cost": cost(start["model"], totals["prompt_tokens"], totals["completion_tokens"], cached, written),
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
         # A plate solve that failed after the run left the pointing unchecked, which is equipment too.
-        "device_drops": len(end.get("device_drops", [])) + any("could not plate solve" in f for f in end.get("failures", [])),
+        "device_drops": len(equipment_drops(events, end)) + any("could not plate solve" in f for f in failures),
         # Runs before the schema option used the published tools.
         "schema": start.get("schema", "published"),
     }

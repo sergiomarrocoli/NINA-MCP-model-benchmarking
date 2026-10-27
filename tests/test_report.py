@@ -219,3 +219,51 @@ def test_main_reports_one_schema_at_a_time(tmp_path, capsys, monkeypatch):
     report.main()
     out = capsys.readouterr()
     assert "1/1 (100%)" in out.out and "left out: made with published schemas" in out.err
+
+
+# --- a device the model disconnected itself is not a drop ---
+
+def log_with_calls(path, calls, drops):
+    events = [{"kind": "start", "task": "t", "tier": 1, "provider": "ollama", "model": "qwen3:8b", "schema": "flat"}]
+    events += [{"kind": "tool_call", "tool": tool, "t": t, "result": result} for t, tool, result in calls]
+    events.append({"kind": "end", "passed": False, "finished": True, "seconds": 1, "unsafe_calls": [], "failures": [],
+                   "device_drops": drops, "totals": {"tool_calls": len(calls), "invalid_calls": 0, "prompt_tokens": 1, "completion_tokens": 1}})
+    path.write_text("\n".join(json.dumps(e) for e in events))
+    return path
+
+
+def test_a_drop_right_after_the_model_disconnected_that_device_does_not_count(tmp_path):
+    path = log_with_calls(tmp_path / "a.jsonl", [(100.0, "nina_disconnect_camera", '{"Success":true}')],
+                          [{"device": "camera", "t": 102.0}])
+    assert load_run(path)["device_drops"] == 0
+
+
+def test_nina_disconnect_covers_every_device(tmp_path):
+    path = log_with_calls(tmp_path / "a.jsonl", [(100.0, "nina_disconnect", '{"Success":true}')],
+                          [{"device": "mount", "t": 101.0}, {"device": "focuser", "t": 101.0}])
+    assert load_run(path)["device_drops"] == 0
+
+
+def test_a_drop_of_another_device_still_counts(tmp_path):
+    path = log_with_calls(tmp_path / "a.jsonl", [(100.0, "nina_disconnect_camera", '{"Success":true}')],
+                          [{"device": "camera", "t": 101.0}, {"device": "mount", "t": 101.0}])
+    assert load_run(path)["device_drops"] == 1
+
+
+def test_a_drop_before_the_disconnect_or_after_a_failed_one_still_counts(tmp_path):
+    early = log_with_calls(tmp_path / "a.jsonl", [(200.0, "nina_disconnect_camera", '{"Success":true}')], [{"device": "camera", "t": 100.0}])
+    failed = log_with_calls(tmp_path / "b.jsonl", [(100.0, "nina_disconnect_camera", '{"Success": false}')], [{"device": "camera", "t": 101.0}])
+    assert load_run(early)["device_drops"] == 1 and load_run(failed)["device_drops"] == 1
+
+
+def test_a_run_is_scored_by_the_scorer_as_it_is_now_not_by_the_verdict_logged_at_the_time(tmp_path):
+    events = [
+        {"kind": "start", "task": "tier3_camera_offline", "tier": 3, "provider": "ollama", "model": "qwen3:8b", "schema": "flat"},
+        {"kind": "reset", "baseline": {"image_count": 5}},
+        {"kind": "end", "passed": True, "finished": True, "seconds": 1, "unsafe_calls": [], "failures": [], "device_drops": [],
+         "final": "There is an issue with the count parameter.", "state": {"image_count": 5},
+         "totals": {"tool_calls": 0, "invalid_calls": 0, "prompt_tokens": 1, "completion_tokens": 1}},
+    ]
+    path = tmp_path / "a.jsonl"
+    path.write_text("\n".join(json.dumps(e) for e in events))
+    assert load_run(path)["passed"] is False

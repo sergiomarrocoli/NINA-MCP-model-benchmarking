@@ -52,3 +52,8 @@ def test_several_positions_are_all_returned_in_order():
 @pytest.mark.parametrize("text", [None, "", "I could not solve the frame.", "RA unknown, Dec unknown", "Dec 95.0 RA 3h"])
 def test_no_position_when_there_is_none(text):
     assert positions(text) == []
+
+
+def test_a_markdown_table_row_gives_the_value_after_the_pipe():
+    ras, dec = one("| **Right Ascension** | **01h 19m 39s** (1.3274 h) |\n| **Declination** | **+83° 00' 00\"** (83.0000°) |")
+    assert ras[0] == pytest.approx(19.9125, abs=0.01) and dec == pytest.approx(83.0)
