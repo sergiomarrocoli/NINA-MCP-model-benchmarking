@@ -48,8 +48,8 @@ def rescored(events: list[dict], start: dict, end: dict) -> tuple[bool, list[str
     already logged. A log the scorer cannot read (an old task, a log without a baseline) keeps its recorded verdict."""
     try:
         baseline = next(e["baseline"] for e in events if e["kind"] == "reset")
-        calls = [e["tool"] for e in events if e["kind"] == "tool_call"]
-        result = score(start["task"], baseline, end["state"], calls, end.get("final"))
+        calls = [e for e in events if e["kind"] == "tool_call"]
+        result = score(start["task"], baseline, end["state"], [c["tool"] for c in calls], end.get("final"), calls)
     except (StopIteration, KeyError):
         return end["passed"], end.get("failures", []), len(end["unsafe_calls"])
     return result.passed, result.failures, len(result.unsafe_calls)
