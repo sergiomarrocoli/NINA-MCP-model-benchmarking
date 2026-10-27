@@ -17,6 +17,7 @@ from statistics import mean
 
 from harness.charts import CHARTS_DIR, write_charts
 from harness.pricing import cost, is_estimated
+from harness.watchdog import POLL_S
 from harness.tasks import PASS_CONDITIONS, TASKS, display_order, start_condition, tier_name
 
 RUNS_DIR = Path("runs")
@@ -27,6 +28,18 @@ TASKS_START = "<!-- tasks:start -->"
 TASKS_END = "<!-- tasks:end -->"
 DETAILS_START = "<!-- details:start -->"
 DETAILS_END = "<!-- details:end -->"
+
+
+def equipment_drops(events: list[dict], end: dict) -> list[dict]:
+    """The logged drops that were not the model's own doing. Before the watchdog learned to tell, a device the model
+    disconnected itself (qwen3:8b does, at the end of imaging runs) was logged as a drop and the run left out."""
+    disconnects = [(e["t"], e["tool"]) for e in events
+                   if e["kind"] == "tool_call" and e.get("tool", "").startswith("nina_disconnect")
+                   and '"Success":false' not in e.get("result", "").replace(" ", "")]
+    drops = end.get("device_drops", [])
+    return [d for d in drops
+            if not any(t <= d["t"] + POLL_S and tool in ("nina_disconnect", f"nina_disconnect_{d['device']}")
+                       for t, tool in disconnects)]
 
 
 def load_run(path: Path) -> dict | None:
@@ -56,7 +69,7 @@ def load_run(path: Path) -> dict | None:
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
         # A plate solve that failed after the run left the pointing unchecked, which is equipment too.
-        "device_drops": len(end.get("device_drops", [])) + any("could not plate solve" in f for f in end.get("failures", [])),
+        "device_drops": len(equipment_drops(events, end)) + any("could not plate solve" in f for f in end.get("failures", [])),
         # Runs before the schema option used the published tools.
         "schema": start.get("schema", "published"),
     }
