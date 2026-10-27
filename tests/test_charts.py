@@ -218,7 +218,8 @@ def test_display_order_is_connect_then_single_commands_then_sessions_then_vague_
     assert set(single[:-1]) == {"tier1_cool_camera", "tier1_move_focuser", "tier1_change_filter", "tier1_park_mount",
                                 "tier3_camera_offline", "tier3_solve_and_report"}
     assert order[9:12] == ["tier2_m31_session", "tier3_centre_fails", "tier3_pointing_offset"]
-    assert order[12:] == ["tier5_m31_rgb", "tier5_heart_narrowband"]
+    assert order[12:14] == ["tier5_m31_rgb", "tier5_heart_narrowband"]
+    assert order[14:] == ["held_change_filter", "held_slew_below_horizon", "held_centre_fails"]  # held-out variants last
 
 
 def test_axis_tops_give_round_ticks():
