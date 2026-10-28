@@ -336,9 +336,8 @@ def test_centre_refuses_a_target_below_the_horizon_and_never_slews(monkeypatch):
     assert not result["Success"] and "Not slewing" in result["Error"] and slewed == []
 
 
-def test_centre_below_the_horizon_goes_ahead_when_overridden(monkeypatch):
-    result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8, "allow_below_horizon": True})
-    assert result["Success"] and len(slewed) == 1
+def test_centre_has_no_override_argument():
+    assert "allow_below_horizon" not in extra_tools.CenterMountInput.model_fields
 
 
 def test_centre_without_the_servers_horizon_check_goes_ahead(monkeypatch):
