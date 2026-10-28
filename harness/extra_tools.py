@@ -14,6 +14,7 @@ import time
 from typing import Any
 
 import aiohttp
+import nina_advanced_mcp
 from nina_advanced_mcp import create_error_response, mcp, tool
 from pydantic import BaseModel, Field
 
@@ -134,6 +135,17 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
     if not -90 <= input.dec <= 90:
         return create_error_response("NINAMountError", "Declination must be between -90 and +90 degrees", {"StatusCode": 400})
     try:
+        # The same refusal as nina_slew_mount, when the installed server has it (the fork's horizon check), with no
+        # override: a model that can switch the check off does. If the mount's info cannot be read the centre goes ahead, as the slew does.
+        below_horizon_message = getattr(nina_advanced_mcp, "below_horizon_message", None)
+        if below_horizon_message:
+            try:
+                info = (await _get("equipment/mount/info")).get("Response") or {}
+            except Exception:
+                info = {}
+            reason = below_horizon_message(input.ra, input.dec, info)
+            if reason:
+                return create_error_response("NINAMountError", f"Not slewing: {reason}", {"StatusCode": 400})
         params = {"ra": input.ra * 15, "dec": input.dec, "center": "true",
                   "waitForResult": str(input.wait_for_completion).lower()}
         result = await _get("equipment/mount/slew", params, timeout=CENTER_TIMEOUT_S)
