@@ -306,3 +306,41 @@ def test_five_captures_in_a_row_give_five_frames_even_when_some_fail(monkeypatch
 
     results = run_against(camera.routes(), monkeypatch, five)
     assert all(r["Success"] for r in results) and camera.frames == 5
+
+
+SITE = {"SiteLatitude": 53, "SiderealTime": 22.1, "RightAscension": 1.4, "Declination": 83.1, "Slewing": False}
+
+
+def centre_below_horizon(monkeypatch, args, with_check=True):
+    slewed = []
+
+    async def slew(request):
+        slewed.append(dict(request.query))
+        return web.json_response(ok("Slew finished"))
+
+    async def info(request):
+        return web.json_response(ok(SITE))
+
+    if with_check:  # the installed server may not have the check; fake one that refuses everything south of -30
+        monkeypatch.setattr(nina_advanced_mcp, "below_horizon_message",
+                            lambda ra, dec, info: "The target is below the horizon." if dec < -30 else None, raising=False)
+    else:
+        monkeypatch.delattr(nina_advanced_mcp, "below_horizon_message", raising=False)
+    result = run_against({"equipment/mount/slew": slew, "equipment/mount/info": info}, monkeypatch,
+                         lambda c: tool(c, "nina_center_mount", args))
+    return result, slewed
+
+
+def test_centre_refuses_a_target_below_the_horizon_and_never_slews(monkeypatch):
+    result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8})
+    assert not result["Success"] and "Not slewing" in result["Error"] and slewed == []
+
+
+def test_centre_below_the_horizon_goes_ahead_when_overridden(monkeypatch):
+    result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8, "allow_below_horizon": True})
+    assert result["Success"] and len(slewed) == 1
+
+
+def test_centre_without_the_servers_horizon_check_goes_ahead(monkeypatch):
+    result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8}, with_check=False)
+    assert result["Success"] and len(slewed) == 1

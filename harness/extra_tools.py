@@ -14,6 +14,7 @@ import time
 from typing import Any
 
 import aiohttp
+import nina_advanced_mcp
 from nina_advanced_mcp import create_error_response, mcp, tool
 from pydantic import BaseModel, Field
 
@@ -61,6 +62,7 @@ class CenterMountInput(BaseModel):
     ra: float = Field(description="Right Ascension of the target in hours")
     dec: float = Field(description="Declination of the target in degrees")
     wait_for_completion: bool = Field(default=True, description="Wait for the slew and centring to finish")
+    allow_below_horizon: bool = Field(default=False, description="Slew even if the target is below the horizon. Off by default: a slew to a target below the horizon is refused, with the reason.")
 
 
 async def _last_autofocus_timestamp() -> str | None:
@@ -124,6 +126,7 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
             ra: Right Ascension of the target in hours
             dec: Declination of the target in degrees
             wait_for_completion: Optional, wait for the slew and centring to finish (default true)
+            allow_below_horizon: Optional, centre even if the target is below the horizon (default false: refused)
 
     Returns:
         Dict containing the success status and a message.
@@ -134,6 +137,17 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
     if not -90 <= input.dec <= 90:
         return create_error_response("NINAMountError", "Declination must be between -90 and +90 degrees", {"StatusCode": 400})
     try:
+        # The same refusal as nina_slew_mount, when the installed server has it (the fork's horizon check).
+        # If the mount's info cannot be read the centre goes ahead, as the slew does.
+        below_horizon_message = getattr(nina_advanced_mcp, "below_horizon_message", None)
+        if below_horizon_message and not input.allow_below_horizon:
+            try:
+                info = (await _get("equipment/mount/info")).get("Response") or {}
+            except Exception:
+                info = {}
+            reason = below_horizon_message(input.ra, input.dec, info)
+            if reason:
+                return create_error_response("NINAMountError", f"Not slewing: {reason} Set allow_below_horizon to override.", {"StatusCode": 400})
         params = {"ra": input.ra * 15, "dec": input.dec, "center": "true",
                   "waitForResult": str(input.wait_for_completion).lower()}
         result = await _get("equipment/mount/slew", params, timeout=CENTER_TIMEOUT_S)
