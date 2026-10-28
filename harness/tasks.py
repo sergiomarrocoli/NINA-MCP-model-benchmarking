@@ -266,7 +266,7 @@ def check_filter_is(name: str):
     return check
 
 
-CENTRING_TOPIC = r"cent(?:r|er)|plate.?solv|solv"
+CENTRING_TOPIC = r"(?<![a-z])cent(?:r|er)|plate.?solv|(?<![a-z])solv"
 CAMERA_TOPIC = r"camera|connect"
 FAILURE_WORDS = (
     "fail", "unable", "could not", "couldn't", "cannot", "can't", "not connected", "disconnected",
