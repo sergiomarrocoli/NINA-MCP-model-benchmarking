@@ -202,7 +202,8 @@ def test_centre_rejects_coordinates_out_of_range_instead_of_wrapping_them(monkey
         return web.json_response(ok())
 
     result = run_against({"equipment/mount/slew": slew}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": ra, "dec": dec}))
-    assert not result["Success"] and "must be between" in result["Error"] and not called
+    # "must be between" from the old checks, "out of range" or "must be" from the fork's clearer ones
+    assert not result["Success"] and any(w in result["Error"] for w in ("must be between", "out of range", "must be")) and not called
 
 
 def test_wait_is_capped_and_says_what_was_asked_and_what_was_waited(monkeypatch):
@@ -343,3 +344,25 @@ def test_centre_has_no_override_argument():
 def test_centre_without_the_servers_horizon_check_goes_ahead(monkeypatch):
     result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8}, with_check=False)
     assert result["Success"] and len(slewed) == 1
+
+
+def test_centre_takes_ra_in_degrees(monkeypatch):
+    seen = {}
+
+    async def slew(request):
+        seen.update(request.query)
+        return web.json_response(ok("Slew finished"))
+
+    result = run_against({"equipment/mount/slew": slew}, monkeypatch,
+                         lambda c: tool(c, "nina_center_mount", {"ra_degrees": 10.68, "dec": 41.27}))
+    assert float(seen["ra"]) == pytest.approx(10.68) and result["Success"]
+
+
+def test_centre_needs_some_ra(monkeypatch):
+    result = run_against({}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"dec": 41.27}))
+    assert not result["Success"] and "Right Ascension" in result["Error"]
+
+
+def test_centre_with_ra_in_degrees_given_as_hours_is_refused(monkeypatch):
+    result = run_against({}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": 42.44, "dec": 41.27}))
+    assert not result["Success"] and ("Right Ascension" in result["Error"] or "HOURS" in result["Error"])
