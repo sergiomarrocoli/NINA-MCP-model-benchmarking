@@ -366,3 +366,16 @@ def test_centre_needs_some_ra(monkeypatch):
 def test_centre_with_ra_in_degrees_given_as_hours_is_refused(monkeypatch):
     result = run_against({}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": 42.44, "dec": 41.27}))
     assert not result["Success"] and ("Right Ascension" in result["Error"] or "HOURS" in result["Error"])
+
+
+def test_centre_takes_ra_as_hours_minutes_seconds(monkeypatch):
+    seen = {}
+
+    async def slew(request):
+        seen.update(request.query)
+        return web.json_response(ok("Slew finished"))
+
+    run_against({"equipment/mount/slew": slew}, monkeypatch,
+                lambda c: tool(c, "nina_center_mount", {"ra_hms": "00h 42m 44s", "dec": 41.27}))
+    if hasattr(nina_advanced_mcp, "resolve_ra_hours"):  # only a server with the fork's change understands it
+        assert float(seen["ra"]) == pytest.approx(10.68, abs=0.01)
