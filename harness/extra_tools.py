@@ -59,9 +59,22 @@ class AutofocusInput(BaseModel):
 
 
 class CenterMountInput(BaseModel):
-    ra: float = Field(description="Right Ascension of the target in hours")
+    ra: float | None = Field(default=None, description="Right Ascension of the target in HOURS (0-24)")
+    ra_degrees: float | None = Field(default=None, description="Right Ascension of the target in DEGREES (0-360), instead of ra")
+    ra_hms: str | None = Field(default=None, description="Right Ascension as hours, minutes, seconds, such as '00h 42m 44s', instead of ra")
     dec: float = Field(description="Declination of the target in degrees")
     wait_for_completion: bool = Field(default=True, description="Wait for the slew and centring to finish")
+
+
+def _resolve_ra_hours(ra: float | None, ra_degrees: float | None, ra_hms: str | None = None) -> tuple[float | None, str | None]:
+    """The fallback for a server without resolve_ra_hours: hours or degrees."""
+    if ra_hms is not None:
+        return None, "ra_hms needs a newer server; give ra in hours."
+    if ra_degrees is not None:
+        return ra_degrees / 15, None
+    if ra is None or not 0 <= ra <= 24:
+        return None, "Right Ascension must be between 0 and 24 hours"
+    return ra, None
 
 
 async def _last_autofocus_timestamp() -> str | None:
@@ -122,7 +135,9 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
 
     Args:
         input: CenterMountInput containing:
-            ra: Right Ascension of the target in hours
+            ra: Right Ascension of the target in HOURS (0-24)
+            ra_degrees: Right Ascension in DEGREES (0-360), instead of ra
+            ra_hms: Right Ascension as hours, minutes, seconds, such as "00h 42m 44s", instead of ra; give one of the three
             dec: Declination of the target in degrees
             wait_for_completion: Optional, wait for the slew and centring to finish (default true)
 
@@ -130,8 +145,12 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
         Dict containing the success status and a message.
     """
     # Same checks as nina_slew_mount. Without them 42.44 "hours" wraps to 18.4 h and is reported as centred.
-    if not 0 <= input.ra < 24:
-        return create_error_response("NINAMountError", "Right Ascension must be between 0 and 24 hours", {"StatusCode": 400})
+    # Hours or degrees, with the server's clearer errors when it has them (the fork's resolve_ra_hours).
+    resolve_ra_hours = getattr(nina_advanced_mcp, "resolve_ra_hours", None) or _resolve_ra_hours
+    ra_hours, ra_problem = resolve_ra_hours(input.ra, input.ra_degrees, input.ra_hms)
+    if ra_problem or ra_hours >= 24:
+        return create_error_response("NINAMountError", ra_problem or "Right Ascension must be between 0 and 24 hours", {"StatusCode": 400})
+    input.ra = ra_hours
     if not -90 <= input.dec <= 90:
         return create_error_response("NINAMountError", "Declination must be between -90 and +90 degrees", {"StatusCode": 400})
     try:
