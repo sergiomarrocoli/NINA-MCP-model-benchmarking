@@ -71,6 +71,10 @@ rough.
   A server-side fix works where judgement does not: with the fork's refusal for below-horizon slews, five models that
   slewed every time (qwen3:8b, both DeepSeek models, gpt-4.1, Haiku) passed 50 of 50 runs. See
   [docs/horizon-check.md](docs/horizon-check.md), including why the first version, with an override argument, failed.
+- **Much of the weakest model's failure was the tool's interface.** qwen3:8b misread M31's right ascension, picked the
+  wrong filter by number, and asked for a repeat count the capture tool lacked. Fixing those in the server took its
+  pointing-offset task from 1 of 8 to 5 of 5 and its M31 session from 0 of 5 to 3 of 5. See
+  [docs/units-and-capture.md](docs/units-and-capture.md).
 - **Whether a model notices that something broke varies a lot.** In the task where centring is made impossible, a run
   passes if the reply says centring failed or could not be confirmed (whether or not it then took the frames). Claude Haiku,
   Sonnet and Opus did so 5 times out of 5, DeepSeek V4 Pro 4, deepseek-chat 3, gpt-4.1 2, gpt-6-sol 1 and qwen3:8b never.
