@@ -210,5 +210,25 @@ async def nina_wait(seconds: float) -> dict[str, Any]:
     return {"Success": True, "Message": message, "Details": {"requested_seconds": seconds, "waited_seconds": waited}, "Type": "NINA_API"}
 
 
+PROFILE_KEEPS = {"nina_autofocus", "nina_center_mount"}  # ours; the server's profiles don't know them
+
+
+def apply_requested_profile(profile: str | None, server=nina_advanced_mcp) -> None:
+    """List only the tools of the server's NINA_MCP_PROFILE ("core", "mono"), plus our own, when one is asked for.
+
+    The pinned v1 server has no profiles, so asking for one there is an error, not a silent full list that would be
+    recorded as the trimmed arm.
+    """
+    if not profile or profile == "full":
+        return
+    apply_profile = getattr(server, "apply_profile", None)
+    if apply_profile is None:
+        raise RuntimeError(f"NINA_MCP_PROFILE={profile} needs a server with tool profiles; this one has none")
+    apply_profile(profile, extra=PROFILE_KEEPS)
+
+
+apply_requested_profile(os.environ.get("NINA_MCP_PROFILE"))
+
+
 if __name__ == "__main__":
     mcp.run()

@@ -110,7 +110,7 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
                 record("setup", tool=name, args=args, result=text, is_error=is_error, seconds=secs)
 
             tools, flattened = openai_tools(await client.list_tools(), schema)
-            record("tools", count=len(tools))
+            record("tools", count=len(tools), profile=os.environ.get("NINA_MCP_PROFILE") or "full")
             chat = open_chat(provider, system_prompt(task), task.prompt, tools)
             totals = {"prompt_tokens": 0, "completion_tokens": 0, "tool_calls": 0, "invalid_calls": 0}
             started = time.monotonic()
