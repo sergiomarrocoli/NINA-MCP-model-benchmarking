@@ -39,6 +39,9 @@ class Chat(Protocol):
     def add_tool_results(self, results: list[tuple[str, str, bool]]) -> None:
         """Answer the last turn's tool calls: (tool call id, result text, whether the call failed)."""
 
+    def set_tools(self, tools: list[dict]) -> None:
+        """Replace the tools offered from the next turn on (the server's list changed)."""
+
 
 class OpenAIChat:
     """The OpenAI chat-completions API, which OpenAI, DeepSeek and Ollama all speak."""
@@ -62,6 +65,9 @@ class OpenAIChat:
     def add_tool_results(self, results: list[tuple[str, str, bool]]) -> None:
         for call_id, text, _failed in results:
             self.messages.append({"role": "tool", "tool_call_id": call_id, "content": text})
+
+    def set_tools(self, tools: list[dict]) -> None:
+        self.tools = tools
 
 
 def open_chat(provider: Provider, system: str, user: str, tools: list[dict]) -> Chat:

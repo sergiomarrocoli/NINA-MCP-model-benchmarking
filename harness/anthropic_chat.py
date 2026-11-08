@@ -35,6 +35,9 @@ class AnthropicChat:
         self.tools = anthropic_tools(tools)
         self.messages = [{"role": "user", "content": user}]
 
+    def set_tools(self, tools: list[dict]) -> None:
+        self.tools = anthropic_tools(tools)
+
     def step(self) -> Turn:
         resp = self.client.messages.create(
             model=self.provider.model, max_tokens=MAX_TOKENS, system=self.system, tools=self.tools,
