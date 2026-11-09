@@ -170,3 +170,36 @@ def test_load_run_reads_the_cache_writes_from_the_run_log(tmp_path):
     path = tmp_path / "a.jsonl"
     path.write_text("\n".join(json.dumps(e) for e in events))
     assert load_run(path)["cost"] == pytest.approx(0.1 * 0.10 + 0.8 * 0.01 + 0.1 * 0.125)
+
+
+# --- the tool list can change mid-run (tool discovery) ---
+
+NEW_TOOLS = OPENAI_TOOLS + [{"type": "function", "function": {"name": "nina_open_dome_shutter", "description": "Open it.",
+                                                               "parameters": {"type": "object", "properties": {}}}}]
+
+
+def test_the_anthropic_chat_offers_new_tools_from_the_next_turn(chat):
+    chat, api = chat
+    chat.set_tools(NEW_TOOLS)
+    api.replies = [reply([text("ok")], stop="end_turn")]
+    chat.step()
+    assert [t["name"] for t in api.calls[0]["tools"]] == ["nina_park_mount", "nina_open_dome_shutter"]
+
+
+def test_the_openai_chat_offers_new_tools_from_the_next_turn(monkeypatch):
+    seen = []
+
+    def create(**kwargs):
+        seen.append([t["function"]["name"] for t in kwargs["tools"]])
+        msg = NS(content="ok", tool_calls=None, model_dump=lambda exclude_none=True: {"role": "assistant", "content": "ok"})
+        usage = NS(prompt_tokens=1, completion_tokens=1, model_dump=lambda: {})
+        return NS(choices=[NS(message=msg, finish_reason="stop")], usage=usage)
+
+    monkeypatch.setattr(llm, "OpenAI", lambda **kw: NS(chat=NS(completions=NS(create=create))))
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-test")
+    chat = OpenAIChat(PROVIDERS["openai"], "s", "u", OPENAI_TOOLS)
+    chat.step()
+    chat.set_tools(NEW_TOOLS)
+    chat.step()
+    assert seen == [["nina_park_mount"], ["nina_park_mount", "nina_open_dome_shutter"]]

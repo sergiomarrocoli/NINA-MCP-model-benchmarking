@@ -154,6 +154,11 @@ async def run(provider_name: str, task_id: str, schema: str = "flat") -> Path:
                         watchdog.model_disconnected(tc.name)
                     results.append((tc.id, text[:TOOL_RESULT_CHARS], failed))
                 chat.add_tool_results(results)
+                if any(tc.name == "nina_enable_tools" for tc in turn.tool_calls):
+                    # The server's tool list changed (tool discovery); offer the new list from the next turn on.
+                    tools, flattened = openai_tools(await client.list_tools(), schema)
+                    chat.set_tools(tools)
+                    record("tools", count=len(tools), profile=os.environ.get("NINA_MCP_PROFILE") or "full", after="nina_enable_tools")
 
             # The scorer reads NINA directly, not through the tools the model used.
             run_seconds = time.monotonic() - started  # the model's own time, before waiting on equipment
