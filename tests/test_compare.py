@@ -24,3 +24,11 @@ def test_table_skips_tasks_and_totals_each_folder(tmp_path):
     out = table({"x": load(tmp_path / "x")}, skip=("held_centre_fails",))
     assert "held_centre_fails" not in out
     assert "**1/1 · valid 1/1**" in out
+
+
+def test_unchecked_pointing_is_valid_when_the_run_also_missed_other_requirements(tmp_path):
+    only = ["could not plate solve to check where the camera points"]
+    write_run(tmp_path / "a.jsonl", passed=False, failures=only)
+    write_run(tmp_path / "b.jsonl", passed=False, failures=only + ["0 red frames, wanted 1"])
+    runs = load(tmp_path)["tier1_cool_camera"]
+    assert cell(runs) == "0/2 · valid 0/1"

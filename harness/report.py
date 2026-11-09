@@ -83,6 +83,9 @@ def load_run(path: Path) -> dict | None:
         "seconds": end["seconds"],
         # A device that dropped during the run makes it an equipment fault, not a model result.
         # A plate solve that failed after the run left the pointing unchecked, which is equipment too.
+        # The pieces of that verdict, for harness.compare, which counts an unchecked pointing as equipment only when it is the run's only failure.
+        "watchdog_drops": len(equipment_drops(events, end)),
+        "failures": failures,
         "device_drops": len(equipment_drops(events, end)) + any("could not plate solve" in f for f in failures),
         # Runs before the schema option used the published tools.
         "schema": start.get("schema", "published"),
