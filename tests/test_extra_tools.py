@@ -379,3 +379,29 @@ def test_centre_takes_ra_as_hours_minutes_seconds(monkeypatch):
                 lambda c: tool(c, "nina_center_mount", {"ra_hms": "00h 42m 44s", "dec": 41.27}))
     if hasattr(nina_advanced_mcp, "resolve_ra_hours"):  # only a server with the fork's change understands it
         assert float(seen["ra"]) == pytest.approx(10.68, abs=0.01)
+
+
+class ServerWithProfiles:
+    def __init__(self):
+        self.calls = []
+
+    def apply_profile(self, name, extra=()):
+        self.calls.append((name, set(extra)))
+
+
+@pytest.mark.parametrize("profile", [None, "", "full"])
+def test_no_profile_leaves_the_tool_list_alone(profile):
+    server = ServerWithProfiles()
+    extra_tools.apply_requested_profile(profile, server)
+    assert server.calls == []
+
+
+def test_a_profile_is_applied_and_keeps_our_own_tools():
+    server = ServerWithProfiles()
+    extra_tools.apply_requested_profile("core", server)
+    assert server.calls == [("core", {"nina_autofocus", "nina_center_mount"})]
+
+
+def test_a_profile_on_a_server_without_profiles_is_an_error():
+    with pytest.raises(RuntimeError, match="needs a server with tool profiles"):
+        extra_tools.apply_requested_profile("core", object())
