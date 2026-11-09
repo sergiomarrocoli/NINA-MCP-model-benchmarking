@@ -4,13 +4,24 @@
 
 Each cell is `passed/all runs`, then `valid passed/valid runs` once the runs the report leaves out are removed:
 a device that dropped during the run, or a plate solve that could not check the pointing afterwards
-(see `harness.report.load_run`). Logs with no end record, such as one from a killed sweep, are ignored.
+as the run's only failure (see `is_valid`). Logs with no end record, such as one from a killed sweep, are ignored.
 """
 import argparse
 from collections import defaultdict
 from pathlib import Path
 
 from harness.report import load_run
+
+UNCHECKED = "could not plate solve"
+
+
+def is_valid(run: dict) -> bool:
+    """A run counts unless a device dropped during it, or the plate solve afterwards could not check the pointing and
+    that was the run's only failure. If the run also missed other requirements (frames in the wrong filter, say), the
+    model failed regardless, so it stays in. `harness.report` is stricter and drops every unchecked pointing."""
+    if run["watchdog_drops"]:
+        return False
+    return not (len(run["failures"]) == 1 and UNCHECKED in run["failures"][0])
 
 
 def load(folder: Path, exclude: tuple[str, ...] = ()) -> dict[str, list[dict]]:
@@ -26,7 +37,7 @@ def load(folder: Path, exclude: tuple[str, ...] = ()) -> dict[str, list[dict]]:
 def cell(runs: list[dict]) -> str:
     if not runs:
         return "-"
-    valid = [r for r in runs if not r["device_drops"]]
+    valid = [r for r in runs if is_valid(r)]
     return f"{sum(r['passed'] for r in runs)}/{len(runs)} · valid {sum(r['passed'] for r in valid)}/{len(valid)}"
 
 
@@ -38,7 +49,7 @@ def table(folders: dict[str, dict[str, list[dict]]], skip: tuple[str, ...] = ())
     totals = []
     for f in folders.values():
         runs = [r for t, rs in f.items() if t not in skip for r in rs]
-        valid = [r for r in runs if not r["device_drops"]]
+        valid = [r for r in runs if is_valid(r)]
         totals.append(f"**{sum(r['passed'] for r in runs)}/{len(runs)} · valid {sum(r['passed'] for r in valid)}/{len(valid)}**")
     lines.append("| **Total** | " + " | ".join(totals) + " |")
     return "\n".join(lines)
