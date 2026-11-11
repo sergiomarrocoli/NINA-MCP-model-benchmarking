@@ -27,6 +27,16 @@ POLL_S = 2
 CENTERED_WITHIN_DEG = 0.05  # 3 arc-minutes
 
 
+# A server that already has these tools (the fork, since its PR #14) is benchmarked with its own. Registering ours on top
+# would replace them, and the fork's behaviour, such as its failed-centre message, would never reach a model.
+SERVER_HAS_OWN_TOOLS = hasattr(nina_advanced_mcp, "extras")
+
+
+def _own(function):
+    """Publish one of our tools, unless the server has its own."""
+    return function if SERVER_HAS_OWN_TOOLS else tool()(function)
+
+
 def _base() -> str:
     return f"http://{os.environ.get('NINA_HOST', 'localhost')}:{os.environ.get('NINA_PORT', '1888')}/v2/api"
 
@@ -86,7 +96,7 @@ async def _last_autofocus_timestamp() -> str | None:
     return response.get("Timestamp") if isinstance(response, dict) else None
 
 
-@tool()
+@_own
 async def nina_autofocus(input: AutofocusInput) -> dict[str, Any]:
     """Run NINA's autofocus routine on the connected focuser and camera, or cancel a running one.
 
@@ -126,7 +136,7 @@ async def nina_autofocus(input: AutofocusInput) -> dict[str, Any]:
         return create_error_response("NINAFocuserError", _describe(e), {})
 
 
-@tool()
+@_own
 async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
     """Slew the mount to coordinates and centre on them using NINA's plate solver.
 
@@ -186,7 +196,7 @@ async def nina_center_mount(input: CenterMountInput) -> dict[str, Any]:
 _sleep = asyncio.sleep  # a name the tests can replace
 
 
-@tool()
+@_own
 async def nina_wait(seconds: float) -> dict[str, Any]:
     """Wait for a specified duration in seconds, at most 300.
 
