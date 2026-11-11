@@ -10,6 +10,9 @@ from fastmcp import Client
 import nina_advanced_mcp
 from harness import extra_tools
 
+# These test our copies of the tools. A server with its own (the fork) is tested in its own repo.
+needs_own_tools = pytest.mark.skipif(extra_tools.SERVER_HAS_OWN_TOOLS, reason="the server has its own versions of these tools")
+
 
 def run_against(routes, monkeypatch, call):
     """Start a fake API, point the tools at it, and run `call(client)` against the MCP server."""
@@ -40,12 +43,14 @@ async def tool(client, name, args):
     return json.loads(result.content[0].text)
 
 
+@needs_own_tools
 def test_both_tools_are_registered(monkeypatch):
     names = run_against({}, monkeypatch, lambda c: c.list_tools())
     assert {"nina_autofocus", "nina_center_mount"} <= {t.name for t in names}
     assert "nina_slew_mount" in {t.name for t in names}  # upstream tools are still there
 
 
+@needs_own_tools
 def test_autofocus_waits_for_a_new_result(monkeypatch):
     monkeypatch.setattr(extra_tools, "POLL_S", 0.05)
     state = {"timestamp": "old", "polls": 0, "started": 0}
@@ -67,6 +72,7 @@ def test_autofocus_waits_for_a_new_result(monkeypatch):
     assert result["Details"]["Timestamp"] == "new"
 
 
+@needs_own_tools
 def test_autofocus_that_never_finishes_is_an_error(monkeypatch):
     monkeypatch.setattr(extra_tools, "POLL_S", 0.05)
     monkeypatch.setattr(extra_tools, "AUTOFOCUS_TIMEOUT_S", 0.3)
@@ -82,6 +88,7 @@ def test_autofocus_that_never_finishes_is_an_error(monkeypatch):
     assert not result["Success"] and "No autofocus result" in result["Error"]
 
 
+@needs_own_tools
 def test_autofocus_without_a_focuser_is_an_error(monkeypatch):
     async def last_af(request):
         return web.json_response(ok({}))
@@ -95,6 +102,7 @@ def test_autofocus_without_a_focuser_is_an_error(monkeypatch):
     assert not result["Success"] and result["Error"] == "Focuser not connected"
 
 
+@needs_own_tools
 def test_autofocus_without_waiting_returns_at_once(monkeypatch):
     async def last_af(request):
         return web.json_response(ok({"Timestamp": "t"}))
@@ -107,6 +115,7 @@ def test_autofocus_without_waiting_returns_at_once(monkeypatch):
     assert result["Success"] and result["Message"] == "Autofocus started"
 
 
+@needs_own_tools
 def test_cancel_sends_cancel_true(monkeypatch):
     seen = {}
 
@@ -119,6 +128,7 @@ def test_cancel_sends_cancel_true(monkeypatch):
     assert seen == {"cancel": "true"} and result["Success"]
 
 
+@needs_own_tools
 def test_center_converts_ra_hours_to_degrees_and_asks_for_centring(monkeypatch):
     seen = {}
 
@@ -143,6 +153,7 @@ def mount_info(ra_hours, dec, slewing=False):
     return handler
 
 
+@needs_own_tools
 def test_center_failure_is_reported_when_the_mount_is_elsewhere(monkeypatch):
     async def slew(request):
         return web.json_response(FAILED)
@@ -152,6 +163,7 @@ def test_center_failure_is_reported_when_the_mount_is_elsewhere(monkeypatch):
     assert not result["Success"] and "Slew failed" in result["Error"]
 
 
+@needs_own_tools
 def test_center_that_the_plugin_calls_failed_but_left_the_mount_on_target_is_a_success(monkeypatch):
     # NINA's own log showed the solve succeeding with zero offset; M31's JNOW position in 2026 is
     # about RA 0.737 h, Dec +41.42. The plugin still said "Slew failed".
@@ -168,6 +180,7 @@ def test_center_that_the_plugin_calls_failed_but_left_the_mount_on_target_is_a_s
     assert result["Success"] and "centred" in result["Message"]
 
 
+@needs_own_tools
 def test_center_is_not_reported_as_success_while_the_mount_is_still_slewing(monkeypatch):
     async def slew(request):
         return web.json_response(FAILED)
@@ -180,6 +193,7 @@ def test_center_is_not_reported_as_success_while_the_mount_is_still_slewing(monk
     assert not result["Success"]
 
 
+@needs_own_tools
 def test_a_timeout_gets_a_readable_error(monkeypatch):
     import asyncio as aio
 
@@ -194,6 +208,7 @@ def test_a_timeout_gets_a_readable_error(monkeypatch):
 
 
 @pytest.mark.parametrize("ra, dec", [(42.44, 41.27), (-1, 41.27), (24, 41.27), (0.7, 91)])
+@needs_own_tools
 def test_centre_rejects_coordinates_out_of_range_instead_of_wrapping_them(monkeypatch, ra, dec):
     called = []
 
@@ -206,6 +221,7 @@ def test_centre_rejects_coordinates_out_of_range_instead_of_wrapping_them(monkey
     assert not result["Success"] and any(w in result["Error"] for w in ("must be between", "out of range", "must be")) and not called
 
 
+@needs_own_tools
 def test_wait_is_capped_and_says_what_was_asked_and_what_was_waited(monkeypatch):
     slept = []
 
@@ -221,11 +237,13 @@ def test_wait_is_capped_and_says_what_was_asked_and_what_was_waited(monkeypatch)
     assert short["Details"] == {"requested_seconds": 12.5, "waited_seconds": 12.5} and "asked" not in short["Message"]
 
 
+@needs_own_tools
 def test_wait_rejects_a_negative_duration(monkeypatch):
     result = run_against({}, monkeypatch, lambda c: tool(c, "nina_wait", {"seconds": -1}))
     assert not result["Success"] and "negative" in result["Error"]
 
 
+@needs_own_tools
 def test_the_server_has_one_nina_wait_and_it_is_ours(monkeypatch):
     names = [t.name for t in run_against({}, monkeypatch, lambda c: c.list_tools())]
     assert names.count("nina_wait") == 1
@@ -271,6 +289,7 @@ def capture(camera, monkeypatch, **args):
     return run_against(camera.routes(), monkeypatch, lambda c: tool(c, "nina_capture_image", args))
 
 
+@needs_own_tools
 def test_capture_waits_for_the_saved_frame(monkeypatch, quick_capture):
     camera = FakeCamera()
     result = capture(camera, monkeypatch, duration=5)
@@ -279,12 +298,14 @@ def test_capture_waits_for_the_saved_frame(monkeypatch, quick_capture):
     assert camera.last_query["waitForResult"] == "true" and camera.last_query["duration"] == "5.0"
 
 
+@needs_own_tools
 def test_capture_tries_again_when_the_plugin_saves_nothing(monkeypatch, quick_capture):
     camera = FakeCamera(["unknown", "saved"])
     result = capture(camera, monkeypatch, duration=5)
     assert result["Success"] and camera.calls == 2 and camera.frames == 1
 
 
+@needs_own_tools
 def test_capture_does_not_trust_a_success_without_a_new_frame(monkeypatch, quick_capture):
     camera = FakeCamera(["claims"])
     result = capture(camera, monkeypatch, duration=5)
@@ -292,12 +313,14 @@ def test_capture_does_not_trust_a_success_without_a_new_frame(monkeypatch, quick
     assert camera.calls == 3 and camera.frames == 0
 
 
+@needs_own_tools
 def test_capture_reports_the_failure_when_every_attempt_fails(monkeypatch, quick_capture):
     camera = FakeCamera(["unknown"])
     result = capture(camera, monkeypatch, duration=5)
     assert not result["Success"] and "no response from device" in result["Error"]  # the server's wording for "Unknown error"
 
 
+@needs_own_tools
 def test_five_captures_in_a_row_give_five_frames_even_when_some_fail(monkeypatch, quick_capture):
     # The 4 frames problem: some captures fail at random; each successful call must still mean one frame.
     camera = FakeCamera(["saved", "unknown", "saved", "saved", "unknown", "saved", "saved"])
@@ -332,20 +355,24 @@ def centre_below_horizon(monkeypatch, args, with_check=True):
     return result, slewed
 
 
+@needs_own_tools
 def test_centre_refuses_a_target_below_the_horizon_and_never_slews(monkeypatch):
     result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8})
     assert not result["Success"] and "Not slewing" in result["Error"] and slewed == []
 
 
+@needs_own_tools
 def test_centre_has_no_override_argument():
     assert "allow_below_horizon" not in extra_tools.CenterMountInput.model_fields
 
 
+@needs_own_tools
 def test_centre_without_the_servers_horizon_check_goes_ahead(monkeypatch):
     result, slewed = centre_below_horizon(monkeypatch, {"ra": 14.66, "dec": -60.8}, with_check=False)
     assert result["Success"] and len(slewed) == 1
 
 
+@needs_own_tools
 def test_centre_takes_ra_in_degrees(monkeypatch):
     seen = {}
 
@@ -358,16 +385,19 @@ def test_centre_takes_ra_in_degrees(monkeypatch):
     assert float(seen["ra"]) == pytest.approx(10.68) and result["Success"]
 
 
+@needs_own_tools
 def test_centre_needs_some_ra(monkeypatch):
     result = run_against({}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"dec": 41.27}))
     assert not result["Success"] and "Right Ascension" in result["Error"]
 
 
+@needs_own_tools
 def test_centre_with_ra_in_degrees_given_as_hours_is_refused(monkeypatch):
     result = run_against({}, monkeypatch, lambda c: tool(c, "nina_center_mount", {"ra": 42.44, "dec": 41.27}))
     assert not result["Success"] and ("Right Ascension" in result["Error"] or "HOURS" in result["Error"])
 
 
+@needs_own_tools
 def test_centre_takes_ra_as_hours_minutes_seconds(monkeypatch):
     seen = {}
 
